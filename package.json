@@ -1,0 +1,68 @@
+{
+  "name": "@revivejs/react-multiselect-dropdown",
+  "version": "17.0.0",
+  "description": "A maintained React multiselect dropdown with Angular-friendly settings and versioned demos.",
+  "keywords": [
+    "react",
+    "multiselect",
+    "dropdown",
+    "react-multiselect-dropdown",
+    "typescript",
+    "forms",
+    "checkbox",
+    "ui-component",
+    "wrapper",
+    "maintained",
+    "revivejs"
+  ],
+  "homepage": "https://alexandroit.github.io/react-multiselect-dropdown/",
+  "bugs": {
+    "url": "https://github.com/alexandroit/react-multiselect-dropdown/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/alexandroit/react-multiselect-dropdown.git"
+  },
+  "license": "MIT",
+  "type": "module",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsup",
+    "clean": "rm -rf dist docs/react-17 docs/react-18 docs/react-19",
+    "typecheck": "tsc --noEmit",
+    "docs:install:react-17": "cd docs-src/react-17 && npm install",
+    "docs:install:react-18": "cd docs-src/react-18 && npm install",
+    "docs:install:react-19": "cd docs-src/react-19 && npm install",
+    "build:docs:react-17": "cd docs-src/react-17 && npm run build",
+    "build:docs:react-18": "cd docs-src/react-18 && npm run build",
+    "build:docs:react-19": "cd docs-src/react-19 && npm run build",
+    "build:docs": "npm run build:docs:react-19"
+  },
+  "peerDependencies": {
+    "react": ">=17.0.0 <18.0.0",
+    "react-dom": ">=17.0.0 <18.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "17.0.91",
+    "@types/react-dom": "17.0.26",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "tsup": "8.5.1",
+    "typescript": "5.9.3"
+  }
+}
