@@ -1,10 +1,10 @@
-# `@revivejs/react-multiselect-dropdown`
+# `@stackline/react-multiselect-dropdown`
 
 A maintained React multiselect dropdown built for teams migrating from Angular-style settings objects while still feeling natural in React apps.
 
 ## Why this package exists
 
-`@revivejs/react-multiselect-dropdown` keeps the familiar mental model from `@revivejs/angular2-multiselect-dropdown`:
+`@stackline/react-multiselect-dropdown` keeps the familiar mental model from `@stackline/angular2-multiselect-dropdown`:
 
 - pass `data`
 - pass a `settings` object
@@ -21,14 +21,14 @@ At the same time, the React version adds the patterns React developers expect:
 ## Install
 
 ```bash
-npm install @revivejs/react-multiselect-dropdown
+npm install @stackline/react-multiselect-dropdown
 ```
 
 ## Quick start
 
 ```tsx
 import { useState } from 'react';
-import { MultiSelectDropdown } from '@revivejs/react-multiselect-dropdown';
+import { MultiSelectDropdown } from '@stackline/react-multiselect-dropdown';
 
 const items = [
   { id: 1, itemName: 'India' },

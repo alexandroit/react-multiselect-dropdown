@@ -13,10 +13,10 @@ ReactDOM.render(
   <React.StrictMode>
     <App
       docsMeta={{
-        badge: 'React 17 · Multiselect dropdown',
-        reactLine: '17.0.2',
+        badge: 'React 17 family · Multiselect dropdown',
+        reactLine: '17.0.0 -> 17.0.2',
         packageVersion: '17.0.0',
-        packageRange: '^17.0.0',
+        packageRange: '17',
         docsPath: 'react-17'
       }}
     />

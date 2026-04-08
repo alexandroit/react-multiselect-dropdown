@@ -4,7 +4,7 @@ import {
   type DropdownRenderContext,
   type DropdownSettings,
   type MultiSelectDropdownHandle
-} from '@revivejs/react-multiselect-dropdown';
+} from '@stackline/react-multiselect-dropdown';
 import type {
   CountryOption,
   PersonOption,
@@ -354,7 +354,7 @@ function StylingExample({ pushLog }: DemoProps) {
 function ControlledFormExample({ pushLog }: DemoProps) {
   const [formModel, setFormModel] = useState({
     name: '',
-    email: 'developer@revivejs.dev',
+    email: 'developer@stackline.dev',
     skills: [SKILLS[0]]
   });
   const [submitted, setSubmitted] = useState(false);

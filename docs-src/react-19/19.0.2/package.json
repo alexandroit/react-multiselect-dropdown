@@ -1,0 +1,14 @@
+{
+  "name": "@stackline/react-multiselect-dropdown-docs-react19-19-0-2",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "validate": "node ./stackline-validate.mjs"
+  },
+  "dependencies": {
+    "react": "19.0.2",
+    "react-dom": "19.0.2",
+    "@stackline/react-multiselect-dropdown": "file:../../.."
+  },
+  "devDependencies": {}
+}

@@ -7,7 +7,7 @@ export default defineConfig({
   base: './',
   resolve: {
     alias: {
-      '@revivejs/react-multiselect-dropdown': resolve(__dirname, '../../src/index.ts'),
+      '@stackline/react-multiselect-dropdown': resolve(__dirname, '../../src/index.ts'),
       react: resolve(__dirname, 'node_modules/react'),
       'react/jsx-runtime': resolve(__dirname, 'node_modules/react/jsx-runtime.js'),
       'react/jsx-dev-runtime': resolve(__dirname, 'node_modules/react/jsx-dev-runtime.js'),

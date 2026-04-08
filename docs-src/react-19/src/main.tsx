@@ -13,10 +13,10 @@ createRoot(rootElement).render(
   <React.StrictMode>
     <App
       docsMeta={{
-        badge: 'React 19 · Multiselect dropdown',
-        reactLine: '19.2.4',
+        badge: 'React 19 family · Multiselect dropdown',
+        reactLine: '19.0.0 -> 19.2.5',
         packageVersion: '19.0.0',
-        packageRange: '^19.0.0',
+        packageRange: '19',
         docsPath: 'react-19'
       }}
     />

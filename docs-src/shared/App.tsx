@@ -75,7 +75,7 @@ export function App({ docsMeta }: AppProps) {
     ].slice(0, 10));
   };
 
-  const installCode = `npm install @revivejs/react-multiselect-dropdown@${docsMeta.packageRange}`;
+  const installCode = `npm install @stackline/react-multiselect-dropdown@${docsMeta.packageRange}`;
   const setupCode = [
     `const [selectedItems, setSelectedItems] = useState([]);`,
     ``,
@@ -100,7 +100,7 @@ export function App({ docsMeta }: AppProps) {
       <section className="hero">
         <div className="hero-card hero-main">
           <span className="badge">{docsMeta.badge}</span>
-          <h1>@revivejs/react-multiselect-dropdown</h1>
+          <h1>@stackline/react-multiselect-dropdown</h1>
           <p>
             A maintained React multiselect dropdown with Angular-friendly settings,
             render props for custom rows and badges, event callbacks, and dedicated docs
@@ -319,7 +319,7 @@ export function App({ docsMeta }: AppProps) {
       <footer className="footer">
         <p>
           React wrapper, docs curation, versioned compatibility releases, and ongoing maintenance
-          by ReviveJS.
+          by Stackline.
         </p>
       </footer>
     </div>

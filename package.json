@@ -1,5 +1,5 @@
 {
-  "name": "@revivejs/react-multiselect-dropdown",
+  "name": "@stackline/react-multiselect-dropdown",
   "version": "19.0.0",
   "description": "A maintained React multiselect dropdown with Angular-friendly settings and versioned demos.",
   "keywords": [
@@ -45,6 +45,9 @@
     "build": "tsup",
     "clean": "rm -rf dist docs/react-17 docs/react-18 docs/react-19",
     "typecheck": "tsc --noEmit",
+    "pack:check": "npm run build && npm pack --dry-run",
+    "release:line": "npm run build && node scripts/release-react-line.js",
+    "release:sequence": "npm run build && node scripts/release-react-sequence.js",
     "docs:install:react-17": "cd docs-src/react-17 && npm install",
     "docs:install:react-18": "cd docs-src/react-18 && npm install",
     "docs:install:react-19": "cd docs-src/react-19 && npm install",
@@ -56,6 +59,9 @@
   "peerDependencies": {
     "react": ">=19.0.0 <20.0.0",
     "react-dom": ">=19.0.0 <20.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "devDependencies": {
     "@types/react": "19.2.14",
