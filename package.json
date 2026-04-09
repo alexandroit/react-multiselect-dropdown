@@ -12,8 +12,7 @@
     "checkbox",
     "ui-component",
     "wrapper",
-    "maintained",
-    "revivejs"
+    "maintained"
   ],
   "homepage": "https://alexandroit.github.io/react-multiselect-dropdown/",
   "bugs": {

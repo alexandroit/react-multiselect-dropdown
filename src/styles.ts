@@ -1,4 +1,4 @@
-const STYLE_ID = 'revivejs-react-multiselect-dropdown-styles';
+const STYLE_ID = 'stackline-react-multiselect-dropdown-styles';
 
 const styles = `
 .rmsd-root {

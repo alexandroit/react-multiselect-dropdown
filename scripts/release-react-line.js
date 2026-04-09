@@ -76,7 +76,7 @@ function createReleasePackage(line) {
     throw new Error('Build output not found. Run `npm run build` before releasing.');
   }
 
-  const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), `revivejs-react-multiselect-dropdown-${release.version}-`));
+  const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), `stackline-react-multiselect-dropdown-${release.version}-`));
   const packageJson = JSON.parse(fs.readFileSync(path.join(rootDir, 'package.json'), 'utf8'));
 
   copyDir(distDir, path.join(tempDir, 'dist'));

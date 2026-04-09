@@ -1,0 +1,19 @@
+{
+  "packageName": "@stackline/react-multiselect-dropdown",
+  "projectRoot": "react-multiselect-dropdown/react-multiselect-dropdown",
+  "family": "react-18",
+  "framework": "react",
+  "exactVersion": "18.3.0",
+  "releaseRoot": "react-multiselect-dropdown/react-multiselect-dropdown/docs-src/react-18/18.3.0",
+  "build": null,
+  "install": {
+    "success": true,
+    "command": "npm install --ignore-scripts"
+  },
+  "validate": {
+    "success": true,
+    "command": "npm run validate"
+  },
+  "success": true,
+  "generatedAt": "2026-04-09T01:58:37.607Z"
+}
