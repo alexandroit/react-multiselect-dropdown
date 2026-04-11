@@ -107,9 +107,9 @@ The React version keeps the commonly used Angular settings keys:
 
 | React line | Package line | Docs |
 | --- | --- | --- |
-| React 17 | `17.x` | https://alexandroit.github.io/react-multiselect-dropdown/react-17/ |
-| React 18 | `18.x` | https://alexandroit.github.io/react-multiselect-dropdown/react-18/ |
-| React 19 | `19.x` | https://alexandroit.github.io/react-multiselect-dropdown/react-19/ |
+| React 17 | `17.x` | https://alexandro.net/docs/react/react-multiselect-dropdown/react-17/ |
+| React 18 | `18.x` | https://alexandro.net/docs/react/react-multiselect-dropdown/react-18/ |
+| React 19 | `19.x` | https://alexandro.net/docs/react/react-multiselect-dropdown/react-19/ |
 
 ## Version history
 
