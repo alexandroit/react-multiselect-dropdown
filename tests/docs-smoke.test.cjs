@@ -4,11 +4,11 @@ const fs = require("node:fs");
 const path = require("node:path");
 
 const repoRoot = path.resolve(__dirname, "..");
-const htmlFiles = ["docs-src/react-18/index.html"];
+const htmlFiles = ["docs-src/react-19/index.html"];
 const skinFiles = ["docs-src/shared/app.css"];
 const expectedStrings = [
   "@stackline/react-multiselect-dropdown",
-  "React 18 docs",
+  "React 19 docs",
 ];
 const themeMarker = /stackline-react17-live-20260527/;
 

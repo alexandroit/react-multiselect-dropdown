@@ -1,7 +1,7 @@
 {
   "name": "@stackline/react-multiselect-dropdown",
-  "version": "18.0.0",
-  "description": "A maintained React 18 multiselect dropdown with controlled state, skins, live docs, and ADA-friendly keyboard support.",
+  "version": "19.0.0",
+  "description": "A maintained React 19 multiselect dropdown with controlled state, skins, live docs, and ADA-friendly keyboard support.",
   "keywords": [
     "react",
     "multiselect",
@@ -53,23 +53,24 @@
     "build:docs:react-17": "cd docs-src/react-17 && npm run build",
     "build:docs:react-18": "cd docs-src/react-18 && npm run build",
     "build:docs:react-19": "cd docs-src/react-19 && npm run build",
-    "build:docs": "npm run build:docs:react-18",
+    "build:docs": "npm run build:docs:react-19",
     "publish:verdaccio:react-17": "npm run build && npm publish --registry=http://127.0.0.1:4873 --@stackline:registry=http://127.0.0.1:4873 --tag react-17 --access public",
     "publish:verdaccio:react-18": "npm run build && npm publish --registry=http://127.0.0.1:4873 --@stackline:registry=http://127.0.0.1:4873 --tag react-18 --access public",
+    "publish:verdaccio:react-19": "npm run build && npm publish --registry=http://127.0.0.1:4873 --@stackline:registry=http://127.0.0.1:4873 --tag react-19 --access public",
     "test": "node --test tests/*.test.cjs"
   },
   "peerDependencies": {
-    "react": ">=18.0.0 <19.0.0",
-    "react-dom": ">=18.0.0 <19.0.0"
+    "react": ">=19.0.0 <20.0.0",
+    "react-dom": ">=19.0.0 <20.0.0"
   },
   "publishConfig": {
     "access": "public"
   },
   "devDependencies": {
-    "@types/react": "18.3.28",
-    "@types/react-dom": "18.3.7",
-    "react": "18.3.1",
-    "react-dom": "18.3.1",
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
     "tsup": "8.5.1",
     "typescript": "5.9.3"
   }
