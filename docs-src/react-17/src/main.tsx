@@ -15,6 +15,8 @@ ReactDOM.render(
       docsMeta={{
         badge: 'React 17 family · Multiselect dropdown',
         reactLine: '17.0.0 package · React runtime 17.0.2',
+        reactFamily: '17.x',
+        reactRuntime: '17.0.2',
         packageVersion: '17.0.0',
         packageRange: '17.0.0',
         docsPath: 'react-17'

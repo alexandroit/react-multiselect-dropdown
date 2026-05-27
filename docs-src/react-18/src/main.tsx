@@ -15,8 +15,10 @@ createRoot(rootElement).render(
       docsMeta={{
         badge: 'React 18 family · Multiselect dropdown',
         reactLine: '18.0.0 -> 18.3.1',
+        reactFamily: '18.x',
+        reactRuntime: '18.3.1',
         packageVersion: '18.0.0',
-        packageRange: '18',
+        packageRange: '18.0.0',
         docsPath: 'react-18'
       }}
     />

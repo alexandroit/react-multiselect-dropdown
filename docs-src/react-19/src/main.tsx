@@ -15,6 +15,8 @@ createRoot(rootElement).render(
       docsMeta={{
         badge: 'React 19 family · Multiselect dropdown',
         reactLine: '19.0.0 -> 19.2.5',
+        reactFamily: '19.x',
+        reactRuntime: '19.2.4',
         packageVersion: '19.0.0',
         packageRange: '19',
         docsPath: 'react-19'

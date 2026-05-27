@@ -16,6 +16,8 @@ import {
 export type DocsMeta = {
   badge: string;
   reactLine: string;
+  reactFamily: string;
+  reactRuntime: string;
   packageVersion: string;
   packageRange: string;
   docsPath: string;
@@ -375,7 +377,7 @@ export function App({ docsMeta }: AppProps) {
         </div>
 
         <div className="topbar-meta">
-          <span className="meta-pill">React 17.x</span>
+          <span className="meta-pill">React {docsMeta.reactFamily}</span>
           <span className="meta-pill primary">v{docsMeta.packageVersion}</span>
         </div>
       </header>
@@ -414,7 +416,7 @@ export function App({ docsMeta }: AppProps) {
             </div>
             <div className="release-item">
               <strong>React</strong>
-              <span>17.0.2</span>
+              <span>{docsMeta.reactRuntime}</span>
             </div>
             <div className="release-item">
               <strong>Docs path</strong>
@@ -434,7 +436,8 @@ export function App({ docsMeta }: AppProps) {
                 <div className="setup-label">Live preview</div>
                 <h3>{currentRoute.label}</h3>
                 <p>
-                  Running against package line <code>{docsMeta.packageVersion}</code> and React <code>17.0.2</code>.
+                  Running against package line <code>{docsMeta.packageVersion}</code> and React{' '}
+                  <code>{docsMeta.reactRuntime}</code>.
                 </p>
               </div>
               <span className="status-pill">Classic selector preserved</span>
@@ -449,10 +452,11 @@ export function App({ docsMeta }: AppProps) {
             <span className="hero-badge">{docsMeta.badge}</span>
             <h2>Material-inspired multiselect, shaped for controlled React applications.</h2>
             <p className="hero-copy">
-              This React 17 line keeps the familiar Stackline settings contract while using idiomatic React state,
-              render functions, refs, and callback events. Version <code>{docsMeta.packageVersion}</code> includes
-              ADA-compliant keyboard and ARIA behavior, accurate badge counters, clear-all controls, dialog-safe body
-              overlays, and matching classic/material/dark/custom/brand skins.
+              This React {docsMeta.reactFamily} line keeps the familiar Stackline settings contract while using
+              idiomatic React state, render functions, refs, and callback events. Version{' '}
+              <code>{docsMeta.packageVersion}</code> includes ADA-compliant keyboard and ARIA behavior, accurate badge
+              counters, clear-all controls, dialog-safe body overlays, and matching
+              classic/material/dark/custom/brand skins.
             </p>
 
             <div className="pill-row">
