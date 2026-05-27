@@ -4,10 +4,13 @@ const fs = require("node:fs");
 const path = require("node:path");
 
 const repoRoot = path.resolve(__dirname, "..");
-const htmlFiles = ["docs-src/react-19/index.html"];
-const themeFiles = ["docs-src/shared/app.css"];
-const expectedStrings = ["@stackline/react-multiselect-dropdown"];
-const themeMarker = /stackline-docs-(refresh|wrap-fix|mobile-title-fix|mobile-layout-fix)-2026/;
+const htmlFiles = ["docs-src/react-17/index.html"];
+const skinFiles = ["docs-src/shared/app.css"];
+const expectedStrings = [
+  "@stackline/react-multiselect-dropdown",
+  "React 17 docs",
+];
+const themeMarker = /stackline-react17-live-20260527/;
 
 for (const relativePath of htmlFiles) {
   test(`html smoke: ${relativePath}`, () => {
@@ -22,8 +25,8 @@ for (const relativePath of htmlFiles) {
   });
 }
 
-for (const relativePath of themeFiles) {
-  test(`theme smoke: ${relativePath}`, () => {
+for (const relativePath of skinFiles) {
+  test(`skin smoke: ${relativePath}`, () => {
     const filePath = path.join(repoRoot, relativePath);
     const source = fs.readFileSync(filePath, "utf8");
     assert.match(source, themeMarker);

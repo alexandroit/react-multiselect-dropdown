@@ -30,103 +30,103 @@ export type PersonOption = {
 export const COUNTRIES: CountryOption[] = [
   {
     id: 1,
-    itemName: 'India',
-    name: 'IN',
-    capital: 'Delhi',
-    category: 'Asia',
-    region: 'Asia',
-    flag: '🇮🇳',
-    caption: 'Delhi · Asia'
+    itemName: 'Brazil',
+    name: 'BR',
+    capital: 'Brasilia',
+    category: 'South America',
+    region: 'Americas',
+    flag: 'BR',
+    caption: 'Brasilia - Americas'
   },
   {
     id: 2,
-    itemName: 'Singapore',
-    name: 'SG',
-    capital: 'Singapore',
-    category: 'Asia Pacific',
-    region: 'Asia',
-    flag: '🇸🇬',
-    caption: 'Singapore · Asia Pacific'
-  },
-  {
-    id: 3,
-    itemName: 'Australia',
-    name: 'AU',
-    capital: 'Canberra',
-    category: 'Oceania',
-    region: 'Oceania',
-    flag: '🇦🇺',
-    caption: 'Canberra · Oceania'
-  },
-  {
-    id: 4,
     itemName: 'Canada',
     name: 'CA',
     capital: 'Ottawa',
     category: 'North America',
     region: 'Americas',
-    flag: '🇨🇦',
-    caption: 'Ottawa · Americas'
+    flag: 'CA',
+    caption: 'Ottawa - Americas'
+  },
+  {
+    id: 3,
+    itemName: 'Portugal',
+    name: 'PT',
+    capital: 'Lisbon',
+    category: 'Europe',
+    region: 'Europe',
+    flag: 'PT',
+    caption: 'Lisbon - Europe'
+  },
+  {
+    id: 4,
+    itemName: 'United States',
+    name: 'US',
+    capital: 'Washington, DC',
+    category: 'North America',
+    region: 'Americas',
+    flag: 'US',
+    caption: 'Washington, DC - Americas'
   },
   {
     id: 5,
-    itemName: 'South Korea',
-    name: 'KR',
-    capital: 'Seoul',
-    category: 'Asia',
-    region: 'Asia',
-    flag: '🇰🇷',
-    caption: 'Seoul · Asia'
+    itemName: 'Argentina',
+    name: 'AR',
+    capital: 'Buenos Aires',
+    category: 'South America',
+    region: 'Americas',
+    flag: 'AR',
+    caption: 'Buenos Aires - Americas'
   },
   {
     id: 6,
-    itemName: 'Brazil',
-    name: 'BR',
-    capital: 'Brasilia',
-    category: 'Latin America',
-    region: 'Americas',
-    flag: '🇧🇷',
-    caption: 'Brasilia · Americas'
-  },
-  {
-    id: 7,
-    itemName: 'France',
-    name: 'FR',
-    capital: 'Paris',
-    category: 'Europe',
-    region: 'Europe',
-    flag: '🇫🇷',
-    caption: 'Paris · Europe'
-  },
-  {
-    id: 8,
     itemName: 'Germany',
     name: 'DE',
     capital: 'Berlin',
     category: 'Europe',
     region: 'Europe',
-    flag: '🇩🇪',
-    caption: 'Berlin · Europe'
+    flag: 'DE',
+    caption: 'Berlin - Europe'
+  },
+  {
+    id: 7,
+    itemName: 'Mexico',
+    name: 'MX',
+    capital: 'Mexico City',
+    category: 'North America',
+    region: 'Americas',
+    flag: 'MX',
+    caption: 'Mexico City - Americas'
+  },
+  {
+    id: 8,
+    itemName: 'Colombia',
+    name: 'CO',
+    capital: 'Bogota',
+    category: 'South America',
+    region: 'Americas',
+    flag: 'CO',
+    caption: 'Bogota - Americas'
   },
   {
     id: 9,
-    itemName: 'Japan',
-    name: 'JP',
-    capital: 'Tokyo',
-    category: 'Asia',
-    region: 'Asia',
-    flag: '🇯🇵',
-    caption: 'Tokyo · Asia'
+    itemName: 'Uruguay',
+    name: 'UY',
+    capital: 'Montevideo',
+    category: 'South America',
+    region: 'Americas',
+    flag: 'UY',
+    caption: 'Montevideo - Americas'
   },
   {
     id: 10,
-    itemName: 'New Zealand',
-    name: 'NZ',
-    capital: 'Wellington',
-    category: 'Oceania',
-    region: 'Oceania',
-    flag: '🇳🇿',
-    caption: 'Wellington · Oceania',
+    itemName: 'Costa Rica',
+    name: 'CR',
+    capital: 'San Jose',
+    category: 'Central America',
+    region: 'Americas',
+    flag: 'CR',
+    caption: 'San Jose - Americas',
     disabled: true
   }
 ];
@@ -174,7 +174,7 @@ export const CUSTOMERS = [
   { id: 4, name: 'Google', countries: COUNTRIES.slice(4, 6) }
 ];
 
-const PERSON_CATEGORIES = ['American', 'Canadian', 'Chinese', 'Indian'];
+const PERSON_CATEGORIES = ['Brazilian', 'Canadian', 'Mexican', 'Colombian'];
 const PERSON_LAST_NAMES = [
   'Smith',
   'Johnson',

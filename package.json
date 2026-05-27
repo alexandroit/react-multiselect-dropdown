@@ -1,7 +1,7 @@
 {
   "name": "@stackline/react-multiselect-dropdown",
-  "version": "19.0.0",
-  "description": "A maintained React multiselect dropdown with Angular-friendly settings and versioned demos.",
+  "version": "17.0.0",
+  "description": "A maintained React 17 multiselect dropdown with controlled state, themes, live docs, and ADA-friendly keyboard support.",
   "keywords": [
     "react",
     "multiselect",
@@ -14,7 +14,7 @@
     "wrapper",
     "maintained"
   ],
-  "homepage": "https://alexandro.net/docs/react/react-multiselect-dropdown/",
+  "homepage": "https://alexandro.net/docs/react/multiselect/",
   "bugs": {
     "url": "https://github.com/alexandroit/react-multiselect-dropdown/issues"
   },
@@ -53,21 +53,22 @@
     "build:docs:react-17": "cd docs-src/react-17 && npm run build",
     "build:docs:react-18": "cd docs-src/react-18 && npm run build",
     "build:docs:react-19": "cd docs-src/react-19 && npm run build",
-    "build:docs": "npm run build:docs:react-19",
+    "build:docs": "npm run build:docs:react-17",
+    "publish:verdaccio:react-17": "npm run build && npm publish --registry=http://127.0.0.1:4873 --@stackline:registry=http://127.0.0.1:4873 --tag react-17 --access public",
     "test": "node --test tests/*.test.cjs"
   },
   "peerDependencies": {
-    "react": ">=19.0.0 <20.0.0",
-    "react-dom": ">=19.0.0 <20.0.0"
+    "react": ">=17.0.0 <18.0.0",
+    "react-dom": ">=17.0.0 <18.0.0"
   },
   "publishConfig": {
     "access": "public"
   },
   "devDependencies": {
-    "@types/react": "19.2.14",
-    "@types/react-dom": "19.2.3",
-    "react": "19.2.4",
-    "react-dom": "19.2.4",
+    "@types/react": "17.0.91",
+    "@types/react-dom": "17.0.26",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
     "tsup": "8.5.1",
     "typescript": "5.9.3"
   }

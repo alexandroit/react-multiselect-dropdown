@@ -1,6 +1,17 @@
-import { useMemo, useState } from 'react';
-import type { ExampleDefinition } from './examples';
-import { EXAMPLES } from './examples';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import {
+  MultiSelectDropdown,
+  type MultiSelectDropdownHandle
+} from '@stackline/react-multiselect-dropdown';
+import { PEOPLE_SOURCE } from './demoData';
+import {
+  LIVE_EXAMPLES,
+  createCountryItemFromQuery,
+  getSkinSettings,
+  type CountryOption,
+  type LiveExampleDefinition,
+  type SkinName
+} from './examples';
 
 export type DocsMeta = {
   badge: string;
@@ -14,314 +25,498 @@ type AppProps = {
   docsMeta: DocsMeta;
 };
 
-type LogEntry = {
-  id: number;
-  text: string;
+type DocsRoute = {
+  path: string;
+  label: string;
+  example: LiveExampleDefinition<any>;
 };
 
-function stamp(message: string) {
-  return `${new Date().toLocaleTimeString('en-US', { hour12: false })}  ${message}`;
+const ROUTES: DocsRoute[] = [
+  { path: 'basic', label: 'Basic example', example: LIVE_EXAMPLES[0] },
+  { path: 'allvisible', label: 'All visible counter', example: LIVE_EXAMPLES[1] },
+  { path: 'singleselection', label: 'Single selection', example: LIVE_EXAMPLES[2] },
+  { path: 'searchfilter', label: 'Search filter', example: LIVE_EXAMPLES[3] },
+  { path: 'groupby', label: 'Group By', example: LIVE_EXAMPLES[4] },
+  { path: 'limitselection', label: 'Selection limit', example: LIVE_EXAMPLES[5] },
+  { path: 'templating', label: 'Templating', example: LIVE_EXAMPLES[6] },
+  { path: 'searchfilterAddNewItem', label: 'Search and Add New Item', example: LIVE_EXAMPLES[7] },
+  { path: 'disabledstate', label: 'Disabled state', example: LIVE_EXAMPLES[8] },
+  { path: 'usinginform', label: 'Using in Forms', example: LIVE_EXAMPLES[9] },
+  { path: 'virtualscrolling', label: 'Virtual Scrolling', example: LIVE_EXAMPLES[10] },
+  { path: 'lazyloading', label: 'Lazy Loading', example: LIVE_EXAMPLES[11] },
+  { path: 'usingInDialog', label: 'Using Inside Dialog', example: LIVE_EXAMPLES[12] },
+  { path: 'bodyOverlayTop', label: 'Body Overlay Auto', example: LIVE_EXAMPLES[13] },
+  { path: 'dropdownMethods', label: 'Methods', example: LIVE_EXAMPLES[14] }
+];
+
+function normalizeHashPath() {
+  const raw = window.location.hash.replace(/^#\/?/, '').trim();
+  return raw || 'basic';
 }
 
-function CodeBlock({ label, code }: { label: string; code: string }) {
-  const [copied, setCopied] = useState(false);
+function CountryRow({ item }: { item: CountryOption }) {
+  return (
+    <div className="country-row">
+      <span className="country-flag">{item.flag}</span>
+      <span>
+        <strong>{item.itemName}</strong>
+        <small>{item.capital}</small>
+      </span>
+    </div>
+  );
+}
+
+function CountryBadge({ item }: { item: CountryOption }) {
+  return (
+    <span className="country-badge">
+      {item.flag} {item.name}
+    </span>
+  );
+}
+
+function ExamplePreview<T extends Record<string, any>>({
+  example,
+  skin,
+  pushLog
+}: {
+  example: LiveExampleDefinition<T>;
+  skin: SkinName;
+  pushLog: (message: string) => void;
+}) {
+  const ref = useRef<MultiSelectDropdownHandle<T>>(null);
+  const [data, setData] = useState<T[]>(example.data);
+  const [selectedItems, setSelectedItems] = useState<T[]>(example.initialSelected);
+  const [disabled, setDisabled] = useState(false);
+  const [formName, setFormName] = useState('');
+  const [formEmail, setFormEmail] = useState('ascasc@aa.com');
+  const settings = useMemo(
+    () => getSkinSettings(example.settings, skin, example.allowDisabledToggle ? disabled : false),
+    [disabled, example, skin]
+  );
+  const isValidationExample = example.id === 'form-validation';
+  const formIsValid = formEmail.trim().length > 0 && selectedItems.length > 0;
+  const renderItem =
+    example.customRenderer === 'country'
+      ? (item: T) => <CountryRow item={item as unknown as CountryOption} />
+      : undefined;
+  const renderBadge =
+    example.customRenderer === 'country'
+      ? (item: T) => <CountryBadge item={item as unknown as CountryOption} />
+      : undefined;
+
+  const appendNextChunk = () => {
+    if (!example.lazy) {
+      return;
+    }
+
+    const nextChunk = PEOPLE_SOURCE.slice(data.length, data.length + 20) as T[];
+    if (!nextChunk.length) {
+      pushLog(`${example.title}: no more lazy rows`);
+      return;
+    }
+
+    setData((current) => current.concat(nextChunk));
+    pushLog(`${example.title}: appended ${nextChunk.length} rows`);
+  };
+
+  const renderDropdown = () => (
+    <MultiSelectDropdown
+      ref={ref}
+      data={data}
+      selectedItems={selectedItems}
+      onChange={(items) => {
+        setSelectedItems(items);
+        pushLog(`${example.title}: ${items.length} selected`);
+      }}
+      settings={settings}
+      renderItem={renderItem}
+      renderBadge={renderBadge}
+      onAddFilterNewItem={
+        example.addFromFilter
+          ? (query) => {
+              const next = createCountryItemFromQuery(query, data.length) as T;
+              setData((current) => current.concat(next));
+              pushLog(`${example.title}: created ${query}`);
+              return next;
+            }
+          : undefined
+      }
+      onScrollToEnd={example.lazy ? appendNextChunk : undefined}
+      onOpen={() => pushLog(`${example.title}: opened`)}
+      onClose={() => pushLog(`${example.title}: closed`)}
+      onSelect={(item) => pushLog(`${example.title}: selected ${JSON.stringify(item)}`)}
+      onDeSelect={(item) => pushLog(`${example.title}: removed ${JSON.stringify(item)}`)}
+    />
+  );
+
+  if (isValidationExample) {
+    const formValue = {
+      name: formName,
+      email: formEmail,
+      skills: selectedItems
+    };
+
+    return (
+      <div className="preview-example">
+        <div className="example-live">
+          <form
+            className="docs-form"
+            onSubmit={(event) => {
+              event.preventDefault();
+              pushLog(`${example.title}: submitted`);
+            }}>
+            <label className="form-field">
+              <span>Name</span>
+              <input value={formName} onChange={(event) => setFormName(event.target.value)} />
+            </label>
+
+            <label className="form-field">
+              <span>
+                Email Address <em>* required</em>
+              </span>
+              <input value={formEmail} onChange={(event) => setFormEmail(event.target.value)} />
+            </label>
+
+            <div className="form-field">
+              <span>
+                Skills <em>* required</em>
+              </span>
+              {renderDropdown()}
+            </div>
+
+            <button className="submit-button" type="submit" disabled={!formIsValid}>
+              Submit
+            </button>
+          </form>
+
+          <table className="form-output">
+            <tbody>
+              <tr>
+                <td>
+                  <label>Name</label>
+                </td>
+                <td>{formName}</td>
+              </tr>
+              <tr>
+                <td>
+                  <label>Email</label>
+                </td>
+                <td>{formEmail}</td>
+              </tr>
+              <tr>
+                <td>
+                  <label>Skills</label>
+                </td>
+                <td>{selectedItems.map((item) => String((item as Record<string, unknown>).itemName)).join(', ')}</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <p className="form-json">{JSON.stringify(formValue)}</p>
+          <p className="form-json">Form status: "{formIsValid ? 'VALID' : 'INVALID'}"</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="code-card">
-      <div className="code-card-head">
-        <strong>{label}</strong>
-        <button
-          className="copy-button"
-          type="button"
-          onClick={async () => {
-            await navigator.clipboard.writeText(code);
-            setCopied(true);
-            window.setTimeout(() => setCopied(false), 1200);
-          }}>
-          {copied ? 'Copied' : 'Copy'}
-        </button>
+    <div className="preview-example">
+      <div className="example-live">
+        {example.allowDisabledToggle ? (
+          <div className="method-bar">
+            <button
+              className="small-button"
+              type="button"
+              onClick={() => {
+                setDisabled((value) => !value);
+                pushLog(`${example.title}: disabled ${!disabled ? 'on' : 'off'}`);
+              }}>
+              {disabled ? 'Enable' : 'Disable'}
+            </button>
+          </div>
+        ) : null}
+
+        {example.showMethods ? (
+          <div className="method-bar">
+            <button type="button" onClick={() => ref.current?.openDropdown()}>
+              Open
+            </button>
+            <button type="button" onClick={() => ref.current?.closeDropdown()}>
+              Close
+            </button>
+            <button type="button" onClick={() => ref.current?.focusSearch()}>
+              Focus search
+            </button>
+            <button type="button" onClick={() => ref.current?.selectAll()}>
+              Select all
+            </button>
+            <button type="button" onClick={() => ref.current?.clearSelection()}>
+              Clear
+            </button>
+          </div>
+        ) : null}
+
+        <div className={example.overflowDemo ? 'overflow-lab' : undefined}>
+          {example.overflowDemo ? (
+            <div className="overflow-label">
+              Simulated dialog surface with <code>overflow: hidden</code>
+            </div>
+          ) : null}
+          {renderDropdown()}
+        </div>
       </div>
-      <pre>{code}</pre>
     </div>
   );
 }
 
 export function App({ docsMeta }: AppProps) {
-  const [activeId, setActiveId] = useState(EXAMPLES[0]?.id ?? 'basic');
-  const [logEntries, setLogEntries] = useState<LogEntry[]>([
-    { id: 1, text: stamp(`Demo loaded for React ${docsMeta.reactLine}.`) }
-  ]);
+  const skin: SkinName = 'classic';
+  const [currentPath, setCurrentPath] = useState(() => normalizeHashPath());
 
-  const activeExample =
-    EXAMPLES.find((example) => example.id === activeId) ??
-    EXAMPLES[0];
+  useEffect(() => {
+    const syncHash = () => setCurrentPath(normalizeHashPath());
+    window.addEventListener('hashchange', syncHash);
 
-  const exampleGroups = useMemo(() => {
-    const groups = new Map<string, ExampleDefinition[]>();
-
-    for (const example of EXAMPLES) {
-      const current = groups.get(example.group) ?? [];
-      current.push(example);
-      groups.set(example.group, current);
+    if (!window.location.hash) {
+      window.history.replaceState(null, '', '#/basic');
+      setCurrentPath('basic');
     }
 
-    return Array.from(groups.entries());
+    return () => window.removeEventListener('hashchange', syncHash);
   }, []);
 
+  const currentRoute = ROUTES.find((route) => route.path === currentPath) ?? ROUTES[0];
+
   const pushLog = (message: string) => {
-    setLogEntries((current) => [
-      { id: Date.now() + Math.random(), text: stamp(message) },
-      ...current
-    ].slice(0, 10));
+    void message;
   };
 
-  const installCode = `npm install @stackline/react-multiselect-dropdown@${docsMeta.packageRange}`;
+  const installCode = `npm install @stackline/react-multiselect-dropdown@${docsMeta.packageVersion} --save-exact`;
   const setupCode = [
-    `const [selectedItems, setSelectedItems] = useState([]);`,
+    `import { useMemo, useState } from 'react';`,
+    `import { MultiSelectDropdown } from '@stackline/react-multiselect-dropdown';`,
     ``,
-    `const settings = {`,
-    `  text: 'Select Countries',`,
-    `  enableSearchFilter: true,`,
+    `type Country = { id: number; itemName: string; capital: string };`
+  ].join('\n');
+  const settingsCode = [
+    `const settings = useMemo(() => ({`,
+    `  text: 'Select countries',`,
     `  primaryKey: 'id',`,
-    `  labelKey: 'itemName'`,
-    `};`
+    `  labelKey: 'itemName',`,
+    `  enableSearchFilter: true,`,
+    `  badgeShowLimit: 3,`,
+    `  clearAll: true,`,
+    `  skin: '${skin}'`,
+    `}), []);`
   ].join('\n');
   const renderCode = [
+    `const [selectedCountries, setSelectedCountries] = useState<Country[]>([]);`,
+    ``,
     `<MultiSelectDropdown`,
     `  data={countries}`,
-    `  selectedItems={selectedItems}`,
-    `  onChange={setSelectedItems}`,
+    `  selectedItems={selectedCountries}`,
+    `  onChange={setSelectedCountries}`,
     `  settings={settings}`,
     `/>`
   ].join('\n');
+  const featurePills = [
+    'Controlled state',
+    'Search',
+    'Grouping',
+    'Custom renderers',
+    'Lazy loading',
+    'Ref methods',
+    'ADA-compliant keyboard/ARIA',
+    'appendToBody',
+    'Classic and modern skins'
+  ];
+  const apiCards = [
+    {
+      kicker: 'Component',
+      title: '<MultiSelectDropdown />',
+      copy: 'Use a controlled React state array through selectedItems and onChange while keeping the settings object familiar.'
+    },
+    {
+      kicker: 'Settings',
+      title: 'settings.skin',
+      copy: 'Use settings.skin for classic, material, dark, custom, and brand visual modes. The legacy theme alias stays compatibility-only.'
+    },
+    {
+      kicker: 'Events',
+      title: 'onSelect and onDeSelect',
+      copy: 'React callbacks expose selection changes, select-all, clear-all, lazy scrolling, and custom item creation.'
+    },
+    {
+      kicker: 'Rendering',
+      title: 'renderItem and renderBadge',
+      copy: 'Pass React render functions for option rows and selected chips instead of framework templates.'
+    },
+    {
+      kicker: 'Accessibility',
+      title: 'ADA-compliant keyboard and ARIA support',
+      copy: 'The trigger, clear-all action, option rows, lazy lists, selected chips, and listbox states expose keyboard flow and ARIA metadata.'
+    },
+    {
+      kicker: 'Dialogs',
+      title: 'appendToBody / tagToBody',
+      copy: 'Set appendToBody inside modals, drawers, and overflow containers so the list is portaled to document.body and avoids clipping.'
+    }
+  ];
 
   return (
-    <div className="shell">
-      <section className="hero">
-        <div className="hero-card hero-main">
-          <span className="badge">{docsMeta.badge}</span>
-          <h1>@stackline/react-multiselect-dropdown</h1>
-          <p>
-            A maintained React multiselect dropdown with Angular-friendly settings,
-            render props for custom rows and badges, event callbacks, and dedicated docs
-            lines for React 17, 18, and 19.
-          </p>
-
-          <div className="feature-grid">
-            <div className="feature">
-              <strong>Angular-friendly migration</strong>
-              Keep the familiar <code>data</code>, <code>settings</code>, and selection callbacks
-              while moving to React state.
-            </div>
-            <div className="feature">
-              <strong>React-first controls</strong>
-              Controlled and uncontrolled modes, render functions, and <code>ref</code>-based methods.
-            </div>
-            <div className="feature">
-              <strong>Rich dropdown behavior</strong>
-              Search, grouping, limit selection, add-new, lazy loading, and remote data flows.
-            </div>
-            <div className="feature">
-              <strong>Versioned docs</strong>
-              Each maintained React line ships with its own docs build and compiled history.
-            </div>
+    <div className="docs-shell">
+      <header className="topbar">
+        <div className="brand">
+          <div className="brand-mark">R</div>
+          <div>
+            <div className="topbar-eyebrow">Stackline maintained line</div>
+            <h1>@stackline/react-multiselect-dropdown</h1>
           </div>
+        </div>
 
-          <div className="cta-row">
-            <a className="btn" href="#demos">
-              See demos
+        <div className="topbar-meta">
+          <span className="meta-pill">React 17.x</span>
+          <span className="meta-pill primary">v{docsMeta.packageVersion}</span>
+        </div>
+      </header>
+
+      <div className="docs-layout">
+        <aside className="rail">
+          <section className="rail-card">
+            <div className="rail-label">Overview</div>
+            <a className="rail-link" href="#install">Install</a>
+            <a className="rail-link" href="#preview">Preview</a>
+            <a className="rail-link" href="live/" target="_blank" rel="noopener">
+              Live project
             </a>
-            <a
-              className="btn secondary"
-              href="https://github.com/alexandroit/react-multiselect-dropdown#readme"
-              target="_blank"
-              rel="noreferrer">
-              README
-            </a>
-          </div>
-        </div>
+            <a className="rail-link" href="#api">API</a>
+          </section>
 
-        <div className="hero-card hero-setup">
-          <h2>Setup in 3 steps</h2>
+          <section className="rail-card">
+            <div className="rail-label">Examples</div>
+            <nav className="example-nav" aria-label="React multiselect examples">
+              {ROUTES.map((route) => (
+                <a
+                  key={route.path}
+                  className={route.path === currentRoute.path ? 'example-link active' : 'example-link'}
+                  href={`#/${route.path}`}>
+                  {route.label}
+                </a>
+              ))}
+            </nav>
+          </section>
 
-          <div className="step">
-            <span className="step-num">1</span>
-            <div>
-              <strong>Install</strong>
-              <pre>{installCode}</pre>
+          <section className="rail-card">
+            <div className="rail-label">Release line</div>
+            <div className="release-item">
+              <strong>Package</strong>
+              <span>{docsMeta.packageVersion}</span>
             </div>
-          </div>
-
-          <div className="step">
-            <span className="step-num">2</span>
-            <div>
-              <strong>Configure settings</strong>
-              <pre>{setupCode}</pre>
+            <div className="release-item">
+              <strong>React</strong>
+              <span>17.0.2</span>
             </div>
-          </div>
-
-          <div className="step">
-            <span className="step-num">3</span>
-            <div>
-              <strong>Render the dropdown</strong>
-              <pre>{renderCode}</pre>
+            <div className="release-item">
+              <strong>Docs path</strong>
+              <span>/{docsMeta.docsPath}/</span>
             </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="layout" id="demos">
-        <div className="panels">
-          <article className="panel">
-            <div className="panel-header">
-              <h2>Example gallery</h2>
-              <p>
-                Browse the maintained React examples that map directly to the Angular line:
-                forms, templates, grouping, lazy loading, remote data, and ref methods.
-              </p>
+            <div className="release-item">
+              <strong>Promise</strong>
+              <span>ADA-compliant keyboard/ARIA support</span>
             </div>
+          </section>
+        </aside>
 
-            <div className="example-shell">
-              <nav className="example-nav" aria-label="React multiselect examples">
-                {exampleGroups.map(([group, items]) => (
-                  <div className="example-group" key={group}>
-                    <h3>{group}</h3>
-                    {items.map((example) => (
-                      <button
-                        type="button"
-                        key={example.id}
-                        className={`example-link${example.id === activeExample.id ? ' active' : ''}`}
-                        onClick={() => {
-                          setActiveId(example.id);
-                          pushLog(`Opened example: ${example.label}`);
-                        }}>
-                        {example.label}
-                      </button>
-                    ))}
-                  </div>
-                ))}
-              </nav>
-
-              <div className="example-stage">
-                <div className="example-stage-header">
-                  <div>
-                    <h3>{activeExample.label}</h3>
-                    <p>{activeExample.description}</p>
-                  </div>
-                  <span className="stage-pill">React {docsMeta.reactLine}</span>
-                </div>
-
-                <div className="example-preview">
-                  <activeExample.Demo pushLog={pushLog} reactLine={docsMeta.reactLine} />
-                </div>
-
-                <div className="code-grid">
-                  {activeExample.code.map((snippet) => (
-                    <CodeBlock key={`${activeExample.id}-${snippet.label}`} {...snippet} />
-                  ))}
-                </div>
+        <main className="docs-main">
+          <section className="preview-card" id="preview">
+            <div className="preview-head">
+              <div>
+                <div className="setup-label">Live preview</div>
+                <h3>{currentRoute.label}</h3>
+                <p>
+                  Running against package line <code>{docsMeta.packageVersion}</code> and React <code>17.0.2</code>.
+                </p>
               </div>
-            </div>
-          </article>
-
-          <article className="panel ref-panel">
-            <div className="panel-header">
-              <h2>Quick API reference</h2>
-              <p>
-                The package keeps the Angular-style surface area while documenting the
-                most common React entry points in one place.
-              </p>
+              <span className="status-pill">Classic selector preserved</span>
             </div>
 
-            <div className="ref-grid">
-              <div className="ref-card">
-                <h4>Core props</h4>
-                <table className="api-table">
-                  <tbody>
-                    <tr><td><code>data</code></td><td>Array of dropdown options.</td></tr>
-                    <tr><td><code>selectedItems</code></td><td>Controlled selection state.</td></tr>
-                    <tr><td><code>defaultSelectedItems</code></td><td>Uncontrolled initial selection.</td></tr>
-                    <tr><td><code>settings</code></td><td>Angular-friendly settings object.</td></tr>
-                    <tr><td><code>onChange</code></td><td>Receives the next selected items array.</td></tr>
-                  </tbody>
-                </table>
-              </div>
-
-              <div className="ref-card">
-                <h4>Callbacks</h4>
-                <table className="api-table">
-                  <tbody>
-                    <tr><td><code>onSelect</code></td><td>Item selected.</td></tr>
-                    <tr><td><code>onDeSelect</code></td><td>Item removed.</td></tr>
-                    <tr><td><code>onSelectAll</code></td><td>Visible items selected.</td></tr>
-                    <tr><td><code>onDeSelectAll</code></td><td>Selections cleared.</td></tr>
-                    <tr><td><code>onScrollToEnd</code></td><td>Lazy-load hook for remote chunks.</td></tr>
-                  </tbody>
-                </table>
-              </div>
-
-              <div className="ref-card">
-                <h4>Render props and refs</h4>
-                <table className="api-table">
-                  <tbody>
-                    <tr><td><code>renderItem</code></td><td>Custom menu row rendering.</td></tr>
-                    <tr><td><code>renderBadge</code></td><td>Custom selected badge rendering.</td></tr>
-                    <tr><td><code>renderSearch</code></td><td>Custom search control surface.</td></tr>
-                    <tr><td><code>ref</code></td><td>Expose <code>openDropdown</code>, <code>closeDropdown</code>, <code>clearSelection</code>, and <code>focusSearch</code>.</td></tr>
-                  </tbody>
-                </table>
-              </div>
+            <div className="preview-canvas">
+              <ExamplePreview key={currentRoute.path} example={currentRoute.example} skin={skin} pushLog={pushLog} />
             </div>
-          </article>
-        </div>
+          </section>
 
-        <aside className="log-panel">
-          <div className="log-card">
-            <div className="log-head">
-              <h2>Event Log</h2>
-              <button className="clear-log" type="button" onClick={() => setLogEntries([])}>
-                Clear
-              </button>
-            </div>
-
-            <p>
-              Inspect selection callbacks, menu open/close events, and async data flow from the
-              active example.
+          <section className="hero-card">
+            <span className="hero-badge">{docsMeta.badge}</span>
+            <h2>Material-inspired multiselect, shaped for controlled React applications.</h2>
+            <p className="hero-copy">
+              This React 17 line keeps the familiar Stackline settings contract while using idiomatic React state,
+              render functions, refs, and callback events. Version <code>{docsMeta.packageVersion}</code> includes
+              ADA-compliant keyboard and ARIA behavior, accurate badge counters, clear-all controls, dialog-safe body
+              overlays, and matching classic/material/dark/custom/brand skins.
             </p>
 
-            <div className="log-list">
-              {logEntries.map((entry) => (
-                <div className="log-entry" key={entry.id}>
-                  {entry.text}
-                </div>
+            <div className="pill-row">
+              {featurePills.map((pill) => (
+                <span className="feature-pill" key={pill}>
+                  {pill}
+                </span>
               ))}
             </div>
-          </div>
 
-          <div className="log-card">
-            <h2>Release line</h2>
-            <p>
-              This docs build stays aligned with the maintained React compatibility line and
-              the published npm package.
-            </p>
-
-            <div className="log-list">
-              <div className="log-entry">Package line: {docsMeta.packageVersion}</div>
-              <div className="log-entry">React compatibility: {docsMeta.reactLine}</div>
-              <div className="log-entry">Docs path: /{docsMeta.docsPath}/</div>
-              <div className="log-entry">Pattern: versioned docs-src + compiled docs history</div>
-              <div className="log-entry">Coverage: forms, templates, grouping, lazy loading, remote data</div>
+            <div className="compat-grid">
+              <div className="compat-card">
+                <strong>React state first</strong>
+                Keep selection in component state through <code>selectedItems</code> and <code>onChange</code>.
+              </div>
+              <div className="compat-card">
+                <strong>Consistent behavior where it matters</strong>
+                Skins, counters, keyboard behavior, and body overlays follow the validated Stackline behavior.
+              </div>
+              <div className="compat-card">
+                <strong>Render functions instead of templates</strong>
+                Customize option rows and selected chips with React functions, not string templates.
+              </div>
             </div>
-          </div>
-        </aside>
-      </section>
+          </section>
 
-      <footer className="footer">
-        <p>
-          React wrapper, docs curation, versioned compatibility releases, and ongoing maintenance
-          by Stackline.
-        </p>
-      </footer>
+          <section className="setup-grid" id="install">
+            <article className="setup-card">
+              <div className="setup-label">Step 1</div>
+              <h3>Install the package</h3>
+              <pre>{installCode}</pre>
+            </article>
+
+            <article className="setup-card">
+              <div className="setup-label">Step 2</div>
+              <h3>Import the component</h3>
+              <pre>{setupCode}</pre>
+            </article>
+
+            <article className="setup-card">
+              <div className="setup-label">Step 3</div>
+              <h3>Create settings</h3>
+              <pre>{settingsCode}</pre>
+            </article>
+
+            <article className="setup-card">
+              <div className="setup-label">Step 4</div>
+              <h3>Render with controlled state</h3>
+              <pre>{renderCode}</pre>
+            </article>
+          </section>
+
+          <section className="api-grid" id="api">
+            {apiCards.map((card) => (
+              <article className="api-card" key={card.title}>
+                <div className="setup-label">{card.kicker}</div>
+                <h3>{card.title}</h3>
+                <p>{card.copy}</p>
+              </article>
+            ))}
+          </section>
+
+        </main>
+      </div>
     </div>
   );
 }

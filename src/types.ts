@@ -28,6 +28,7 @@ export interface DropdownSettings<T = DropdownItem> {
   labelKey?: string;
   primaryKey?: string;
   position?: 'top' | 'bottom';
+  autoPosition?: boolean;
   loading?: boolean;
   selectGroup?: boolean;
   addNewItemOnFilter?: boolean;
@@ -36,6 +37,19 @@ export interface DropdownSettings<T = DropdownItem> {
   clearAll?: boolean;
   closeDropDownOnSelection?: boolean;
   tagToBody?: boolean;
+  appendToBody?: boolean;
+  /** @deprecated Use `skin` instead. Kept as a compatibility alias. */
+  theme?: 'classic' | 'material' | 'dark' | 'custom' | 'brand' | string;
+  skin?: 'classic' | 'material' | 'dark' | 'custom' | 'brand' | string;
+  ariaLabel?: string;
+  listboxAriaLabel?: string;
+  searchAriaLabel?: string;
+  clearSearchAriaLabel?: string;
+  clearAllAriaLabel?: string;
+  removeItemAriaLabel?: string | ((item: T) => string);
+  openDropdownAriaLabel?: string;
+  closeDropdownAriaLabel?: string;
+  loadingText?: string;
 }
 
 export interface DropdownRenderContext<T = DropdownItem> {

@@ -4,3 +4,5 @@ dist
 docs-src/react-17/node_modules
 docs-src/react-18/node_modules
 docs-src/react-19/node_modules
+PROJECT_MEMORY.md
+*.memory.md
