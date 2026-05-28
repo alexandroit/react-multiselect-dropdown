@@ -1,6 +1,6 @@
 # @stackline/react-multiselect-dropdown
 
-> A maintained React multiselect dropdown for React 19 applications, with controlled React state, searchable/grouped options, lazy loading hooks, custom render functions, skins, body-overlay positioning, and ADA-friendly keyboard/ARIA behavior.
+> A maintained React multiselect dropdown for React 19 applications, with controlled React state, searchable/grouped options, lazy loading hooks, custom render functions, skins, body-overlay positioning, and ADA-compliant keyboard/ARIA behavior.
 
 [![npm version](https://img.shields.io/npm/v/@stackline/react-multiselect-dropdown.svg?style=flat-square)](https://www.npmjs.com/package/@stackline/react-multiselect-dropdown)
 [![npm downloads](https://img.shields.io/npm/dt/@stackline/react-multiselect-dropdown.svg?style=flat-square)](https://www.npmjs.com/package/@stackline/react-multiselect-dropdown)
@@ -12,7 +12,7 @@
 
 **[Documentation & Live Demos](https://alexandro.net/docs/react/multiselect/)** | **[React 19 Demo](https://alexandro.net/docs/react/multiselect/react-19/)** | **[npm](https://www.npmjs.com/package/@stackline/react-multiselect-dropdown)** | **[Issues](https://github.com/alexandroit/react-multiselect-dropdown/issues)** | **[Repository](https://github.com/alexandroit/react-multiselect-dropdown)**
 
-**Latest tested package release:** `19.0.0` for React `19.x`
+**Latest tested package release:** `19.0.1` for React `19.x`
 
 ---
 
@@ -26,7 +26,7 @@
 
 The package is built around a controlled React API: pass `data`, bind `selectedItems`, receive updates through `onChange`, and customize behavior through a `settings` object. It also supports custom React render functions for option rows and selected badges, lazy loading callbacks, imperative `ref` methods, and body-overlay positioning for dialogs or clipped containers.
 
-The current package release is `19.0.0` for React 19.x applications. It was tested in a clean React `19.2.4` application before publication to the local validation registry.
+The current package release is `19.0.1` for React 19.x applications. It was tested in a clean React `19.2.4` application before public npm publication.
 
 ## Features
 
@@ -43,7 +43,7 @@ The current package release is `19.0.0` for React 19.x applications. It was test
 | Add-new-item from search text | Yes |
 | Ref methods for open, close, focus, select all, and clear | Yes |
 | Built-in `classic`, `material`, `dark`, `custom`, and `brand` skins | Yes |
-| ADA-friendly keyboard navigation, focus states, and ARIA labels | Yes |
+| ADA-compliant keyboard navigation, focus states, and ARIA labels | Yes |
 | Dialog and overflow-container support through `appendToBody` / `tagToBody` | Yes |
 | Versioned docs builds per React line | Yes |
 
@@ -72,15 +72,15 @@ Each package family installs on its matching React family. Keep the package fami
 | :---: | :---: | :---: | :---: | :--- |
 | **17.x** | **React 17 only** | **`>=17.0.0 <18.0.0`** | **17.0.0 -> 17.0.2** | [React 17 family docs](https://alexandro.net/docs/react/multiselect/react-17/) |
 | **18.x** | **React 18 only** | **`>=18.0.0 <19.0.0`** | **18.0.0 -> 18.3.1** | [React 18 family docs](https://alexandro.net/docs/react/multiselect/react-18/) |
-| **19.x** | **React 19 only** | **`>=19.0.0 <20.0.0`** | **19.0.0 -> 19.2.4** | [React 19 family docs](https://alexandro.net/docs/react/multiselect/react-19/) |
+| **19.x** | **React 19 only** | **`>=19.0.0 <20.0.0`** | **19.0.1 -> 19.2.4** | [React 19 family docs](https://alexandro.net/docs/react/multiselect/react-19/) |
 
 ## Installation
 
 ```bash
-npm install @stackline/react-multiselect-dropdown@19.0.0 --save-exact
+npm install @stackline/react-multiselect-dropdown@19.0.1 --save-exact
 ```
 
-Install `19.0.0` for React 19.x applications. The package includes its component styles and injects them at runtime, so no extra CSS import is required for the default experience.
+Install `19.0.1` for React 19.x applications. The package includes its component styles and injects them at runtime, so no extra CSS import is required for the default experience.
 
 ## Setup
 
@@ -206,7 +206,7 @@ export function CountrySelector() {
 
 ## Official React 19 Test Matrix
 
-The React 19 release was tested in a clean React `19.2.4` application with `@stackline/react-multiselect-dropdown@19.0.0`. The docs use the same examples from that test app, including keyboard navigation, focus, ARIA behavior, badge counters, responsive action buttons, scrollable lists, and dialog-safe body overlays.
+The React 19 release was tested in a clean React `19.2.4` application with `@stackline/react-multiselect-dropdown@19.0.1`. The docs use the same examples from that test app, including keyboard navigation, focus, ARIA behavior, badge counters, responsive action buttons, scrollable lists, and dialog-safe body overlays.
 
 The same core scenarios are validated for the visual skins:
 

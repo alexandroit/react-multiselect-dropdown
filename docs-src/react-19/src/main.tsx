@@ -17,8 +17,8 @@ createRoot(rootElement).render(
         reactLine: '19.0.0 -> 19.2.5',
         reactFamily: '19.x',
         reactRuntime: '19.2.4',
-        packageVersion: '19.0.0',
-        packageRange: '19.0.0',
+        packageVersion: '19.0.1',
+        packageRange: '19.0.1',
         docsPath: 'react-19'
       }}
     />

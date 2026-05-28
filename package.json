@@ -1,7 +1,7 @@
 {
   "name": "@stackline/react-multiselect-dropdown",
-  "version": "19.0.0",
-  "description": "A maintained React 19 multiselect dropdown with controlled state, skins, live docs, and ADA-friendly keyboard support.",
+  "version": "19.0.1",
+  "description": "Maintained React 19 multiselect dropdown with ADA-compliant keyboard/ARIA support, controlled state, Stackline skins, body overlays, live docs, search, grouping, lazy loading, and custom renderers.",
   "keywords": [
     "react",
     "multiselect",
