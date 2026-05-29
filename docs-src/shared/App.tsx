@@ -395,6 +395,7 @@ export function App({ docsMeta }: AppProps) {
     'Ref methods',
     'ADA-compliant keyboard/ARIA',
     'appendToBody',
+    'Centered placeholder line',
     'Classic and modern skins'
   ];
   const apiCards = [
@@ -427,6 +428,11 @@ export function App({ docsMeta }: AppProps) {
       kicker: 'Dialogs',
       title: 'appendToBody / tagToBody',
       copy: 'Set appendToBody inside modals, drawers, and overflow containers so the list is portaled to document.body and avoids clipping.'
+    },
+    {
+      kicker: 'Layout',
+      title: 'Placeholder alignment',
+      copy: 'Empty placeholders and single values stay left aligned while remaining vertically centered inside the trigger on desktop and mobile.'
     }
   ];
 
@@ -541,8 +547,8 @@ export function App({ docsMeta }: AppProps) {
               This React {docsMeta.reactFamily} line keeps the familiar Stackline settings contract while using
               idiomatic React state, render functions, refs, and callback events. Version{' '}
               <code>{docsMeta.packageVersion}</code> includes ADA-compliant keyboard and ARIA behavior, accurate badge
-              counters, clear-all controls, dialog-safe body overlays, and matching
-              classic/material/dark/custom/brand skins.
+              counters, clear-all controls, dialog-safe body overlays, left-aligned vertically centered placeholders, and
+              matching classic/material/dark/custom/brand skins.
             </p>
 
             <div className="pill-row">

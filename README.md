@@ -12,7 +12,7 @@
 
 **[Documentation & Live Demos](https://alexandro.net/docs/react/multiselect/)** | **[React 19 Demo](https://alexandro.net/docs/react/multiselect/react-19/)** | **[React 19 StackBlitz](https://stackblitz.com/github/alexandroit/stackline-react-multiselect-react-19?file=src%2Fexamples%2Fbasic%2Fbasic.component.tsx&startScript=start&initialpath=%2Fbasic)** | **[npm](https://www.npmjs.com/package/@stackline/react-multiselect-dropdown)** | **[Issues](https://github.com/alexandroit/react-multiselect-dropdown/issues)** | **[Repository](https://github.com/alexandroit/react-multiselect-dropdown)**
 
-**Latest tested package release:** `19.0.1` for React `19.x`
+**Latest tested package release:** `19.0.2` for React `19.x`
 
 ---
 
@@ -26,7 +26,7 @@
 
 The package is built around a controlled React API: pass `data`, bind `selectedItems`, receive updates through `onChange`, and customize behavior through a `settings` object. It also supports custom React render functions for option rows and selected badges, lazy loading callbacks, imperative `ref` methods, and body-overlay positioning for dialogs or clipped containers.
 
-The current package release is `19.0.1` for React 19.x applications. It was tested in a clean React `19.2.4` application before public npm publication.
+The current package release is `19.0.2` for React 19.x applications. It was tested in a clean React `19.2.4` application before public npm publication. This patch keeps the React 19 line aligned with the Angular visual contract and centers placeholder/single-value text vertically while preserving left alignment.
 
 ## Features
 
@@ -45,6 +45,7 @@ The current package release is `19.0.1` for React 19.x applications. It was test
 | Built-in `classic`, `material`, `dark`, `custom`, and `brand` skins | Yes |
 | ADA-compliant keyboard navigation, focus states, and ARIA labels | Yes |
 | Dialog and overflow-container support through `appendToBody` / `tagToBody` | Yes |
+| Left-aligned, vertically centered placeholder and single-value text | Yes |
 | Versioned docs builds per React line | Yes |
 
 ## Table of Contents
@@ -73,15 +74,15 @@ Each package family installs on its matching React family. Keep the package fami
 | :---: | :---: | :---: | :---: | :--- |
 | **17.x** | **React 17 only** | **`>=17.0.0 <18.0.0`** | **17.0.0 -> 17.0.2** | [React 17 family docs](https://alexandro.net/docs/react/multiselect/react-17/) |
 | **18.x** | **React 18 only** | **`>=18.0.0 <19.0.0`** | **18.0.0 -> 18.3.1** | [React 18 family docs](https://alexandro.net/docs/react/multiselect/react-18/) |
-| **19.x** | **React 19 only** | **`>=19.0.0 <20.0.0`** | **19.0.1 -> 19.2.4** | [React 19 family docs](https://alexandro.net/docs/react/multiselect/react-19/) |
+| **19.x** | **React 19 only** | **`>=19.0.0 <20.0.0`** | **19.0.2 -> 19.2.4** | [React 19 family docs](https://alexandro.net/docs/react/multiselect/react-19/) |
 
 ## Installation
 
 ```bash
-npm install @stackline/react-multiselect-dropdown@19.0.1 --save-exact
+npm install @stackline/react-multiselect-dropdown@19.0.2 --save-exact
 ```
 
-Install `19.0.1` for React 19.x applications. The package includes its component styles and injects them at runtime, so no extra CSS import is required for the default experience.
+Install `19.0.2` for React 19.x applications. The package includes its component styles and injects them at runtime, so no extra CSS import is required for the default experience. This release also keeps empty placeholders visually centered in the trigger on desktop and mobile.
 
 ## Setup
 
@@ -241,7 +242,7 @@ Use the dedicated React 19 StackBlitz project when you want a fast editable exam
 
 ## Official React 19 Test Matrix
 
-The React 19 release was tested in a clean React `19.2.4` application with `@stackline/react-multiselect-dropdown@19.0.1`. The docs use the same examples from that test app, including keyboard navigation, focus, ARIA behavior, badge counters, responsive action buttons, scrollable lists, and dialog-safe body overlays.
+The React 19 release was tested in a clean React `19.2.4` application with `@stackline/react-multiselect-dropdown@19.0.2`. The docs use the same examples from that test app, including keyboard navigation, focus, ARIA behavior, badge counters, responsive action buttons, scrollable lists, dialog-safe body overlays, and the corrected left-aligned placeholder with vertical centering.
 
 The same core scenarios are validated for the visual skins:
 
