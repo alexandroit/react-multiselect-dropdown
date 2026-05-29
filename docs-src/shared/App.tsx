@@ -34,32 +34,66 @@ type DocsRoute = {
   example: LiveExampleDefinition<any>;
 };
 
+function exampleById(id: string) {
+  const example = LIVE_EXAMPLES.find((item) => item.id === id);
+  if (!example) {
+    throw new Error(`Missing React docs example: ${id}`);
+  }
+  return example;
+}
+
 const ROUTES: DocsRoute[] = [
-  { path: 'basic', label: 'Basic example', example: LIVE_EXAMPLES[0] },
-  { path: 'allvisible', label: 'All visible counter', example: LIVE_EXAMPLES[1] },
-  { path: 'singleselection', label: 'Single selection', example: LIVE_EXAMPLES[2] },
-  { path: 'searchfilter', label: 'Search filter', example: LIVE_EXAMPLES[3] },
-  { path: 'groupby', label: 'Group By', example: LIVE_EXAMPLES[4] },
-  { path: 'limitselection', label: 'Selection limit', example: LIVE_EXAMPLES[5] },
-  { path: 'templating', label: 'Templating', example: LIVE_EXAMPLES[6] },
-  { path: 'searchfilterAddNewItem', label: 'Search and Add New Item', example: LIVE_EXAMPLES[7] },
-  { path: 'disabledstate', label: 'Disabled state', example: LIVE_EXAMPLES[8] },
-  { path: 'usinginform', label: 'Using in Forms', example: LIVE_EXAMPLES[9] },
-  { path: 'virtualscrolling', label: 'Virtual Scrolling', example: LIVE_EXAMPLES[10] },
-  { path: 'lazyloading', label: 'Lazy Loading', example: LIVE_EXAMPLES[11] },
-  { path: 'usingInDialog', label: 'Using Inside Dialog', example: LIVE_EXAMPLES[12] },
-  { path: 'bodyOverlayTop', label: 'Body Overlay Auto', example: LIVE_EXAMPLES[13] },
-  { path: 'dropdownMethods', label: 'Methods', example: LIVE_EXAMPLES[14] }
+  { path: 'basic', label: 'Basic example', example: exampleById('basic-counter') },
+  { path: 'single-selection', label: 'Single selection', example: exampleById('single-selection') },
+  { path: 'search-filter', label: 'Search filter', example: exampleById('search-filter') },
+  { path: 'custom-search-api', label: 'Custom Search from API', example: exampleById('custom-search-api') },
+  { path: 'search-filter-by-property', label: 'Search Filter By Property', example: exampleById('search-by') },
+  { path: 'search-add-new-item', label: 'Search and Add New Item', example: exampleById('add-filter-item') },
+  { path: 'group-by', label: 'Group By', example: exampleById('grouped') },
+  { path: 'templating', label: 'Templating', example: exampleById('custom-rendering') },
+  { path: 'template-driven-forms', label: 'Template-driven forms', example: exampleById('template-driven-forms') },
+  { path: 'reactive-forms', label: 'Reactive forms', example: exampleById('form-validation') },
+  { path: 'virtual-scrolling', label: 'Virtual Scrolling', example: exampleById('long-list') },
+  { path: 'lazy-loading-api', label: 'Lazy Loading from API', example: exampleById('lazy-loading') },
+  { path: 'remote-data', label: 'Data from remote API', example: exampleById('remote-data') },
+  { path: 'list-loop', label: 'Using in List for loop', example: exampleById('list-loop') },
+  { path: 'dialog', label: 'Using Inside Dialog', example: exampleById('body-overlay') },
+  { path: 'multiple-dropdowns', label: 'Multiple dropdowns', example: exampleById('multiple-dropdowns') },
+  { path: 'dynamic-data', label: 'Load dynamic data', example: exampleById('dynamic-data') },
+  { path: 'methods', label: 'Methods', example: exampleById('methods') },
+  { path: 'events', label: 'Events', example: exampleById('events') },
+  { path: 'disabled', label: 'Disabled state', example: exampleById('disabled-toggle') },
+  { path: 'limit-selection', label: 'Limit selection', example: exampleById('limit-selection') },
+  { path: 'limit-badges', label: 'Limit badges', example: exampleById('limit-badges') },
+  { path: 'custom-placeholder', label: 'Custom placeholder', example: exampleById('custom-placeholder') },
+  { path: 'styling', label: 'Styling', example: exampleById('styling') },
+  { path: 'body-overlay-auto', label: 'Body Overlay Auto', example: exampleById('body-overlay-top') }
 ];
+
+const ROUTE_ALIASES: Record<string, string> = {
+  allvisible: 'limit-badges',
+  singleselection: 'single-selection',
+  searchfilter: 'search-filter',
+  groupby: 'group-by',
+  limitselection: 'limit-selection',
+  searchfilterAddNewItem: 'search-add-new-item',
+  disabledstate: 'disabled',
+  usinginform: 'reactive-forms',
+  virtualscrolling: 'virtual-scrolling',
+  lazyloading: 'lazy-loading-api',
+  usingInDialog: 'dialog',
+  bodyOverlayTop: 'body-overlay-auto',
+  dropdownMethods: 'methods'
+};
 
 function normalizeHashPath() {
   const raw = window.location.hash.replace(/^#\/?/, '').trim();
-  return raw || 'basic';
+  return ROUTE_ALIASES[raw] || raw || 'basic';
 }
 
 const STACKBLITZ_ROUTE_PATHS: Record<string, string> = {
   basic: 'basic',
-  allvisible: 'all-visible-counter',
+  allvisible: 'limit-badges',
   singleselection: 'single-selection',
   searchfilter: 'search-filter',
   groupby: 'group-by',
