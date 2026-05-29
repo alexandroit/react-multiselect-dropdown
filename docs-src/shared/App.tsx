@@ -76,7 +76,9 @@ const STACKBLITZ_ROUTE_PATHS: Record<string, string> = {
 };
 
 function buildStackBlitzUrl(baseUrl: string, routePath: string) {
-  return `${baseUrl}?startScript=start&initialpath=${encodeURIComponent(`/${STACKBLITZ_ROUTE_PATHS[routePath] || routePath}`)}`;
+  const stackBlitzRoute = STACKBLITZ_ROUTE_PATHS[routePath] || routePath;
+  const filePath = `src/examples/${stackBlitzRoute}/${stackBlitzRoute}.component.tsx`;
+  return `${baseUrl}?file=${encodeURIComponent(filePath)}&startScript=start&initialpath=${encodeURIComponent(`/${stackBlitzRoute}`)}`;
 }
 
 function CountryRow({ item }: { item: CountryOption }) {

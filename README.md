@@ -10,7 +10,7 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue?style=flat-square&logo=typescript)](https://www.typescriptlang.org)
 [![GitHub stars](https://img.shields.io/github/stars/alexandroit/react-multiselect-dropdown.svg?style=flat-square)](https://github.com/alexandroit/react-multiselect-dropdown/stargazers)
 
-**[Documentation & Live Demos](https://alexandro.net/docs/react/multiselect/)** | **[React 19 Demo](https://alexandro.net/docs/react/multiselect/react-19/)** | **[React 19 StackBlitz](https://stackblitz.com/github/alexandroit/stackline-react-multiselect-react-19?startScript=start&initialpath=%2Fbasic)** | **[npm](https://www.npmjs.com/package/@stackline/react-multiselect-dropdown)** | **[Issues](https://github.com/alexandroit/react-multiselect-dropdown/issues)** | **[Repository](https://github.com/alexandroit/react-multiselect-dropdown)**
+**[Documentation & Live Demos](https://alexandro.net/docs/react/multiselect/)** | **[React 19 Demo](https://alexandro.net/docs/react/multiselect/react-19/)** | **[React 19 StackBlitz](https://stackblitz.com/github/alexandroit/stackline-react-multiselect-react-19?file=src%2Fexamples%2Fbasic%2Fbasic.component.tsx&startScript=start&initialpath=%2Fbasic)** | **[npm](https://www.npmjs.com/package/@stackline/react-multiselect-dropdown)** | **[Issues](https://github.com/alexandroit/react-multiselect-dropdown/issues)** | **[Repository](https://github.com/alexandroit/react-multiselect-dropdown)**
 
 **Latest tested package release:** `19.0.1` for React `19.x`
 
@@ -209,25 +209,25 @@ export function CountrySelector() {
 
 Use the dedicated React 19 StackBlitz project when you want a fast editable example without importing the full package repository:
 
-**[Open the React 19 playground](https://stackblitz.com/github/alexandroit/stackline-react-multiselect-react-19?startScript=start&initialpath=%2Fbasic)**
+**[Open the React 19 playground](https://stackblitz.com/github/alexandroit/stackline-react-multiselect-react-19?file=src%2Fexamples%2Fbasic%2Fbasic.component.tsx&startScript=start&initialpath=%2Fbasic)**
 
 | Example | StackBlitz |
 | :--- | :--- |
-| Basic example | [Open](https://stackblitz.com/github/alexandroit/stackline-react-multiselect-react-19?startScript=start&initialpath=%2Fbasic) |
-| All visible counter | [Open](https://stackblitz.com/github/alexandroit/stackline-react-multiselect-react-19?startScript=start&initialpath=%2Fall-visible-counter) |
-| Single selection | [Open](https://stackblitz.com/github/alexandroit/stackline-react-multiselect-react-19?startScript=start&initialpath=%2Fsingle-selection) |
-| Search filter | [Open](https://stackblitz.com/github/alexandroit/stackline-react-multiselect-react-19?startScript=start&initialpath=%2Fsearch-filter) |
-| Group By | [Open](https://stackblitz.com/github/alexandroit/stackline-react-multiselect-react-19?startScript=start&initialpath=%2Fgroup-by) |
-| Selection limit | [Open](https://stackblitz.com/github/alexandroit/stackline-react-multiselect-react-19?startScript=start&initialpath=%2Fselection-limit) |
-| Templating | [Open](https://stackblitz.com/github/alexandroit/stackline-react-multiselect-react-19?startScript=start&initialpath=%2Ftemplating) |
-| Search and Add New Item | [Open](https://stackblitz.com/github/alexandroit/stackline-react-multiselect-react-19?startScript=start&initialpath=%2Fsearch-add-new-item) |
-| Disabled state | [Open](https://stackblitz.com/github/alexandroit/stackline-react-multiselect-react-19?startScript=start&initialpath=%2Fdisabled-state) |
-| Using in Forms | [Open](https://stackblitz.com/github/alexandroit/stackline-react-multiselect-react-19?startScript=start&initialpath=%2Fusing-in-forms) |
-| Virtual Scrolling | [Open](https://stackblitz.com/github/alexandroit/stackline-react-multiselect-react-19?startScript=start&initialpath=%2Fvirtual-scrolling) |
-| Lazy Loading | [Open](https://stackblitz.com/github/alexandroit/stackline-react-multiselect-react-19?startScript=start&initialpath=%2Flazy-loading) |
-| Using Inside Dialog | [Open](https://stackblitz.com/github/alexandroit/stackline-react-multiselect-react-19?startScript=start&initialpath=%2Fusing-inside-dialog) |
-| Body Overlay Auto | [Open](https://stackblitz.com/github/alexandroit/stackline-react-multiselect-react-19?startScript=start&initialpath=%2Fbody-overlay-auto) |
-| Methods | [Open](https://stackblitz.com/github/alexandroit/stackline-react-multiselect-react-19?startScript=start&initialpath=%2Fmethods) |
+| Basic example | [Open](https://stackblitz.com/github/alexandroit/stackline-react-multiselect-react-19?file=src%2Fexamples%2Fbasic%2Fbasic.component.tsx&startScript=start&initialpath=%2Fbasic) |
+| All visible counter | [Open](https://stackblitz.com/github/alexandroit/stackline-react-multiselect-react-19?file=src%2Fexamples%2Fall-visible-counter%2Fall-visible-counter.component.tsx&startScript=start&initialpath=%2Fall-visible-counter) |
+| Single selection | [Open](https://stackblitz.com/github/alexandroit/stackline-react-multiselect-react-19?file=src%2Fexamples%2Fsingle-selection%2Fsingle-selection.component.tsx&startScript=start&initialpath=%2Fsingle-selection) |
+| Search filter | [Open](https://stackblitz.com/github/alexandroit/stackline-react-multiselect-react-19?file=src%2Fexamples%2Fsearch-filter%2Fsearch-filter.component.tsx&startScript=start&initialpath=%2Fsearch-filter) |
+| Group By | [Open](https://stackblitz.com/github/alexandroit/stackline-react-multiselect-react-19?file=src%2Fexamples%2Fgroup-by%2Fgroup-by.component.tsx&startScript=start&initialpath=%2Fgroup-by) |
+| Selection limit | [Open](https://stackblitz.com/github/alexandroit/stackline-react-multiselect-react-19?file=src%2Fexamples%2Fselection-limit%2Fselection-limit.component.tsx&startScript=start&initialpath=%2Fselection-limit) |
+| Templating | [Open](https://stackblitz.com/github/alexandroit/stackline-react-multiselect-react-19?file=src%2Fexamples%2Ftemplating%2Ftemplating.component.tsx&startScript=start&initialpath=%2Ftemplating) |
+| Search and Add New Item | [Open](https://stackblitz.com/github/alexandroit/stackline-react-multiselect-react-19?file=src%2Fexamples%2Fsearch-add-new-item%2Fsearch-add-new-item.component.tsx&startScript=start&initialpath=%2Fsearch-add-new-item) |
+| Disabled state | [Open](https://stackblitz.com/github/alexandroit/stackline-react-multiselect-react-19?file=src%2Fexamples%2Fdisabled-state%2Fdisabled-state.component.tsx&startScript=start&initialpath=%2Fdisabled-state) |
+| Using in Forms | [Open](https://stackblitz.com/github/alexandroit/stackline-react-multiselect-react-19?file=src%2Fexamples%2Fusing-in-forms%2Fusing-in-forms.component.tsx&startScript=start&initialpath=%2Fusing-in-forms) |
+| Virtual Scrolling | [Open](https://stackblitz.com/github/alexandroit/stackline-react-multiselect-react-19?file=src%2Fexamples%2Fvirtual-scrolling%2Fvirtual-scrolling.component.tsx&startScript=start&initialpath=%2Fvirtual-scrolling) |
+| Lazy Loading | [Open](https://stackblitz.com/github/alexandroit/stackline-react-multiselect-react-19?file=src%2Fexamples%2Flazy-loading%2Flazy-loading.component.tsx&startScript=start&initialpath=%2Flazy-loading) |
+| Using Inside Dialog | [Open](https://stackblitz.com/github/alexandroit/stackline-react-multiselect-react-19?file=src%2Fexamples%2Fusing-inside-dialog%2Fusing-inside-dialog.component.tsx&startScript=start&initialpath=%2Fusing-inside-dialog) |
+| Body Overlay Auto | [Open](https://stackblitz.com/github/alexandroit/stackline-react-multiselect-react-19?file=src%2Fexamples%2Fbody-overlay-auto%2Fbody-overlay-auto.component.tsx&startScript=start&initialpath=%2Fbody-overlay-auto) |
+| Methods | [Open](https://stackblitz.com/github/alexandroit/stackline-react-multiselect-react-19?file=src%2Fexamples%2Fmethods%2Fmethods.component.tsx&startScript=start&initialpath=%2Fmethods) |
 
 ## Official React 19 Test Matrix
 
