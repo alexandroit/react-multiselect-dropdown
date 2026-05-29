@@ -77,6 +77,7 @@ const styles = `
   display: flex;
   flex: 1 1 auto;
   min-width: 0;
+  min-height: 1.45em;
   align-items: center;
   align-content: center;
   gap: 8px;
@@ -90,6 +91,7 @@ const styles = `
   align-self: center;
   justify-content: flex-start;
   min-width: 0;
+  min-height: 1.45em;
   max-width: 100%;
   color: var(--rmsd-muted);
   font-size: 0.95rem;
@@ -1034,7 +1036,7 @@ const styles = `
 
 @media (max-width: 720px) {
   .rmsd-trigger {
-    align-items: flex-start;
+    align-items: center;
     padding-right: 54px;
   }
 }
