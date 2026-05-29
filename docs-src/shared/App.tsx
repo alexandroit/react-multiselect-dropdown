@@ -57,8 +57,26 @@ function normalizeHashPath() {
   return raw || 'basic';
 }
 
+const STACKBLITZ_ROUTE_PATHS: Record<string, string> = {
+  basic: 'basic',
+  allvisible: 'all-visible-counter',
+  singleselection: 'single-selection',
+  searchfilter: 'search-filter',
+  groupby: 'group-by',
+  limitselection: 'selection-limit',
+  templating: 'templating',
+  searchfilterAddNewItem: 'search-add-new-item',
+  disabledstate: 'disabled-state',
+  usinginform: 'using-in-forms',
+  virtualscrolling: 'virtual-scrolling',
+  lazyloading: 'lazy-loading',
+  usingInDialog: 'using-inside-dialog',
+  bodyOverlayTop: 'body-overlay-auto',
+  dropdownMethods: 'methods'
+};
+
 function buildStackBlitzUrl(baseUrl: string, routePath: string) {
-  return `${baseUrl}?startScript=start&initialpath=${encodeURIComponent(`/#/${routePath}`)}`;
+  return `${baseUrl}?startScript=start&initialpath=${encodeURIComponent(`/${STACKBLITZ_ROUTE_PATHS[routePath] || routePath}`)}`;
 }
 
 function CountryRow({ item }: { item: CountryOption }) {
