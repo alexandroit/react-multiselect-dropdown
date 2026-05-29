@@ -19,7 +19,8 @@ createRoot(rootElement).render(
         reactRuntime: '19.2.4',
         packageVersion: '19.0.1',
         packageRange: '19.0.1',
-        docsPath: 'react-19'
+        docsPath: 'react-19',
+        stackBlitzBaseUrl: 'https://stackblitz.com/github/alexandroit/stackline-react-multiselect-react-19'
       }}
     />
   </React.StrictMode>

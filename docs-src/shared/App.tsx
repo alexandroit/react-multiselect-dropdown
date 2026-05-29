@@ -21,6 +21,7 @@ export type DocsMeta = {
   packageVersion: string;
   packageRange: string;
   docsPath: string;
+  stackBlitzBaseUrl?: string;
 };
 
 type AppProps = {
@@ -54,6 +55,10 @@ const ROUTES: DocsRoute[] = [
 function normalizeHashPath() {
   const raw = window.location.hash.replace(/^#\/?/, '').trim();
   return raw || 'basic';
+}
+
+function buildStackBlitzUrl(baseUrl: string, routePath: string) {
+  return `${baseUrl}?startScript=start&initialpath=${encodeURIComponent(`/#/${routePath}`)}`;
 }
 
 function CountryRow({ item }: { item: CountryOption }) {
@@ -288,6 +293,12 @@ export function App({ docsMeta }: AppProps) {
   }, []);
 
   const currentRoute = ROUTES.find((route) => route.path === currentPath) ?? ROUTES[0];
+  const stackBlitzHomeUrl = docsMeta.stackBlitzBaseUrl
+    ? buildStackBlitzUrl(docsMeta.stackBlitzBaseUrl, 'basic')
+    : undefined;
+  const currentStackBlitzUrl = docsMeta.stackBlitzBaseUrl
+    ? buildStackBlitzUrl(docsMeta.stackBlitzBaseUrl, currentRoute.path)
+    : undefined;
 
   const pushLog = (message: string) => {
     void message;
@@ -391,6 +402,11 @@ export function App({ docsMeta }: AppProps) {
             <a className="rail-link" href="live/" target="_blank" rel="noopener">
               Live project
             </a>
+            {stackBlitzHomeUrl ? (
+              <a className="rail-link" href={stackBlitzHomeUrl} target="_blank" rel="noopener">
+                StackBlitz
+              </a>
+            ) : null}
             <a className="rail-link" href="#api">API</a>
           </section>
 
@@ -440,8 +456,24 @@ export function App({ docsMeta }: AppProps) {
                   <code>{docsMeta.reactRuntime}</code>.
                 </p>
               </div>
-              <span className="status-pill">Classic selector preserved</span>
+              <div className="preview-actions">
+                <span className="status-pill">Classic selector preserved</span>
+                {currentStackBlitzUrl ? (
+                  <a className="stackblitz-button" href={currentStackBlitzUrl} target="_blank" rel="noopener">
+                    Open in StackBlitz
+                  </a>
+                ) : null}
+              </div>
             </div>
+
+            {currentStackBlitzUrl ? (
+              <div className="preview-example-link-row">
+                <span>StackBlitz example</span>
+                <a href={currentStackBlitzUrl} target="_blank" rel="noopener">
+                  {currentRoute.label}
+                </a>
+              </div>
+            ) : null}
 
             <div className="preview-canvas">
               <ExamplePreview key={currentRoute.path} example={currentRoute.example} skin={skin} pushLog={pushLog} />

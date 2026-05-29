@@ -8,14 +8,16 @@
       body {
         margin: 0;
         min-height: 100vh;
-        display: grid;
-        place-items: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 32px 16px;
         background: radial-gradient(circle at top, #fff7ea 0%, #f4f8ff 42%, #edf4ff 100%);
         color: #1f3550;
         font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       }
       .card {
-        width: min(720px, calc(100vw - 32px));
+        width: min(1040px, 100%);
         border: 1px solid #dbe4f0;
         border-radius: 28px;
         background: rgba(255,255,255,0.94);
@@ -33,6 +35,7 @@
       }
       .links {
         display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 12px;
         margin-top: 20px;
       }
@@ -45,9 +48,36 @@
         text-decoration: none;
         padding: 14px 16px;
       }
+      a.primary {
+        border-color: #bfc7ff;
+        background: #f1f2ff;
+      }
       a strong {
         display: block;
         margin-bottom: 4px;
+      }
+      .release {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin: 18px 0 0;
+      }
+      .release span {
+        border: 1px solid #dbe4f0;
+        border-radius: 999px;
+        background: #fff;
+        color: #40536b;
+        font-size: 0.85rem;
+        font-weight: 700;
+        padding: 8px 12px;
+      }
+      @media (max-width: 720px) {
+        .links {
+          grid-template-columns: 1fr;
+        }
+        h1 {
+          font-size: 2.1rem;
+        }
       }
     </style>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6353624842390947"
@@ -66,11 +96,28 @@
   <body>
     <div class="card">
       <h1>@stackline/react-multiselect-dropdown</h1>
-      <p>Choose the maintained docs line that matches your React application.</p>
+      <p>Choose the maintained docs line that matches your React application. The React 19 line includes the current live matrix, ADA-compliant keyboard/ARIA behavior, skins, body overlays, and a dedicated StackBlitz playground.</p>
+      <div class="release">
+        <span>Latest: 19.0.1</span>
+        <span>React 19.2.4 tested</span>
+        <span>StackBlitz ready</span>
+      </div>
       <div class="links">
-        <a href="./react-19/">
+        <a class="primary" href="./react-19/">
           <strong>React 19 docs</strong>
-          Latest maintained line · package 19.x
+          Latest maintained line · package 19.0.1
+        </a>
+        <a class="primary" href="./react-19/live/">
+          <strong>React 19 live project</strong>
+          Full live test matrix with forms, lazy loading, dialogs, skins, and keyboard behavior
+        </a>
+        <a href="https://stackblitz.com/github/alexandroit/stackline-react-multiselect-react-19?startScript=start&initialpath=%2F%23%2Fbasic">
+          <strong>React 19 StackBlitz</strong>
+          Editable dedicated playground for every official example
+        </a>
+        <a href="https://www.npmjs.com/package/@stackline/react-multiselect-dropdown">
+          <strong>npm package</strong>
+          Install @stackline/react-multiselect-dropdown
         </a>
         <a href="./react-18/">
           <strong>React 18 docs</strong>
