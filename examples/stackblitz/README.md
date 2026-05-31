@@ -6,7 +6,14 @@ https://stackblitz.com/github/alexandroit/stackline-react-multiselect-react-19?f
 
 | Example | Route |
 | :--- | :--- |
-| Basic example | https://stackblitz.com/github/alexandroit/stackline-react-multiselect-react-19?file=src%2Fexamples%2Fbasic%2Fbasic.component.tsx&startScript=start&initialpath=%2Fbasic |
+| Basic usage | https://stackblitz.com/github/alexandroit/stackline-react-multiselect-react-19?file=src%2Fexamples%2Fbasic%2Fbasic.component.tsx&startScript=start&initialpath=%2Fbasic |
+| Keyboard contract | https://stackblitz.com/github/alexandroit/stackline-react-multiselect-react-19?file=src%2Fexamples%2Fkeyboard-contract%2Fkeyboard-contract.component.tsx&startScript=start&initialpath=%2Fkeyboard-contract |
+| ARIA state audit | https://stackblitz.com/github/alexandroit/stackline-react-multiselect-react-19?file=src%2Fexamples%2Faria-state%2Faria-state.component.tsx&startScript=start&initialpath=%2Faria-state |
+| Headless + ARIA | https://stackblitz.com/github/alexandroit/stackline-react-multiselect-react-19?file=src%2Fexamples%2Fheadless-aria%2Fheadless-aria.component.tsx&startScript=start&initialpath=%2Fheadless-aria |
+| State hook | https://stackblitz.com/github/alexandroit/stackline-react-multiselect-react-19?file=src%2Fexamples%2Fstate-hook%2Fstate-hook.component.tsx&startScript=start&initialpath=%2Fstate-hook |
+| Slots API | https://stackblitz.com/github/alexandroit/stackline-react-multiselect-react-19?file=src%2Fexamples%2Fslots-api%2Fslots-api.component.tsx&startScript=start&initialpath=%2Fslots-api |
+| Type-safe factory | https://stackblitz.com/github/alexandroit/stackline-react-multiselect-react-19?file=src%2Fexamples%2Ftype-safe-factory%2Ftype-safe-factory.component.tsx&startScript=start&initialpath=%2Ftype-safe-factory |
+| Async object preservation | https://stackblitz.com/github/alexandroit/stackline-react-multiselect-react-19?file=src%2Fexamples%2Fasync-object-preservation%2Fasync-object-preservation.component.tsx&startScript=start&initialpath=%2Fasync-object-preservation |
 | Single selection | https://stackblitz.com/github/alexandroit/stackline-react-multiselect-react-19?file=src%2Fexamples%2Fsingle-selection%2Fsingle-selection.component.tsx&startScript=start&initialpath=%2Fsingle-selection |
 | Search filter | https://stackblitz.com/github/alexandroit/stackline-react-multiselect-react-19?file=src%2Fexamples%2Fsearch-filter%2Fsearch-filter.component.tsx&startScript=start&initialpath=%2Fsearch-filter |
 | Custom search from API | https://stackblitz.com/github/alexandroit/stackline-react-multiselect-react-19?file=src%2Fexamples%2Fcustom-search-api%2Fcustom-search-api.component.tsx&startScript=start&initialpath=%2Fcustom-search-api |

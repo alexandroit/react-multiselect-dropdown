@@ -2,13 +2,14 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import process from 'node:process';
-import { execSync } from 'node:child_process';
+import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const rootDir = path.resolve(__dirname, '..');
 const packageName = '@stackline/react-multiselect-dropdown';
+const supportedReleaseLines = [17, 18, 19];
 
 const releaseLines = {
   17: {
@@ -31,45 +32,50 @@ const releaseLines = {
   }
 };
 
-function ensureDir(targetPath) {
-  fs.mkdirSync(targetPath, { recursive: true });
-}
-
 function copyDir(sourceDir, targetDir) {
   fs.cpSync(sourceDir, targetDir, { recursive: true });
 }
 
-function run(command, cwd) {
-  execSync(command, {
+function runNpm(args, cwd, options = {}) {
+  const result = spawnSync('npm', args, {
     cwd,
     stdio: 'inherit',
     env: {
       ...process.env,
       npm_config_yes: 'true'
-    }
+    },
+    ...options
   });
+
+  if (result.status !== 0) {
+    throw new Error(`npm ${args.join(' ')} failed with exit code ${result.status}.`);
+  }
 }
 
 function npmVersionExists(version) {
-  try {
-    const output = execSync(`npm view ${packageName}@${version} version --json`, {
-      cwd: rootDir,
-      stdio: ['ignore', 'pipe', 'ignore']
-    }).toString().trim();
+  const result = spawnSync('npm', ['view', `${packageName}@${version}`, 'version', '--json'], {
+    cwd: rootDir,
+    encoding: 'utf8',
+    stdio: ['ignore', 'pipe', 'ignore']
+  });
 
-    return output.replace(/^"|"$/g, '') === version;
-  } catch (error) {
+  if (result.status !== 0) {
     return false;
+  }
+
+  return result.stdout.trim().replace(/^"|"$/g, '') === version;
+}
+
+function assertSupportedLine(line) {
+  if (!releaseLines[line]) {
+    throw new Error(`Unsupported React release line: ${line}. Use one of: ${supportedReleaseLines.join(', ')}.`);
   }
 }
 
 function createReleasePackage(line) {
+  assertSupportedLine(line);
+
   const release = releaseLines[line];
-
-  if (!release) {
-    throw new Error(`Unsupported React release line: ${line}`);
-  }
-
   const distDir = path.join(rootDir, 'dist');
 
   if (!fs.existsSync(distDir)) {
@@ -93,7 +99,6 @@ function createReleasePackage(line) {
     access: 'public'
   };
 
-  ensureDir(tempDir);
   fs.writeFileSync(path.join(tempDir, 'package.json'), `${JSON.stringify(packageJson, null, 2)}\n`);
 
   return {
@@ -102,13 +107,10 @@ function createReleasePackage(line) {
   };
 }
 
-export function releaseReactLine(line, options = { publish: true }) {
+export function releaseReactLine(line, options = { publish: true, keepTemp: false }) {
+  assertSupportedLine(line);
+
   const release = releaseLines[line];
-
-  if (!release) {
-    throw new Error(`Unsupported React release line: ${line}`);
-  }
-
   console.log(`\n=== React ${line} · ${release.version} ===`);
 
   if (options.publish && npmVersionExists(release.version)) {
@@ -118,11 +120,17 @@ export function releaseReactLine(line, options = { publish: true }) {
 
   const bundle = createReleasePackage(line);
 
-  run('npm pack', bundle.tempDir);
+  try {
+    runNpm(['pack'], bundle.tempDir);
 
-  if (options.publish) {
-    run('npm publish --access public', bundle.tempDir);
-    console.log(`Published ${packageName}@${release.version}.`);
+    if (options.publish) {
+      runNpm(['publish', '--access', 'public'], bundle.tempDir);
+      console.log(`Published ${packageName}@${release.version}.`);
+    }
+  } finally {
+    if (!options.keepTemp) {
+      fs.rmSync(bundle.tempDir, { recursive: true, force: true });
+    }
   }
 }
 
@@ -135,6 +143,9 @@ function parseCli(argv) {
 
     if (arg === '--line') {
       line = Number(argv[index + 1]);
+      if (!Number.isInteger(line)) {
+        throw new Error('The --line option requires one of: 17, 18, 19.');
+      }
       index += 1;
       continue;
     }
@@ -142,14 +153,15 @@ function parseCli(argv) {
     flags.add(arg);
   }
 
-  if (!line) {
-    throw new Error('Usage: node scripts/release-react-line.js --line <17|18|19> [--no-publish]');
+  if (!line || !releaseLines[line]) {
+    throw new Error('Usage: node scripts/release-react-line.js --line <17|18|19> [--no-publish] [--keep-temp]');
   }
 
   return {
     line,
     options: {
-      publish: !flags.has('--no-publish')
+      publish: !flags.has('--no-publish'),
+      keepTemp: flags.has('--keep-temp')
     }
   };
 }
@@ -159,4 +171,4 @@ if (path.resolve(process.argv[1] || '') === __filename) {
   releaseReactLine(line, options);
 }
 
-export { releaseLines };
+export { releaseLines, supportedReleaseLines };

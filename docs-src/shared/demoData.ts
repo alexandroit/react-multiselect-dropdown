@@ -10,6 +10,15 @@ export type CountryOption = {
   caption?: string;
 };
 
+export function countryFlagClass(countryCode: string) {
+  const code = countryCode.trim().toLowerCase();
+  if (!/^[a-z]{2}$/.test(code)) {
+    return '';
+  }
+
+  return `fi fi-${code}`;
+}
+
 export type SkillOption = {
   id: number;
   itemName: string;
@@ -27,109 +36,86 @@ export type PersonOption = {
   category: string;
 };
 
-export const COUNTRIES: CountryOption[] = [
-  {
-    id: 1,
-    itemName: 'Brazil',
-    name: 'BR',
-    capital: 'Brasilia',
-    category: 'South America',
-    region: 'Americas',
-    flag: 'BR',
-    caption: 'Brasilia - Americas'
-  },
-  {
-    id: 2,
-    itemName: 'Canada',
-    name: 'CA',
-    capital: 'Ottawa',
-    category: 'North America',
-    region: 'Americas',
-    flag: 'CA',
-    caption: 'Ottawa - Americas'
-  },
-  {
-    id: 3,
-    itemName: 'Portugal',
-    name: 'PT',
-    capital: 'Lisbon',
-    category: 'Europe',
-    region: 'Europe',
-    flag: 'PT',
-    caption: 'Lisbon - Europe'
-  },
-  {
-    id: 4,
-    itemName: 'United States',
-    name: 'US',
-    capital: 'Washington, DC',
-    category: 'North America',
-    region: 'Americas',
-    flag: 'US',
-    caption: 'Washington, DC - Americas'
-  },
-  {
-    id: 5,
-    itemName: 'Argentina',
-    name: 'AR',
-    capital: 'Buenos Aires',
-    category: 'South America',
-    region: 'Americas',
-    flag: 'AR',
-    caption: 'Buenos Aires - Americas'
-  },
-  {
-    id: 6,
-    itemName: 'Germany',
-    name: 'DE',
-    capital: 'Berlin',
-    category: 'Europe',
-    region: 'Europe',
-    flag: 'DE',
-    caption: 'Berlin - Europe'
-  },
-  {
-    id: 7,
-    itemName: 'Mexico',
-    name: 'MX',
-    capital: 'Mexico City',
-    category: 'North America',
-    region: 'Americas',
-    flag: 'MX',
-    caption: 'Mexico City - Americas'
-  },
-  {
-    id: 8,
-    itemName: 'Colombia',
-    name: 'CO',
-    capital: 'Bogota',
-    category: 'South America',
-    region: 'Americas',
-    flag: 'CO',
-    caption: 'Bogota - Americas'
-  },
-  {
-    id: 9,
-    itemName: 'Uruguay',
-    name: 'UY',
-    capital: 'Montevideo',
-    category: 'South America',
-    region: 'Americas',
-    flag: 'UY',
-    caption: 'Montevideo - Americas'
-  },
-  {
-    id: 10,
-    itemName: 'Costa Rica',
-    name: 'CR',
-    capital: 'San Jose',
-    category: 'Central America',
-    region: 'Americas',
-    flag: 'CR',
-    caption: 'San Jose - Americas',
-    disabled: true
-  }
-];
+const COUNTRY_SEEDS = [
+  ['Brazil', 'BR', 'Brasilia', 'South America', 'Americas'],
+  ['Canada', 'CA', 'Ottawa', 'North America', 'Americas'],
+  ['Portugal', 'PT', 'Lisbon', 'Southern Europe', 'Europe'],
+  ['Argentina', 'AR', 'Buenos Aires', 'South America', 'Americas'],
+  ['Germany', 'DE', 'Berlin', 'Western Europe', 'Europe'],
+  ['Mexico', 'MX', 'Mexico City', 'North America', 'Americas'],
+  ['Colombia', 'CO', 'Bogota', 'South America', 'Americas'],
+  ['Uruguay', 'UY', 'Montevideo', 'South America', 'Americas'],
+  ['Costa Rica', 'CR', 'San Jose', 'Central America', 'Americas'],
+  ['Chile', 'CL', 'Santiago', 'South America', 'Americas'],
+  ['Peru', 'PE', 'Lima', 'South America', 'Americas'],
+  ['Ecuador', 'EC', 'Quito', 'South America', 'Americas'],
+  ['Panama', 'PA', 'Panama City', 'Central America', 'Americas'],
+  ['Dominican Republic', 'DO', 'Santo Domingo', 'Caribbean', 'Americas'],
+  ['Jamaica', 'JM', 'Kingston', 'Caribbean', 'Americas'],
+  ['Bahamas', 'BS', 'Nassau', 'Caribbean', 'Americas'],
+  ['Barbados', 'BB', 'Bridgetown', 'Caribbean', 'Americas'],
+  ['Belize', 'BZ', 'Belmopan', 'Central America', 'Americas'],
+  ['Paraguay', 'PY', 'Asuncion', 'South America', 'Americas'],
+  ['Ireland', 'IE', 'Dublin', 'Northern Europe', 'Europe'],
+  ['Spain', 'ES', 'Madrid', 'Southern Europe', 'Europe'],
+  ['France', 'FR', 'Paris', 'Western Europe', 'Europe'],
+  ['Italy', 'IT', 'Rome', 'Southern Europe', 'Europe'],
+  ['Netherlands', 'NL', 'Amsterdam', 'Western Europe', 'Europe'],
+  ['Belgium', 'BE', 'Brussels', 'Western Europe', 'Europe'],
+  ['Switzerland', 'CH', 'Bern', 'Western Europe', 'Europe'],
+  ['Austria', 'AT', 'Vienna', 'Western Europe', 'Europe'],
+  ['Sweden', 'SE', 'Stockholm', 'Northern Europe', 'Europe'],
+  ['Norway', 'NO', 'Oslo', 'Northern Europe', 'Europe'],
+  ['Denmark', 'DK', 'Copenhagen', 'Northern Europe', 'Europe'],
+  ['Finland', 'FI', 'Helsinki', 'Northern Europe', 'Europe'],
+  ['Iceland', 'IS', 'Reykjavik', 'Northern Europe', 'Europe'],
+  ['Czech Republic', 'CZ', 'Prague', 'Central Europe', 'Europe'],
+  ['Slovakia', 'SK', 'Bratislava', 'Central Europe', 'Europe'],
+  ['Slovenia', 'SI', 'Ljubljana', 'Southern Europe', 'Europe'],
+  ['Croatia', 'HR', 'Zagreb', 'Southern Europe', 'Europe'],
+  ['Greece', 'GR', 'Athens', 'Southern Europe', 'Europe'],
+  ['Malta', 'MT', 'Valletta', 'Southern Europe', 'Europe'],
+  ['Luxembourg', 'LU', 'Luxembourg', 'Western Europe', 'Europe'],
+  ['Estonia', 'EE', 'Tallinn', 'Northern Europe', 'Europe'],
+  ['South Africa', 'ZA', 'Pretoria', 'Southern Africa', 'Africa'],
+  ['Kenya', 'KE', 'Nairobi', 'East Africa', 'Africa'],
+  ['Ghana', 'GH', 'Accra', 'West Africa', 'Africa'],
+  ['Botswana', 'BW', 'Gaborone', 'Southern Africa', 'Africa'],
+  ['Namibia', 'NA', 'Windhoek', 'Southern Africa', 'Africa'],
+  ['Rwanda', 'RW', 'Kigali', 'East Africa', 'Africa'],
+  ['Tanzania', 'TZ', 'Dodoma', 'East Africa', 'Africa'],
+  ['Senegal', 'SN', 'Dakar', 'West Africa', 'Africa'],
+  ['Mauritius', 'MU', 'Port Louis', 'East Africa', 'Africa'],
+  ['Seychelles', 'SC', 'Victoria', 'East Africa', 'Africa'],
+  ['Cabo Verde', 'CV', 'Praia', 'West Africa', 'Africa'],
+  ['Japan', 'JP', 'Tokyo', 'East Asia', 'Asia'],
+  ['Singapore', 'SG', 'Singapore', 'Southeast Asia', 'Asia'],
+  ['Malaysia', 'MY', 'Kuala Lumpur', 'Southeast Asia', 'Asia'],
+  ['Thailand', 'TH', 'Bangkok', 'Southeast Asia', 'Asia'],
+  ['Indonesia', 'ID', 'Jakarta', 'Southeast Asia', 'Asia'],
+  ['Philippines', 'PH', 'Manila', 'Southeast Asia', 'Asia'],
+  ['Nepal', 'NP', 'Kathmandu', 'South Asia', 'Asia'],
+  ['Bhutan', 'BT', 'Thimphu', 'South Asia', 'Asia'],
+  ['Sri Lanka', 'LK', 'Sri Jayawardenepura Kotte', 'South Asia', 'Asia'],
+  ['Australia', 'AU', 'Canberra', 'Oceania', 'Oceania'],
+  ['New Zealand', 'NZ', 'Wellington', 'Oceania', 'Oceania'],
+  ['Fiji', 'FJ', 'Suva', 'Oceania', 'Oceania'],
+  ['Samoa', 'WS', 'Apia', 'Oceania', 'Oceania']
+] as const;
+
+export const COUNTRIES: CountryOption[] = COUNTRY_SEEDS.map(
+  ([itemName, name, capital, category, region], index) => ({
+    id: index + 1,
+    itemName,
+    name,
+    capital,
+    category,
+    region,
+    flag: name,
+    caption: `${capital} - ${region}`,
+    disabled: itemName === 'Costa Rica'
+  })
+);
 
 export const FRUITS = [
   { id: 101, itemName: 'Apple', category: 'Fruits' },
@@ -161,20 +147,20 @@ export const DIRECTORY_SPECIALTIES: SpecialtyOption[] = [
   { id: 'RTBC', name: 'Real-time benefit check' }
 ];
 
-export const USE_CASES = COUNTRIES.slice(0, 6).map((country) => ({
+export const USE_CASES = COUNTRIES.map((country) => ({
   id: country.id,
   itemName: country.itemName,
   name: country.name
 }));
 
 export const CUSTOMERS = [
-  { id: 1, name: 'Toshiba', countries: COUNTRIES.slice(0, 2) },
-  { id: 2, name: 'Apple', countries: [] as CountryOption[] },
-  { id: 3, name: 'Samsung', countries: [] as CountryOption[] },
-  { id: 4, name: 'Google', countries: COUNTRIES.slice(4, 6) }
+  { id: 1, name: 'Regional demo group', countries: COUNTRIES },
+  { id: 2, name: 'Operations demo group', countries: [...COUNTRIES].reverse() },
+  { id: 3, name: 'Analytics demo group', countries: COUNTRIES.filter((_, index) => index % 2 === 0) },
+  { id: 4, name: 'Support demo group', countries: COUNTRIES.filter((_, index) => index % 2 === 1) }
 ];
 
-const PERSON_CATEGORIES = ['Brazilian', 'Canadian', 'Mexican', 'Colombian'];
+const PERSON_CATEGORIES = ['Americas', 'Europe', 'Africa', 'Asia', 'Oceania'];
 const PERSON_LAST_NAMES = [
   'Smith',
   'Johnson',
@@ -215,7 +201,7 @@ export async function searchCountries(query: string) {
   await delay(400);
   const needle = query.trim().toLowerCase();
   if (!needle) {
-    return COUNTRIES.slice(0, 6);
+    return COUNTRIES;
   }
 
   return COUNTRIES.filter((country) => {

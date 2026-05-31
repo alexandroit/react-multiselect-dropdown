@@ -51,7 +51,7 @@ export const LIVE_EXAMPLES: Array<LiveExampleDefinition<any>> = [
     dataName: 'countries',
     selectedName: 'visibleCountries',
     settingsName: 'visibleBadgeSettings',
-    data: COUNTRIES.slice(0, 6),
+    data: COUNTRIES,
     initialSelected: COUNTRIES.slice(0, 4),
     settings: {
       text: 'All Selected Visible',
@@ -161,7 +161,7 @@ export const LIVE_EXAMPLES: Array<LiveExampleDefinition<any>> = [
     dataName: 'countries',
     selectedName: 'createdCountries',
     settingsName: 'addSettings',
-    data: COUNTRIES.slice(0, 6),
+    data: COUNTRIES,
     initialSelected: COUNTRIES.slice(0, 2),
     addFromFilter: true,
     settings: {
@@ -181,7 +181,7 @@ export const LIVE_EXAMPLES: Array<LiveExampleDefinition<any>> = [
     dataName: 'countries',
     selectedName: 'disabledCountries',
     settingsName: 'disabledSettings',
-    data: COUNTRIES.slice(0, 6),
+    data: COUNTRIES,
     initialSelected: COUNTRIES.slice(0, 3),
     allowDisabledToggle: true,
     settings: {
@@ -301,7 +301,7 @@ export const LIVE_EXAMPLES: Array<LiveExampleDefinition<any>> = [
     dataName: 'countries',
     selectedName: 'methodCountries',
     settingsName: 'methodSettings',
-    data: COUNTRIES.slice(0, 8),
+    data: COUNTRIES,
     initialSelected: COUNTRIES.slice(0, 2),
     showMethods: true,
     settings: {
@@ -338,7 +338,7 @@ export const LIVE_EXAMPLES: Array<LiveExampleDefinition<any>> = [
     dataName: 'remoteCountries',
     selectedName: 'apiCountries',
     settingsName: 'apiSearchSettings',
-    data: COUNTRIES.slice(0, 6),
+    data: COUNTRIES,
     initialSelected: COUNTRIES.slice(1, 2),
     settings: {
       text: 'Remote countries',
@@ -376,7 +376,7 @@ export const LIVE_EXAMPLES: Array<LiveExampleDefinition<any>> = [
     dataName: 'remoteCountries',
     selectedName: 'remoteSelectedCountries',
     settingsName: 'remoteDataSettings',
-    data: COUNTRIES.slice(0, 7),
+    data: COUNTRIES,
     initialSelected: COUNTRIES.slice(2, 4),
     settings: {
       text: 'Remote API countries',
@@ -430,7 +430,7 @@ export const LIVE_EXAMPLES: Array<LiveExampleDefinition<any>> = [
     dataName: 'dynamicCountries',
     selectedName: 'dynamicSelectedCountries',
     settingsName: 'dynamicSettings',
-    data: COUNTRIES.slice(0, 5),
+    data: COUNTRIES,
     initialSelected: COUNTRIES.slice(0, 1),
     settings: {
       text: 'Dynamic data',

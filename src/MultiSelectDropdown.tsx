@@ -1,4 +1,5 @@
 import {
+  Fragment,
   forwardRef,
   useEffect,
   useImperativeHandle,
@@ -7,73 +8,56 @@ import {
   useRef,
   useState,
   type CSSProperties,
+  type ChangeEvent,
   type ForwardedRef,
   type KeyboardEvent as ReactKeyboardEvent,
   type MouseEvent as ReactMouseEvent,
-  type ReactElement
+  type ReactElement,
+  type ReactNode,
+  type TouchEvent as ReactTouchEvent
 } from 'react';
 import { createPortal } from 'react-dom';
+import {
+  buildGroups,
+  createItemFromQuery,
+  getLabel,
+  getPrimaryValue,
+  getVisibleBadgeLimit,
+  isDisabledItem,
+  isPrimitiveItem,
+  itemMatchesQuery,
+  mergeUniqueItems,
+  normalizeSkinName,
+  sanitizeId
+} from './itemUtils';
+import { resolveDropdownSettings } from './settings';
 import { ensureDropdownStyles } from './styles';
 import type {
   DropdownItem,
   DropdownRenderContext,
-  DropdownSettings,
+  MultiSelectDropdownGroupSlot,
   MultiSelectDropdownHandle,
+  MultiSelectDropdownOptionSlot,
   MultiSelectDropdownProps
 } from './types';
+import { useControllableSelection } from './useControllableSelection';
 
-const DEFAULT_SETTINGS: Required<DropdownSettings<any>> = {
-  singleSelection: false,
-  text: 'Select',
-  enableCheckAll: true,
-  selectAllText: 'Select All',
-  unSelectAllText: 'Unselect All',
-  filterSelectAllText: 'Select filtered',
-  filterUnSelectAllText: 'Unselect filtered',
-  enableFilterSelectAll: true,
-  enableSearchFilter: false,
-  searchBy: [],
-  maxHeight: 300,
-  badgeShowLimit: Number.MAX_SAFE_INTEGER,
-  classes: '',
-  limitSelection: 0,
-  disabled: false,
-  searchPlaceholderText: 'Search',
-  groupBy: '',
-  showCheckbox: true,
-  noDataLabel: 'No Data Available',
-  searchAutofocus: true,
-  lazyLoading: false,
-  labelKey: 'itemName',
-  primaryKey: 'id',
-  position: 'bottom',
-  autoPosition: true,
-  loading: false,
-  selectGroup: false,
-  addNewItemOnFilter: false,
-  addNewButtonText: 'Add',
-  escapeToClose: true,
-  clearAll: true,
-  closeDropDownOnSelection: false,
-  tagToBody: false,
-  appendToBody: false,
-  theme: '',
-  skin: 'classic',
-  ariaLabel: 'Multiselect dropdown',
-  listboxAriaLabel: 'Dropdown options',
-  searchAriaLabel: 'Search options',
-  clearSearchAriaLabel: 'Clear search',
-  clearAllAriaLabel: 'Clear selected options',
-  removeItemAriaLabel: 'Remove selected option',
-  openDropdownAriaLabel: 'Open dropdown',
-  closeDropdownAriaLabel: 'Close dropdown',
-  loadingText: 'Loading options'
-};
-
-type GroupedItems<T> = Array<{ name: string; items: T[] }>;
 type PendingFocus = 'first' | 'last' | 'search' | null;
+type SelectionFocusTarget = 'search' | 'trigger' | 'none';
 type IconName = 'remove' | 'clear' | 'search' | 'angle-down' | 'angle-up';
 const useClientLayoutEffect = typeof window === 'undefined' ? useEffect : useLayoutEffect;
+
+function isSpaceKey(key: string) {
+  return key === ' ' || key === 'Spacebar';
+}
+
+function renderSlot<P>(
+  Slot: ((props: P) => ReactNode) | undefined,
+  props: P,
+  fallback: ReactNode
+) {
+  return Slot ? <>{Slot(props)}</> : <>{fallback}</>;
+}
 
 function StacklineIcon({ name, className = 'rmsd-icon' }: { name: IconName; className?: string }) {
   if (name === 'remove') {
@@ -111,181 +95,6 @@ function StacklineIcon({ name, className = 'rmsd-icon' }: { name: IconName; clas
   );
 }
 
-function isPrimitiveItem(item: DropdownItem): item is string | number | boolean {
-  return typeof item === 'string' || typeof item === 'number' || typeof item === 'boolean';
-}
-
-function getLabel<T extends DropdownItem>(item: T, settings: Required<DropdownSettings<T>>) {
-  if (isPrimitiveItem(item)) {
-    return String(item);
-  }
-
-  const keys = [settings.labelKey, 'itemName', 'name', 'label', 'title', 'value'].filter(Boolean);
-
-  for (const key of keys) {
-    if (key && item[key] != null) {
-      return String(item[key]);
-    }
-  }
-
-  return JSON.stringify(item);
-}
-
-function getPrimaryValue<T extends DropdownItem>(item: T, settings: Required<DropdownSettings<T>>) {
-  if (isPrimitiveItem(item)) {
-    return String(item);
-  }
-
-  const keys = [settings.primaryKey, 'id', 'value', 'key'].filter(Boolean);
-  for (const key of keys) {
-    if (key && item[key] != null) {
-      return String(item[key]);
-    }
-  }
-
-  return getLabel(item, settings);
-}
-
-function itemMatchesQuery<T extends DropdownItem>(
-  item: T,
-  query: string,
-  settings: Required<DropdownSettings<T>>
-) {
-  if (!query.trim()) {
-    return true;
-  }
-
-  const needle = query.trim().toLowerCase();
-  const haystack = new Set<string>();
-
-  haystack.add(getLabel(item, settings).toLowerCase());
-
-  if (!isPrimitiveItem(item)) {
-    const searchKeys = settings.searchBy.length ? settings.searchBy : [settings.labelKey];
-    for (const key of searchKeys) {
-      if (key && item[key] != null) {
-        haystack.add(String(item[key]).toLowerCase());
-      }
-    }
-  }
-
-  for (const value of haystack) {
-    if (value.includes(needle)) {
-      return true;
-    }
-  }
-
-  return false;
-}
-
-function getGroupName<T extends DropdownItem>(item: T, settings: Required<DropdownSettings<T>>) {
-  if (!settings.groupBy) {
-    return '';
-  }
-
-  if (typeof settings.groupBy === 'function') {
-    return settings.groupBy(item);
-  }
-
-  if (!isPrimitiveItem(item)) {
-    const groupKey = settings.groupBy as string;
-    const objectItem = item as Record<string, any>;
-    if (groupKey in objectItem) {
-      return String(objectItem[groupKey] ?? '');
-    }
-  }
-
-  return '';
-}
-
-function mergeUniqueItems<T extends DropdownItem>(
-  base: T[],
-  extra: T[],
-  settings: Required<DropdownSettings<T>>
-) {
-  const bucket = new Map<string, T>();
-
-  for (const item of [...base, ...extra]) {
-    bucket.set(getPrimaryValue(item, settings), item);
-  }
-
-  return Array.from(bucket.values());
-}
-
-function createItemFromQuery<T extends DropdownItem>(
-  query: string,
-  settings: Required<DropdownSettings<T>>,
-  sample: T | undefined
-) {
-  if (sample && !isPrimitiveItem(sample)) {
-    return {
-      [settings.primaryKey]: query.toLowerCase().replace(/\s+/g, '-'),
-      [settings.labelKey]: query
-    } as T;
-  }
-
-  return query as T;
-}
-
-function isDisabledItem<T extends DropdownItem>(item: T) {
-  return !isPrimitiveItem(item) && Boolean(item.disabled);
-}
-
-function buildGroups<T extends DropdownItem>(items: T[], settings: Required<DropdownSettings<T>>) {
-  if (!settings.groupBy) {
-    return [] as GroupedItems<T>;
-  }
-
-  const map = new Map<string, T[]>();
-  for (const item of items) {
-    const groupName = getGroupName(item, settings) || 'Ungrouped';
-    const current = map.get(groupName) || [];
-    current.push(item);
-    map.set(groupName, current);
-  }
-
-  return Array.from(map.entries()).map(([name, groupedItems]) => ({
-    name,
-    items: groupedItems
-  }));
-}
-
-function useControllableSelection<T extends DropdownItem>(
-  controlledValue: T[] | undefined,
-  defaultValue: T[] | undefined,
-  onChange: ((items: T[]) => void) | undefined
-) {
-  const [internalValue, setInternalValue] = useState<T[]>(defaultValue ?? []);
-  const isControlled = controlledValue !== undefined;
-  const value = isControlled ? controlledValue : internalValue;
-
-  const setValue = (nextValue: T[]) => {
-    if (!isControlled) {
-      setInternalValue(nextValue);
-    }
-    onChange?.(nextValue);
-  };
-
-  return [value, setValue] as const;
-}
-
-function sanitizeId(value: string) {
-  return value.replace(/[^a-zA-Z0-9_-]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 56) || 'option';
-}
-
-function normalizeSkinName(value: string) {
-  return sanitizeId(value.toLowerCase()) || 'classic';
-}
-
-function getVisibleBadgeLimit(selectedCount: number, rawLimit: number) {
-  if (!Number.isFinite(rawLimit)) {
-    return selectedCount;
-  }
-
-  const limit = Math.max(0, Math.floor(rawLimit));
-  return Math.min(selectedCount, limit);
-}
-
 function InnerMultiSelectDropdown<T extends DropdownItem>(
   {
     data,
@@ -311,13 +120,14 @@ function InnerMultiSelectDropdown<T extends DropdownItem>(
     renderItem,
     renderBadge,
     renderSearch,
-    renderEmptyState
+    renderEmptyState,
+    slots
   }: MultiSelectDropdownProps<T>,
   ref: ForwardedRef<MultiSelectDropdownHandle<T>>
 ) {
   ensureDropdownStyles();
 
-  const settings = { ...DEFAULT_SETTINGS, ...incomingSettings } as Required<DropdownSettings<T>>;
+  const settings = useMemo(() => resolveDropdownSettings(incomingSettings), [incomingSettings]);
   const [selectedItems, setSelectedItems] = useControllableSelection(
     controlledSelectedItems,
     defaultSelectedItems,
@@ -339,11 +149,12 @@ function InnerMultiSelectDropdown<T extends DropdownItem>(
   const listRef = useRef<HTMLDivElement | null>(null);
   const lastScrollHeightRef = useRef(0);
   const pendingFocusRef = useRef<PendingFocus>(null);
+  const addRequestIdRef = useRef(0);
   const instanceIdRef = useRef(`rmsd-${Math.random().toString(36).slice(2)}`);
 
   const allItems = useMemo(
-    () => mergeUniqueItems(data, addedItems, settings),
-    [addedItems, data, settings]
+    () => mergeUniqueItems(data, [...selectedItems, ...addedItems], settings),
+    [addedItems, data, selectedItems, settings]
   );
   const filteredItems = useMemo(
     () => allItems.filter((item) => itemMatchesQuery(item, filter, settings)),
@@ -385,6 +196,85 @@ function InnerMultiSelectDropdown<T extends DropdownItem>(
 
   const focusFirstOption = () => focusOptionByIndex(0);
   const focusLastOption = () => focusOptionByIndex(getOptionElements().length - 1);
+  const focusOptionById = (optionId: string) => {
+    const option = document.getElementById(optionId) as HTMLElement | null;
+    if (!option || !listRef.current?.contains(option) || option.getAttribute('aria-disabled') === 'true') {
+      return false;
+    }
+
+    option.focus();
+    setActiveDescendantId(option.id || null);
+    option.scrollIntoView({ block: 'nearest' });
+    return true;
+  };
+
+  const focusOptionAfterPointerSelection = (optionId: string, fallbackIndex: number) => {
+    window.setTimeout(() => {
+      const focusAfterRender = () => {
+        if (focusOptionById(optionId)) {
+          return;
+        }
+
+        focusOptionByIndex(fallbackIndex);
+      };
+
+      if (typeof window.requestAnimationFrame === 'function') {
+        window.requestAnimationFrame(focusAfterRender);
+        return;
+      }
+
+      focusAfterRender();
+    }, 0);
+  };
+
+  const focusOptionAfterKeyboardSelection = (
+    optionId: string,
+    fallbackIndex: number,
+    moveToNextOption: boolean
+  ) => {
+    window.setTimeout(() => {
+      const focusAfterRender = () => {
+        if (moveToNextOption) {
+          const options = getOptionElements();
+          const currentIndex = options.findIndex((option) => option.id === optionId);
+          const nextOption = currentIndex >= 0 ? options[currentIndex + 1] : undefined;
+
+          if (nextOption) {
+            nextOption.focus();
+            setActiveDescendantId(nextOption.id || null);
+            nextOption.scrollIntoView({ block: 'nearest' });
+            return;
+          }
+        }
+
+        if (!focusOptionById(optionId)) {
+          focusOptionByIndex(fallbackIndex);
+        }
+      };
+
+      if (typeof window.requestAnimationFrame === 'function') {
+        window.requestAnimationFrame(focusAfterRender);
+        return;
+      }
+
+      focusAfterRender();
+    }, 0);
+  };
+
+  const focusAfterSelectionChange = (target: SelectionFocusTarget = 'search') => {
+    if (target === 'none') {
+      return;
+    }
+
+    window.setTimeout(() => {
+      if (target === 'search' && isOpen && settings.enableSearchFilter) {
+        searchRef.current?.focus();
+        return;
+      }
+
+      triggerRef.current?.focus();
+    }, 0);
+  };
 
   const updateSelection = (nextItems: T[]) => {
     setSelectedItems(nextItems);
@@ -424,6 +314,7 @@ function InnerMultiSelectDropdown<T extends DropdownItem>(
     const previousItems = selectedItems;
     updateSelection([]);
     onDeSelectAll?.(previousItems);
+    focusAfterSelectionChange();
   };
 
   const toggleDropdown = () => {
@@ -434,21 +325,31 @@ function InnerMultiSelectDropdown<T extends DropdownItem>(
     }
   };
 
-  const removeItem = (item: T) => {
+  const removeItem = (item: T, focusTarget: SelectionFocusTarget = 'search') => {
     const nextItems = selectedItems.filter(
       (selectedItem) => getPrimaryValue(selectedItem, settings) !== getPrimaryValue(item, settings)
     );
     updateSelection(nextItems);
     onDeSelect?.(item);
+    focusAfterSelectionChange(focusTarget);
   };
 
-  const selectItem = (item: T) => {
+  const removeLastSelectedItem = () => {
+    const lastItem = selectedItems[selectedItems.length - 1];
+    if (!lastItem) {
+      return;
+    }
+
+    removeItem(lastItem);
+  };
+
+  const selectItem = (item: T, focusTarget: SelectionFocusTarget = 'search') => {
     if (settings.disabled || isDisabledItem(item)) {
       return;
     }
 
     if (isSelected(item)) {
-      removeItem(item);
+      removeItem(item, focusTarget);
       return;
     }
 
@@ -456,6 +357,7 @@ function InnerMultiSelectDropdown<T extends DropdownItem>(
       updateSelection([item]);
       onSelect?.(item);
       closeDropdown(true);
+      focusAfterSelectionChange('trigger');
       return;
     }
 
@@ -469,7 +371,11 @@ function InnerMultiSelectDropdown<T extends DropdownItem>(
 
     if (settings.closeDropDownOnSelection) {
       closeDropdown(true);
+      focusAfterSelectionChange('trigger');
+      return;
     }
+
+    focusAfterSelectionChange(focusTarget);
   };
 
   const selectAllItems = (items: T[], filteredSelection = false) => {
@@ -495,6 +401,8 @@ function InnerMultiSelectDropdown<T extends DropdownItem>(
     } else {
       onSelectAll?.(nextItems);
     }
+
+    focusAfterSelectionChange();
   };
 
   const deSelectAllItems = (items: T[], filteredSelection = false) => {
@@ -507,6 +415,8 @@ function InnerMultiSelectDropdown<T extends DropdownItem>(
     } else {
       onDeSelectAll?.(items);
     }
+
+    focusAfterSelectionChange();
   };
 
   const handleAddFilterNewItem = async () => {
@@ -515,7 +425,14 @@ function InnerMultiSelectDropdown<T extends DropdownItem>(
       return;
     }
 
+    const requestId = addRequestIdRef.current + 1;
+    addRequestIdRef.current = requestId;
+
     const result = await onAddFilterNewItem?.(query);
+    if (requestId !== addRequestIdRef.current) {
+      return;
+    }
+
     const nextItem = result === undefined ? createItemFromQuery(query, settings, data[0]) : result;
 
     setAddedItems((currentItems) => mergeUniqueItems(currentItems, [nextItem], settings));
@@ -527,6 +444,7 @@ function InnerMultiSelectDropdown<T extends DropdownItem>(
     }
 
     setFilter('');
+    focusAfterSelectionChange();
   };
 
   const toggleGroup = (groupName: string, items: T[]) => {
@@ -536,11 +454,13 @@ function InnerMultiSelectDropdown<T extends DropdownItem>(
     if (allSelected) {
       deSelectAllItems(groupItems, false);
       onGroupDeSelect?.(groupName, groupItems);
+      focusAfterSelectionChange();
       return;
     }
 
     selectAllItems(groupItems, false);
     onGroupSelect?.(groupName, groupItems);
+    focusAfterSelectionChange();
   };
 
   const handleListScroll = () => {
@@ -592,7 +512,7 @@ function InnerMultiSelectDropdown<T extends DropdownItem>(
     };
 
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape' && settings.escapeToClose) {
+      if (event.key === 'Escape' && settings.keyboard.escape) {
         closeDropdown(true);
       }
     };
@@ -606,7 +526,7 @@ function InnerMultiSelectDropdown<T extends DropdownItem>(
       document.removeEventListener('touchstart', handlePointerDown);
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [isOpen, settings.escapeToClose]);
+  }, [isOpen, settings.keyboard.escape]);
 
   const updateBodyMenuPosition = () => {
     if (!shouldAppendToBody || !triggerRef.current || typeof window === 'undefined') {
@@ -810,9 +730,29 @@ function InnerMultiSelectDropdown<T extends DropdownItem>(
   };
 
   const stopInlineKey = (event: ReactKeyboardEvent<HTMLElement>) => {
-    if (event.key === 'Enter' || event.key === ' ') {
+    if (isSpaceKey(event.key) && !settings.keyboard.space) {
+      event.preventDefault();
+      event.stopPropagation();
+      return;
+    }
+
+    if (event.key === 'Enter' || isSpaceKey(event.key)) {
       event.stopPropagation();
     }
+  };
+
+  const handleBadgeRemoveKeyDown = (event: ReactKeyboardEvent<HTMLElement>, item: T) => {
+    if (
+      settings.keyboard.deleteRemovesFocusedBadge &&
+      (event.key === 'Backspace' || event.key === 'Delete')
+    ) {
+      event.preventDefault();
+      event.stopPropagation();
+      removeItem(item);
+      return;
+    }
+
+    stopInlineKey(event);
   };
 
   const handleTriggerKeyDown = (event: ReactKeyboardEvent<HTMLDivElement>) => {
@@ -820,13 +760,18 @@ function InnerMultiSelectDropdown<T extends DropdownItem>(
       return;
     }
 
-    if (event.key === 'Enter' || event.key === ' ') {
+    if (isSpaceKey(event.key) && !settings.keyboard.space) {
+      event.preventDefault();
+      return;
+    }
+
+    if (event.key === 'Enter' || isSpaceKey(event.key)) {
       event.preventDefault();
       toggleDropdown();
       return;
     }
 
-    if (event.key === 'ArrowDown') {
+    if (settings.keyboard.arrows && event.key === 'ArrowDown') {
       event.preventDefault();
       if (!isOpen) {
         openDropdown('first');
@@ -836,7 +781,7 @@ function InnerMultiSelectDropdown<T extends DropdownItem>(
       return;
     }
 
-    if (event.key === 'ArrowUp') {
+    if (settings.keyboard.arrows && event.key === 'ArrowUp') {
       event.preventDefault();
       if (!isOpen) {
         openDropdown('last');
@@ -846,42 +791,73 @@ function InnerMultiSelectDropdown<T extends DropdownItem>(
       return;
     }
 
-    if (event.key === 'Escape' && isOpen) {
+    if (settings.keyboard.escape && event.key === 'Escape' && isOpen) {
       event.preventDefault();
       closeDropdown(true);
     }
   };
 
   const handleArrowButtonKeyDown = (event: ReactKeyboardEvent<HTMLButtonElement>) => {
-    if (event.key === 'Enter' || event.key === ' ') {
+    if (isSpaceKey(event.key) && !settings.keyboard.space) {
+      event.preventDefault();
+      event.stopPropagation();
+      return;
+    }
+
+    if (event.key === 'Enter' || isSpaceKey(event.key)) {
       event.preventDefault();
       event.stopPropagation();
       toggleDropdown();
       return;
     }
 
-    if (event.key === 'ArrowDown') {
+    if (settings.keyboard.arrows && event.key === 'ArrowDown') {
       event.preventDefault();
       event.stopPropagation();
-      openDropdown('first');
+      if (isOpen) {
+        focusFirstOption();
+      } else {
+        openDropdown('first');
+      }
       return;
     }
 
-    if (event.key === 'ArrowUp') {
+    if (settings.keyboard.arrows && event.key === 'ArrowUp') {
       event.preventDefault();
       event.stopPropagation();
-      openDropdown('last');
+      if (isOpen) {
+        focusLastOption();
+      } else {
+        openDropdown('last');
+      }
     }
   };
 
   const handleSearchKeyDown = (event: ReactKeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'ArrowDown') {
+    if (isSpaceKey(event.key) && !settings.keyboard.space) {
+      event.preventDefault();
+      return;
+    }
+
+    if (
+      settings.keyboard.backspaceRemovesLastWhenSearchEmpty &&
+      event.key === 'Backspace' &&
+      !filter &&
+      selectedItems.length > 0 &&
+      !settings.singleSelection
+    ) {
+      event.preventDefault();
+      removeLastSelectedItem();
+      return;
+    }
+
+    if (settings.keyboard.arrows && event.key === 'ArrowDown') {
       event.preventDefault();
       focusFirstOption();
       return;
     }
 
-    if (event.key === 'Escape' && settings.escapeToClose) {
+    if (settings.keyboard.escape && event.key === 'Escape') {
       event.preventDefault();
       closeDropdown(true);
     }
@@ -892,13 +868,31 @@ function InnerMultiSelectDropdown<T extends DropdownItem>(
     item: T,
     optionIndex: number
   ) => {
-    if (event.key === 'Enter' || event.key === ' ') {
+    if (isSpaceKey(event.key) && !settings.keyboard.space) {
       event.preventDefault();
-      selectItem(item);
       return;
     }
 
-    if (event.key === 'ArrowDown') {
+    if ((event.key === 'Enter' || isSpaceKey(event.key)) && event.repeat) {
+      event.preventDefault();
+      return;
+    }
+
+    if (event.key === 'Enter' || isSpaceKey(event.key)) {
+      event.preventDefault();
+      const willClose = !isSelected(item) && (settings.singleSelection || settings.closeDropDownOnSelection);
+      const currentOptionId = event.currentTarget.id;
+      const moveToNextOption =
+        isSpaceKey(event.key) && settings.keyboard.spaceOptionAction === 'toggle-and-next';
+      selectItem(item, willClose ? 'trigger' : 'none');
+
+      if (!willClose) {
+        focusOptionAfterKeyboardSelection(currentOptionId, optionIndex, moveToNextOption);
+      }
+      return;
+    }
+
+    if (settings.keyboard.arrows && event.key === 'ArrowDown') {
       event.preventDefault();
       const nextIndex = optionIndex + 1;
       const options = getOptionElements();
@@ -910,7 +904,7 @@ function InnerMultiSelectDropdown<T extends DropdownItem>(
       return;
     }
 
-    if (event.key === 'ArrowUp') {
+    if (settings.keyboard.arrows && event.key === 'ArrowUp') {
       event.preventDefault();
       if (optionIndex > 0) {
         focusOptionByIndex(optionIndex - 1);
@@ -922,22 +916,60 @@ function InnerMultiSelectDropdown<T extends DropdownItem>(
       return;
     }
 
-    if (event.key === 'Home') {
+    if (settings.keyboard.arrows && event.key === 'Home') {
       event.preventDefault();
       focusFirstOption();
       return;
     }
 
-    if (event.key === 'End') {
+    if (settings.keyboard.arrows && event.key === 'End') {
       event.preventDefault();
       focusLastOption();
       return;
     }
 
-    if (event.key === 'Escape' && settings.escapeToClose) {
+    if (settings.keyboard.escape && event.key === 'Escape') {
       event.preventDefault();
       closeDropdown(true);
     }
+  };
+
+  const slotState = {
+    settings,
+    isOpen,
+    filter,
+    selectedItems,
+    visibleBadges,
+    hiddenBadgeCount,
+    filteredItems,
+    selectableItems,
+    allFilteredSelected,
+    hasFilteredResults,
+    loading: Boolean(loading ?? settings.loading),
+    listboxId,
+    activeDescendantId: activeDescendantId || undefined,
+    label: selectedItems.length
+      ? selectedItems.map((item) => getLabel(item, settings)).join(', ')
+      : settings.text
+  };
+
+  const slotActions = {
+    openDropdown: () => openDropdown('search'),
+    closeDropdown: () => closeDropdown(),
+    toggleDropdown,
+    clearSelection,
+    selectItem: (item: T) => selectItem(item),
+    removeItem: (item: T) => removeItem(item),
+    selectAll: (items = selectableItems) => selectAllItems(items),
+    deSelectAll: (items = selectedItems) => deSelectAllItems(items),
+    toggleGroup,
+    addFilterNewItem: handleAddFilterNewItem,
+    setFilter
+  };
+
+  const slotBase = {
+    state: slotState,
+    actions: slotActions
   };
 
   const renderItemNode = (item: T) => {
@@ -963,51 +995,142 @@ function InnerMultiSelectDropdown<T extends DropdownItem>(
     );
   };
 
-  const renderBadgeNode = (item: T) => {
+  const renderBadgeLabel = (item: T) => {
+    const label = getLabel(item, settings);
     const context: DropdownRenderContext<T> = {
       item,
-      label: getLabel(item, settings),
+      label,
       selected: true,
       disabled: settings.disabled || isDisabledItem(item),
       query: filter,
       toggle: () => selectItem(item),
       remove: () => removeItem(item)
     };
+    const badgeContent = renderBadge ? renderBadge(item, context) : context.label;
+    const badgeLabelProps = { className: 'rmsd-badge-label' };
 
-    return renderBadge ? renderBadge(item, context) : context.label;
+    return renderSlot(
+      slots?.BadgeLabel,
+      { ...slotBase, props: badgeLabelProps, item, label, children: badgeContent },
+      <span {...badgeLabelProps}>{badgeContent}</span>
+    );
   };
 
-  let optionCursor = -1;
+  const renderCheckbox = (checked: boolean, context: 'option' | 'selectAll') => {
+    if (!settings.showCheckbox) {
+      return null;
+    }
+
+    const checkboxProps = {
+      className: 'rmsd-checkbox',
+      'data-checked': checked,
+      'aria-hidden': true
+    };
+
+    return renderSlot(
+      slots?.Checkbox,
+      { ...slotBase, props: checkboxProps, checked, context },
+      <span {...checkboxProps} />
+    );
+  };
+
+  const renderBadgeRemoveButton = (item: T) => {
+    const label = getLabel(item, settings);
+    const removeProps = {
+      type: 'button' as const,
+      className: 'rmsd-badge-remove',
+      'aria-label': getRemoveItemAriaLabel(item),
+      onKeyDown: (event: ReactKeyboardEvent<HTMLButtonElement>) => handleBadgeRemoveKeyDown(event, item),
+      onClick: (event: ReactMouseEvent<HTMLButtonElement>) => {
+        event.stopPropagation();
+        removeItem(item);
+      }
+    };
+    const icon = <StacklineIcon name="remove" />;
+
+    return renderSlot(
+      slots?.BadgeRemove,
+      { ...slotBase, props: removeProps, item, label, icon },
+      <button {...removeProps}>{icon}</button>
+    );
+  };
+
+  const renderBadgeNode = (item: T) => {
+    const label = getLabel(item, settings);
+    const badgeProps = { className: 'rmsd-badge' };
+    const removeButton = !settings.disabled ? renderBadgeRemoveButton(item) : null;
+    const children = (
+      <>
+        {renderBadgeLabel(item)}
+        {removeButton}
+      </>
+    );
+
+    return renderSlot(
+      slots?.Badge,
+      { ...slotBase, props: badgeProps, item, label, children, removeButton },
+      <span {...badgeProps}>{children}</span>
+    );
+  };
+
+  let enabledOptionCursor = -1;
 
   const renderOption = (item: T, prefix: string, localIndex: number) => {
     const selected = isSelected(item);
     const disabled = settings.disabled || isDisabledItem(item) || (limitReached && !selected);
-    optionCursor += 1;
-    const optionIndex = optionCursor;
+    const optionIndex = disabled ? -1 : (enabledOptionCursor += 1);
     const optionId = getOptionId(item, localIndex, prefix);
+    const optionKey = `${prefix}-${getPrimaryValue(item, settings)}-${localIndex}`;
+    const optionSlot: MultiSelectDropdownOptionSlot<T> = {
+      item,
+      id: optionId,
+      key: optionKey,
+      label: getLabel(item, settings),
+      selected,
+      disabled,
+      index: optionIndex,
+      groupName: prefix.startsWith('group-') ? prefix : undefined
+    };
+    const optionProps = {
+      id: optionId,
+      className: `rmsd-option${selected ? ' rmsd-selected' : ''}${disabled ? ' rmsd-disabled' : ''}`,
+      role: 'option' as const,
+      'aria-selected': selected,
+      'aria-checked': selected,
+      'aria-disabled': disabled,
+      tabIndex: disabled || !settings.keyboard.tab ? -1 : 0,
+      'data-rmsd-option': 'true',
+      onFocus: () => setActiveDescendantId(optionId),
+      onClick: () => {
+        if (disabled) {
+          return;
+        }
+
+        const willClose = !isSelected(item) && (settings.singleSelection || settings.closeDropDownOnSelection);
+        selectItem(item, willClose ? 'trigger' : 'none');
+
+        if (!willClose) {
+          focusOptionAfterPointerSelection(optionId, optionIndex);
+        }
+      },
+      onKeyDown: (event: ReactKeyboardEvent<HTMLElement>) => handleOptionKeyDown(event, item, optionIndex)
+    };
+    const checkbox = renderCheckbox(selected, 'option');
+    const children = (
+      <>
+        {checkbox}
+        {renderItemNode(item)}
+      </>
+    );
 
     return (
-      <div
-        key={`${prefix}-${getPrimaryValue(item, settings)}-${localIndex}`}
-        id={optionId}
-        className={`rmsd-option${selected ? ' rmsd-selected' : ''}${disabled ? ' rmsd-disabled' : ''}`}
-        role="option"
-        aria-selected={selected}
-        aria-disabled={disabled}
-        tabIndex={disabled ? -1 : 0}
-        data-rmsd-option="true"
-        onFocus={() => setActiveDescendantId(optionId)}
-        onClick={() => {
-          if (!disabled) {
-            selectItem(item);
-          }
-        }}
-        onKeyDown={(event) => handleOptionKeyDown(event, item, optionIndex)}>
-        {settings.showCheckbox ? (
-          <span className="rmsd-checkbox" data-checked={selected} aria-hidden="true" />
-        ) : null}
-        {renderItemNode(item)}
-      </div>
+      <Fragment key={optionKey}>
+        {renderSlot(
+          slots?.Option,
+          { ...slotBase, props: optionProps, option: optionSlot, checkbox, children },
+          <div {...optionProps}>{children}</div>
+        )}
+      </Fragment>
     );
   };
 
@@ -1018,204 +1141,447 @@ function InnerMultiSelectDropdown<T extends DropdownItem>(
     toggleDropdown();
   };
 
-  const menu = isOpen ? (
-    <div
-      ref={menuRef}
-      className={`rmsd-menu rmsd-${effectivePosition} skin-${skinName} theme-${skinName}${skinFallbackClass ? ` ${skinFallbackClass}` : ''}${shouldAppendToBody ? ' rmsd-body-overlay' : ''}`}
-      style={shouldAppendToBody ? bodyMenuStyle : undefined}
-      onMouseDown={(event) => event.stopPropagation()}
-      onTouchStart={(event) => event.stopPropagation()}>
-      <div className="rmsd-toolbar">
-        {hasBulkActions ? (
-          <div className="rmsd-bulk-actions">
-            {settings.enableCheckAll && !settings.singleSelection ? (
-              <button
-                type="button"
-                className="rmsd-inline-button rmsd-select-all-button"
-                onClick={() =>
-                  allFilteredSelected
-                    ? deSelectAllItems(selectableItems, Boolean(filter.trim()))
-                    : selectAllItems(selectableItems, Boolean(filter.trim()))
-                }
-                disabled={settings.disabled || selectableItems.length === 0}>
-                {settings.showCheckbox ? (
-                  <span className="rmsd-checkbox" data-checked={allFilteredSelected} aria-hidden="true" />
-                ) : null}
-                <span>
-                  {allFilteredSelected
-                    ? filter.trim()
-                      ? settings.filterUnSelectAllText
-                      : settings.unSelectAllText
-                    : filter.trim()
-                      ? settings.filterSelectAllText
-                      : settings.selectAllText}
-                </span>
-              </button>
-            ) : null}
+  const renderSelectAllButton = () => {
+    const label = allFilteredSelected
+      ? filter.trim()
+        ? settings.filterUnSelectAllText
+        : settings.unSelectAllText
+      : filter.trim()
+        ? settings.filterSelectAllText
+        : settings.selectAllText;
+    const selectAllProps = {
+      type: 'button' as const,
+      className: 'rmsd-inline-button rmsd-select-all-button',
+      onClick: () =>
+        allFilteredSelected
+          ? deSelectAllItems(selectableItems, Boolean(filter.trim()))
+          : selectAllItems(selectableItems, Boolean(filter.trim())),
+      onKeyDown: stopInlineKey,
+      disabled: settings.disabled || selectableItems.length === 0
+    };
+    const checkbox = renderCheckbox(allFilteredSelected, 'selectAll');
 
-            {settings.addNewItemOnFilter && filter.trim() ? (
-              <button type="button" className="rmsd-inline-button rmsd-add-button" onClick={handleAddFilterNewItem}>
-                {settings.addNewButtonText} "{filter.trim()}"
-              </button>
-            ) : null}
-          </div>
-        ) : null}
+    return renderSlot(
+      slots?.SelectAll,
+      { ...slotBase, props: selectAllProps, checked: allFilteredSelected, label, checkbox },
+      <button {...selectAllProps}>
+        {checkbox}
+        <span>{label}</span>
+      </button>
+    );
+  };
 
-        {settings.enableSearchFilter ? (
-          renderSearch ? (
-            renderSearch({ query: filter, setQuery: setFilter, closeDropdown: () => closeDropdown() })
-          ) : (
-            <div className="rmsd-search-shell">
-              <StacklineIcon name="search" className="rmsd-search-icon" />
-              <input
-                ref={searchRef}
-                className="rmsd-search-input"
-                value={filter}
-                onChange={(event) => setFilter(event.target.value)}
-                onKeyDown={handleSearchKeyDown}
-                placeholder={settings.searchPlaceholderText}
-                aria-label={settings.searchAriaLabel}
-              />
-              {filter ? (
-                <button
-                  type="button"
-                  className="rmsd-search-clear"
-                  aria-label={settings.clearSearchAriaLabel}
-                  onKeyDown={stopInlineKey}
-                  onClick={() => setFilter('')}>
-                  <StacklineIcon name="clear" />
-                </button>
-              ) : null}
-            </div>
-          )
-        ) : null}
+  const renderAddNewItemButton = () => {
+    const query = filter.trim();
+    if (!query) {
+      return null;
+    }
+
+    const label = `${settings.addNewButtonText} "${query}"`;
+    const addItemProps = {
+      type: 'button' as const,
+      className: 'rmsd-inline-button rmsd-add-button',
+      onKeyDown: stopInlineKey,
+      onClick: handleAddFilterNewItem
+    };
+
+    return renderSlot(
+      slots?.AddNewItem,
+      { ...slotBase, props: addItemProps, query, label },
+      <button {...addItemProps}>{label}</button>
+    );
+  };
+
+  const renderSearchNode = () => {
+    if (!settings.enableSearchFilter) {
+      return null;
+    }
+
+    const searchShellProps = { className: 'rmsd-search-shell' };
+    const searchInputProps = {
+      ref: searchRef,
+      className: 'rmsd-search-input',
+      value: filter,
+      onChange: (event: ChangeEvent<HTMLInputElement>) => setFilter(event.target.value),
+      onKeyDown: handleSearchKeyDown,
+      placeholder: settings.searchPlaceholderText,
+      'aria-label': settings.searchAriaLabel
+    };
+    const searchClearProps = {
+      type: 'button' as const,
+      className: 'rmsd-search-clear',
+      'aria-label': settings.clearSearchAriaLabel,
+      onKeyDown: stopInlineKey,
+      onClick: () => setFilter('')
+    };
+    const icon = <StacklineIcon name="search" className="rmsd-search-icon" />;
+    const clearIcon = <StacklineIcon name="clear" />;
+    const fallback = renderSearch ? (
+      renderSearch({ query: filter, setQuery: setFilter, closeDropdown: () => closeDropdown() })
+    ) : (
+      <div {...searchShellProps}>
+        {icon}
+        <input {...searchInputProps} />
+        {filter ? <button {...searchClearProps}>{clearIcon}</button> : null}
       </div>
+    );
 
-      <div
-        className="rmsd-list"
-        ref={listRef}
-        style={{ maxHeight: shouldAppendToBody ? bodyListMaxHeight ?? settings.maxHeight : settings.maxHeight }}
-        onScroll={settings.lazyLoading ? handleListScroll : undefined}
-        id={listboxId}
-        role="listbox"
-        aria-label={settings.listboxAriaLabel}
-        aria-multiselectable={!settings.singleSelection}>
-        {(loading ?? settings.loading) ? (
-          <div className="rmsd-state" role="status">
-            {settings.loadingText}
+    return renderSlot(
+      slots?.Search,
+      {
+        ...slotBase,
+        props: searchShellProps,
+        inputProps: searchInputProps,
+        clearButtonProps: searchClearProps,
+        query: filter,
+        icon,
+        clearIcon
+      },
+      fallback
+    );
+  };
+
+  const renderGroupAction = (group: MultiSelectDropdownGroupSlot<T>) => {
+    if (!settings.selectGroup || settings.singleSelection) {
+      return null;
+    }
+
+    const label = group.selected ? 'Unselect' : 'Select';
+    const groupActionProps = {
+      type: 'button' as const,
+      className: 'rmsd-group-action',
+      onKeyDown: stopInlineKey,
+      onClick: () => toggleGroup(group.name, group.items)
+    };
+
+    return renderSlot(
+      slots?.GroupAction,
+      { ...slotBase, props: groupActionProps, group, label },
+      <button {...groupActionProps}>{label}</button>
+    );
+  };
+
+  const renderGroupNode = (group: { name: string; items: T[] }, groupIndex: number) => {
+    const enabledItems = group.items.filter((item) => !isDisabledItem(item));
+    const groupSlot: MultiSelectDropdownGroupSlot<T> = {
+      name: group.name,
+      items: group.items,
+      enabledItems,
+      selected: enabledItems.length > 0 && enabledItems.every((item) => isSelected(item)),
+      disabled: enabledItems.length === 0,
+      index: groupIndex
+    };
+    const action = renderGroupAction(groupSlot);
+    const groupHeaderProps = { className: 'rmsd-group-header' };
+    const header = renderSlot(
+      slots?.GroupHeader,
+      { ...slotBase, props: groupHeaderProps, group: groupSlot, action },
+      <div {...groupHeaderProps}>
+        <span>
+          {group.name} · {group.items.length}
+        </span>
+        {action}
+      </div>
+    );
+    const groupProps = {
+      className: 'rmsd-group',
+      role: 'group' as const,
+      'aria-label': group.name
+    };
+    const children = group.items.map((item, index) => renderOption(item, `group-${groupIndex}`, index));
+
+    return (
+      <Fragment key={group.name}>
+        {renderSlot(
+          slots?.Group,
+          { ...slotBase, props: groupProps, group: groupSlot, header, children },
+          <div {...groupProps}>
+            {header}
+            {children}
           </div>
-        ) : groupedItems.length > 0 ? (
-          groupedItems.map((group, groupIndex) => (
-            <div className="rmsd-group" key={group.name} role="group" aria-label={group.name}>
-              <div className="rmsd-group-header">
-                <span>
-                  {group.name} · {group.items.length}
-                </span>
-                {settings.selectGroup && !settings.singleSelection ? (
-                  <button type="button" className="rmsd-group-action" onClick={() => toggleGroup(group.name, group.items)}>
-                    {group.items.filter((item) => !isDisabledItem(item)).every((item) => isSelected(item))
-                      ? 'Unselect'
-                      : 'Select'}
-                  </button>
-                ) : null}
-              </div>
-              {group.items.map((item, index) => renderOption(item, `group-${groupIndex}`, index))}
-            </div>
-          ))
-        ) : hasFilteredResults ? (
-          filteredItems.map((item, index) => renderOption(item, 'item', index))
-        ) : (
-          <div className="rmsd-state">{renderEmptyState ? renderEmptyState(filter) : settings.noDataLabel}</div>
         )}
-      </div>
-    </div>
-  ) : null;
+      </Fragment>
+    );
+  };
 
-  return (
-    <div className={rootClassName} style={style} ref={rootRef} data-open={isOpen}>
-      <div
-        ref={triggerRef}
-        className={`rmsd-trigger${settings.disabled ? ' rmsd-disabled' : ''}`}
-        onClick={handleTriggerClick}
-        onKeyDown={handleTriggerKeyDown}
-        tabIndex={settings.disabled ? -1 : 0}
-        role="combobox"
-        aria-expanded={isOpen}
-        aria-haspopup="listbox"
-        aria-controls={listboxId}
-        aria-disabled={settings.disabled}
-        aria-activedescendant={activeDescendantId || undefined}
-        aria-label={getTriggerAriaLabel()}>
-        <div className="rmsd-value">
-          {selectedItems.length === 0 ? (
-            <span className="rmsd-placeholder">{settings.text}</span>
-          ) : settings.singleSelection ? (
-            <span className="rmsd-single-value">{getLabel(selectedItems[0], settings)}</span>
-          ) : (
-            <>
-              <div className="rmsd-badge-list">
-                {visibleBadges.map((item) => (
-                  <span className="rmsd-badge" key={getPrimaryValue(item, settings)}>
-                    <span className="rmsd-badge-label">{renderBadgeNode(item)}</span>
-                    {!settings.disabled ? (
-                      <button
-                        type="button"
-                        className="rmsd-badge-remove"
-                        aria-label={getRemoveItemAriaLabel(item)}
-                        onKeyDown={stopInlineKey}
-                        onClick={(event) => {
-                          event.stopPropagation();
-                          removeItem(item);
-                        }}>
-                        <StacklineIcon name="remove" />
-                      </button>
-                    ) : null}
-                  </span>
-                ))}
-              </div>
-              {hiddenBadgeCount > 0 ? <span className="rmsd-overflow">+{hiddenBadgeCount}</span> : null}
-            </>
-          )}
-        </div>
+  const renderOptionListChildren = () => {
+    if (loading ?? settings.loading) {
+      const loadingProps = { className: 'rmsd-state', role: 'status' as const };
 
-        <div className="rmsd-actions">
-          {settings.clearAll && selectedItems.length > 0 && !settings.disabled ? (
-            <button
-              type="button"
-              className="rmsd-clear"
-              aria-label={settings.clearAllAriaLabel}
-              onKeyDown={stopInlineKey}
-              onClick={(event) => {
-                event.stopPropagation();
-                clearSelection();
-              }}>
-              <StacklineIcon name="remove" />
-            </button>
-          ) : null}
-          <button
-            type="button"
-            className="rmsd-arrow-button"
-            disabled={settings.disabled}
-            aria-label={isOpen ? settings.closeDropdownAriaLabel : settings.openDropdownAriaLabel}
-            aria-expanded={isOpen}
-            aria-controls={listboxId}
-            onKeyDown={handleArrowButtonKeyDown}
-            onClick={(event) => {
-              event.stopPropagation();
-              toggleDropdown();
-            }}>
-            <span className="rmsd-arrow" aria-hidden="true">
-              <StacklineIcon name={isOpen ? 'angle-up' : 'angle-down'} />
-            </span>
-          </button>
-        </div>
-      </div>
+      return renderSlot(
+        slots?.LoadingState,
+        { ...slotBase, props: loadingProps, text: settings.loadingText },
+        <div {...loadingProps}>{settings.loadingText}</div>
+      );
+    }
 
+    if (groupedItems.length > 0) {
+      return groupedItems.map((group, groupIndex) => renderGroupNode(group, groupIndex));
+    }
+
+    if (hasFilteredResults) {
+      return filteredItems.map((item, index) => renderOption(item, 'item', index));
+    }
+
+    const emptyProps = { className: 'rmsd-state' };
+
+    return renderSlot(
+      slots?.EmptyState,
+      { ...slotBase, props: emptyProps, query: filter, text: settings.noDataLabel },
+      <div {...emptyProps}>{renderEmptyState ? renderEmptyState(filter) : settings.noDataLabel}</div>
+    );
+  };
+
+  const renderOptionList = () => {
+    const listProps = {
+      className: 'rmsd-list',
+      ref: listRef,
+      style: {
+        maxHeight: shouldAppendToBody ? bodyListMaxHeight ?? settings.maxHeight : settings.maxHeight
+      },
+      onScroll: settings.lazyLoading ? handleListScroll : undefined,
+      id: listboxId,
+      role: 'listbox' as const,
+      'aria-label': settings.listboxAriaLabel,
+      'aria-multiselectable': !settings.singleSelection
+    };
+    const children = renderOptionListChildren();
+
+    return renderSlot(
+      slots?.OptionList,
+      { ...slotBase, props: listProps, children },
+      <div {...listProps}>{children}</div>
+    );
+  };
+
+  const renderBulkActions = () => {
+    if (!hasBulkActions) {
+      return null;
+    }
+
+    const bulkActionsProps = { className: 'rmsd-bulk-actions' };
+    const children = (
+      <>
+        {settings.enableCheckAll && !settings.singleSelection ? renderSelectAllButton() : null}
+        {settings.addNewItemOnFilter && filter.trim() ? renderAddNewItemButton() : null}
+      </>
+    );
+
+    return renderSlot(
+      slots?.BulkActions,
+      { ...slotBase, props: bulkActionsProps, children },
+      <div {...bulkActionsProps}>{children}</div>
+    );
+  };
+
+  const renderToolbar = () => {
+    const toolbarProps = { className: 'rmsd-toolbar' };
+    const children = (
+      <>
+        {renderBulkActions()}
+        {renderSearchNode()}
+      </>
+    );
+
+    return renderSlot(
+      slots?.Toolbar,
+      { ...slotBase, props: toolbarProps, children },
+      <div {...toolbarProps}>{children}</div>
+    );
+  };
+
+  const renderMenuFooter = () => {
+    if (!slots?.MenuFooter) {
+      return null;
+    }
+
+    return renderSlot(slots.MenuFooter, { ...slotBase, props: { className: 'rmsd-menu-footer' } }, null);
+  };
+
+  const renderMenu = () => {
+    if (!isOpen) {
+      return null;
+    }
+
+    const menuProps = {
+      ref: menuRef,
+      className: `rmsd-menu rmsd-${effectivePosition} skin-${skinName} theme-${skinName}${skinFallbackClass ? ` ${skinFallbackClass}` : ''}${shouldAppendToBody ? ' rmsd-body-overlay' : ''}`,
+      style: shouldAppendToBody ? bodyMenuStyle : undefined,
+      onMouseDown: (event: ReactMouseEvent<HTMLDivElement>) => event.stopPropagation(),
+      onTouchStart: (event: ReactTouchEvent<HTMLDivElement>) => event.stopPropagation()
+    };
+    const children = (
+      <>
+        {renderToolbar()}
+        {renderOptionList()}
+        {renderMenuFooter()}
+      </>
+    );
+
+    return renderSlot(
+      slots?.Menu,
+      {
+        ...slotBase,
+        props: menuProps,
+        children,
+        position: effectivePosition,
+        appendToBody: shouldAppendToBody
+      },
+      <div {...menuProps}>{children}</div>
+    );
+  };
+
+  const renderValue = () => {
+    const valueProps = { className: 'rmsd-value' };
+    let children: ReactNode;
+
+    if (selectedItems.length === 0) {
+      const placeholderProps = { className: 'rmsd-placeholder' };
+      children = renderSlot(
+        slots?.Placeholder,
+        { ...slotBase, props: placeholderProps, text: settings.text },
+        <span {...placeholderProps}>{settings.text}</span>
+      );
+    } else if (settings.singleSelection) {
+      const item = selectedItems[0];
+      const singleValueProps = { className: 'rmsd-single-value' };
+      children = renderSlot(
+        slots?.SingleValue,
+        { ...slotBase, props: singleValueProps, item, label: getLabel(item, settings) },
+        <span {...singleValueProps}>{getLabel(item, settings)}</span>
+      );
+    } else {
+      const badgeListProps = { className: 'rmsd-badge-list' };
+      const badgeListChildren = visibleBadges.map((item) => (
+        <Fragment key={getPrimaryValue(item, settings)}>{renderBadgeNode(item)}</Fragment>
+      ));
+      children = renderSlot(
+        slots?.BadgeList,
+        { ...slotBase, props: badgeListProps, items: visibleBadges, children: badgeListChildren },
+        <div {...badgeListProps}>{badgeListChildren}</div>
+      );
+    }
+
+    return renderSlot(
+      slots?.Value,
+      { ...slotBase, props: valueProps, children },
+      <div {...valueProps}>{children}</div>
+    );
+  };
+
+  const renderActions = () => {
+    const actionsProps = { className: 'rmsd-actions' };
+    const overflowProps = { className: 'rmsd-overflow' };
+    const clearAllProps = {
+      type: 'button' as const,
+      className: 'rmsd-clear',
+      'aria-label': settings.clearAllAriaLabel,
+      onKeyDown: stopInlineKey,
+      onClick: (event: ReactMouseEvent<HTMLButtonElement>) => {
+        event.stopPropagation();
+        clearSelection();
+      }
+    };
+    const arrowProps = {
+      type: 'button' as const,
+      className: 'rmsd-arrow-button',
+      disabled: settings.disabled,
+      'aria-label': isOpen ? settings.closeDropdownAriaLabel : settings.openDropdownAriaLabel,
+      'aria-expanded': isOpen,
+      'aria-controls': listboxId,
+      onKeyDown: handleArrowButtonKeyDown,
+      onClick: (event: ReactMouseEvent<HTMLButtonElement>) => {
+        event.stopPropagation();
+        toggleDropdown();
+      }
+    };
+    const clearIcon = <StacklineIcon name="remove" />;
+    const arrowIcon = (
+      <span className="rmsd-arrow" aria-hidden="true">
+        <StacklineIcon name={isOpen ? 'angle-up' : 'angle-down'} />
+      </span>
+    );
+    const children = (
+      <>
+        {hiddenBadgeCount > 0
+          ? renderSlot(
+              slots?.OverflowCounter,
+              { ...slotBase, props: overflowProps, count: hiddenBadgeCount },
+              <span {...overflowProps}>+{hiddenBadgeCount}</span>
+            )
+          : null}
+        {settings.clearAll && selectedItems.length > 0 && !settings.disabled
+          ? renderSlot(
+              slots?.ClearAll,
+              { ...slotBase, props: clearAllProps, icon: clearIcon },
+              <button {...clearAllProps}>{clearIcon}</button>
+            )
+          : null}
+        {renderSlot(
+          slots?.Arrow,
+          { ...slotBase, props: arrowProps, icon: arrowIcon, direction: isOpen ? 'up' : 'down' },
+          <button {...arrowProps}>{arrowIcon}</button>
+        )}
+      </>
+    );
+
+    return renderSlot(
+      slots?.Actions,
+      { ...slotBase, props: actionsProps, children },
+      <div {...actionsProps}>{children}</div>
+    );
+  };
+
+  const renderTrigger = () => {
+    const triggerProps = {
+      ref: triggerRef,
+      className: `rmsd-trigger${settings.disabled ? ' rmsd-disabled' : ''}`,
+      onClick: handleTriggerClick,
+      onKeyDown: handleTriggerKeyDown,
+      tabIndex: settings.disabled ? -1 : 0,
+      role: 'combobox' as const,
+      'aria-expanded': isOpen,
+      'aria-haspopup': 'listbox' as const,
+      'aria-controls': listboxId,
+      'aria-disabled': settings.disabled,
+      'aria-activedescendant': activeDescendantId || undefined,
+      'aria-label': getTriggerAriaLabel()
+    };
+    const children = (
+      <>
+        {renderValue()}
+        {renderActions()}
+      </>
+    );
+
+    return renderSlot(
+      slots?.Trigger,
+      { ...slotBase, props: triggerProps, children },
+      <div {...triggerProps}>{children}</div>
+    );
+  };
+
+  const menu = renderMenu();
+  const rootChildren = (
+    <>
+      {renderTrigger()}
       {shouldAppendToBody && menu && typeof document !== 'undefined'
         ? createPortal(menu, document.body)
         : menu}
-    </div>
+    </>
   );
+  const rootProps = {
+    className: rootClassName,
+    style,
+    ref: rootRef,
+    'data-open': isOpen
+  };
+
+  return renderSlot(
+    slots?.Root,
+    { ...slotBase, props: rootProps, children: rootChildren },
+    <div {...rootProps}>{rootChildren}</div>
+  ) as ReactElement;
 }
 
 type MultiSelectComponent = <T extends DropdownItem = DropdownItem>(

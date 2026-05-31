@@ -175,31 +175,23 @@ const styles = `
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 0;
-  min-height: 0;
+  flex: 0 0 auto;
+  min-width: 24px;
+  min-height: 20px;
   color: var(--rmsd-muted);
   font-size: 0.8rem;
   font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+  text-align: center;
 }
 
-.rmsd-root.rmsd-has-overflow:not(.skin-classic) .rmsd-trigger {
+.rmsd-root.rmsd-has-overflow .rmsd-trigger {
   padding-right: 104px;
 }
 
-.rmsd-root.rmsd-has-overflow:not(.skin-classic):not(.rmsd-has-clear) .rmsd-trigger {
+.rmsd-root.rmsd-has-overflow:not(.rmsd-has-clear) .rmsd-trigger {
   padding-right: 74px;
-}
-
-.rmsd-root.rmsd-has-overflow:not(.skin-classic) .rmsd-overflow {
-  position: absolute;
-  top: 50%;
-  right: 76px;
-  transform: translateY(-50%);
-  z-index: 1;
-}
-
-.rmsd-root.rmsd-has-overflow:not(.skin-classic):not(.rmsd-has-clear) .rmsd-overflow {
-  right: 42px;
 }
 
 .rmsd-actions {
@@ -766,9 +758,12 @@ const styles = `
 
 .theme-classic .rmsd-overflow,
 .skin-classic .rmsd-overflow {
+  min-width: 24px;
+  min-height: 20px;
   color: #333333;
   font-size: 14px;
   font-weight: 400;
+  line-height: 1;
 }
 
 .theme-classic .rmsd-actions,

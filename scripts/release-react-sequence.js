@@ -1,7 +1,9 @@
-import { releaseReactLine } from './release-react-line.js';
+import { releaseReactLine, supportedReleaseLines } from './release-react-line.js';
 
-const publish = !process.argv.slice(2).includes('--no-publish');
+const flags = new Set(process.argv.slice(2));
+const publish = !flags.has('--no-publish');
+const keepTemp = flags.has('--keep-temp');
 
-[17, 18, 19].forEach((line) => {
-  releaseReactLine(line, { publish });
-});
+for (const line of supportedReleaseLines) {
+  releaseReactLine(line, { publish, keepTemp });
+}
