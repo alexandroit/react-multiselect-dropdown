@@ -1,0 +1,18 @@
+.template-route .option-row,
+.template-route .swatch-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.template-route .option-row small {
+  display: block;
+  color: #64748b;
+  font-size: 12px;
+}
+
+.template-route .swatch {
+  width: 14px;
+  height: 14px;
+  border: 1px solid rgba(0, 0, 0, 0.18);
+}

@@ -1,0 +1,1050 @@
+import type { DropdownSettings } from '@stackline/react-multiselect-dropdown';
+import type { DemoItem } from '../../shared/types';
+import { countryOptions } from '../../shared/country-data';
+
+export const initialPeople: DemoItem[] = [
+  {
+    id: 1,
+    itemName: "Person 1",
+    name: "Person 1",
+    region: "Brazilian"
+  },
+  {
+    id: 2,
+    itemName: "Person 2",
+    name: "Person 2",
+    region: "Canadian"
+  },
+  {
+    id: 3,
+    itemName: "Person 3",
+    name: "Person 3",
+    region: "Mexican"
+  },
+  {
+    id: 4,
+    itemName: "Person 4",
+    name: "Person 4",
+    region: "Colombian"
+  },
+  {
+    id: 5,
+    itemName: "Person 5",
+    name: "Person 5",
+    region: "Brazilian"
+  },
+  {
+    id: 6,
+    itemName: "Person 6",
+    name: "Person 6",
+    region: "Canadian"
+  },
+  {
+    id: 7,
+    itemName: "Person 7",
+    name: "Person 7",
+    region: "Mexican"
+  },
+  {
+    id: 8,
+    itemName: "Person 8",
+    name: "Person 8",
+    region: "Colombian"
+  },
+  {
+    id: 9,
+    itemName: "Person 9",
+    name: "Person 9",
+    region: "Brazilian"
+  },
+  {
+    id: 10,
+    itemName: "Person 10",
+    name: "Person 10",
+    region: "Canadian"
+  },
+  {
+    id: 11,
+    itemName: "Person 11",
+    name: "Person 11",
+    region: "Mexican"
+  },
+  {
+    id: 12,
+    itemName: "Person 12",
+    name: "Person 12",
+    region: "Colombian"
+  },
+  {
+    id: 13,
+    itemName: "Person 13",
+    name: "Person 13",
+    region: "Brazilian"
+  },
+  {
+    id: 14,
+    itemName: "Person 14",
+    name: "Person 14",
+    region: "Canadian"
+  },
+  {
+    id: 15,
+    itemName: "Person 15",
+    name: "Person 15",
+    region: "Mexican"
+  },
+  {
+    id: 16,
+    itemName: "Person 16",
+    name: "Person 16",
+    region: "Colombian"
+  },
+  {
+    id: 17,
+    itemName: "Person 17",
+    name: "Person 17",
+    region: "Brazilian"
+  },
+  {
+    id: 18,
+    itemName: "Person 18",
+    name: "Person 18",
+    region: "Canadian"
+  },
+  {
+    id: 19,
+    itemName: "Person 19",
+    name: "Person 19",
+    region: "Mexican"
+  },
+  {
+    id: 20,
+    itemName: "Person 20",
+    name: "Person 20",
+    region: "Colombian"
+  },
+  {
+    id: 21,
+    itemName: "Person 21",
+    name: "Person 21",
+    region: "Brazilian"
+  },
+  {
+    id: 22,
+    itemName: "Person 22",
+    name: "Person 22",
+    region: "Canadian"
+  },
+  {
+    id: 23,
+    itemName: "Person 23",
+    name: "Person 23",
+    region: "Mexican"
+  },
+  {
+    id: 24,
+    itemName: "Person 24",
+    name: "Person 24",
+    region: "Colombian"
+  },
+  {
+    id: 25,
+    itemName: "Person 25",
+    name: "Person 25",
+    region: "Brazilian"
+  },
+  {
+    id: 26,
+    itemName: "Person 26",
+    name: "Person 26",
+    region: "Canadian"
+  },
+  {
+    id: 27,
+    itemName: "Person 27",
+    name: "Person 27",
+    region: "Mexican"
+  },
+  {
+    id: 28,
+    itemName: "Person 28",
+    name: "Person 28",
+    region: "Colombian"
+  },
+  {
+    id: 29,
+    itemName: "Person 29",
+    name: "Person 29",
+    region: "Brazilian"
+  },
+  {
+    id: 30,
+    itemName: "Person 30",
+    name: "Person 30",
+    region: "Canadian"
+  }
+];
+
+export const allPeople: DemoItem[] = [
+  {
+    id: 1,
+    itemName: "Person 1",
+    name: "Person 1",
+    region: "Brazilian"
+  },
+  {
+    id: 2,
+    itemName: "Person 2",
+    name: "Person 2",
+    region: "Canadian"
+  },
+  {
+    id: 3,
+    itemName: "Person 3",
+    name: "Person 3",
+    region: "Mexican"
+  },
+  {
+    id: 4,
+    itemName: "Person 4",
+    name: "Person 4",
+    region: "Colombian"
+  },
+  {
+    id: 5,
+    itemName: "Person 5",
+    name: "Person 5",
+    region: "Brazilian"
+  },
+  {
+    id: 6,
+    itemName: "Person 6",
+    name: "Person 6",
+    region: "Canadian"
+  },
+  {
+    id: 7,
+    itemName: "Person 7",
+    name: "Person 7",
+    region: "Mexican"
+  },
+  {
+    id: 8,
+    itemName: "Person 8",
+    name: "Person 8",
+    region: "Colombian"
+  },
+  {
+    id: 9,
+    itemName: "Person 9",
+    name: "Person 9",
+    region: "Brazilian"
+  },
+  {
+    id: 10,
+    itemName: "Person 10",
+    name: "Person 10",
+    region: "Canadian"
+  },
+  {
+    id: 11,
+    itemName: "Person 11",
+    name: "Person 11",
+    region: "Mexican"
+  },
+  {
+    id: 12,
+    itemName: "Person 12",
+    name: "Person 12",
+    region: "Colombian"
+  },
+  {
+    id: 13,
+    itemName: "Person 13",
+    name: "Person 13",
+    region: "Brazilian"
+  },
+  {
+    id: 14,
+    itemName: "Person 14",
+    name: "Person 14",
+    region: "Canadian"
+  },
+  {
+    id: 15,
+    itemName: "Person 15",
+    name: "Person 15",
+    region: "Mexican"
+  },
+  {
+    id: 16,
+    itemName: "Person 16",
+    name: "Person 16",
+    region: "Colombian"
+  },
+  {
+    id: 17,
+    itemName: "Person 17",
+    name: "Person 17",
+    region: "Brazilian"
+  },
+  {
+    id: 18,
+    itemName: "Person 18",
+    name: "Person 18",
+    region: "Canadian"
+  },
+  {
+    id: 19,
+    itemName: "Person 19",
+    name: "Person 19",
+    region: "Mexican"
+  },
+  {
+    id: 20,
+    itemName: "Person 20",
+    name: "Person 20",
+    region: "Colombian"
+  },
+  {
+    id: 21,
+    itemName: "Person 21",
+    name: "Person 21",
+    region: "Brazilian"
+  },
+  {
+    id: 22,
+    itemName: "Person 22",
+    name: "Person 22",
+    region: "Canadian"
+  },
+  {
+    id: 23,
+    itemName: "Person 23",
+    name: "Person 23",
+    region: "Mexican"
+  },
+  {
+    id: 24,
+    itemName: "Person 24",
+    name: "Person 24",
+    region: "Colombian"
+  },
+  {
+    id: 25,
+    itemName: "Person 25",
+    name: "Person 25",
+    region: "Brazilian"
+  },
+  {
+    id: 26,
+    itemName: "Person 26",
+    name: "Person 26",
+    region: "Canadian"
+  },
+  {
+    id: 27,
+    itemName: "Person 27",
+    name: "Person 27",
+    region: "Mexican"
+  },
+  {
+    id: 28,
+    itemName: "Person 28",
+    name: "Person 28",
+    region: "Colombian"
+  },
+  {
+    id: 29,
+    itemName: "Person 29",
+    name: "Person 29",
+    region: "Brazilian"
+  },
+  {
+    id: 30,
+    itemName: "Person 30",
+    name: "Person 30",
+    region: "Canadian"
+  },
+  {
+    id: 31,
+    itemName: "Person 31",
+    name: "Person 31",
+    region: "Mexican"
+  },
+  {
+    id: 32,
+    itemName: "Person 32",
+    name: "Person 32",
+    region: "Colombian"
+  },
+  {
+    id: 33,
+    itemName: "Person 33",
+    name: "Person 33",
+    region: "Brazilian"
+  },
+  {
+    id: 34,
+    itemName: "Person 34",
+    name: "Person 34",
+    region: "Canadian"
+  },
+  {
+    id: 35,
+    itemName: "Person 35",
+    name: "Person 35",
+    region: "Mexican"
+  },
+  {
+    id: 36,
+    itemName: "Person 36",
+    name: "Person 36",
+    region: "Colombian"
+  },
+  {
+    id: 37,
+    itemName: "Person 37",
+    name: "Person 37",
+    region: "Brazilian"
+  },
+  {
+    id: 38,
+    itemName: "Person 38",
+    name: "Person 38",
+    region: "Canadian"
+  },
+  {
+    id: 39,
+    itemName: "Person 39",
+    name: "Person 39",
+    region: "Mexican"
+  },
+  {
+    id: 40,
+    itemName: "Person 40",
+    name: "Person 40",
+    region: "Colombian"
+  },
+  {
+    id: 41,
+    itemName: "Person 41",
+    name: "Person 41",
+    region: "Brazilian"
+  },
+  {
+    id: 42,
+    itemName: "Person 42",
+    name: "Person 42",
+    region: "Canadian"
+  },
+  {
+    id: 43,
+    itemName: "Person 43",
+    name: "Person 43",
+    region: "Mexican"
+  },
+  {
+    id: 44,
+    itemName: "Person 44",
+    name: "Person 44",
+    region: "Colombian"
+  },
+  {
+    id: 45,
+    itemName: "Person 45",
+    name: "Person 45",
+    region: "Brazilian"
+  },
+  {
+    id: 46,
+    itemName: "Person 46",
+    name: "Person 46",
+    region: "Canadian"
+  },
+  {
+    id: 47,
+    itemName: "Person 47",
+    name: "Person 47",
+    region: "Mexican"
+  },
+  {
+    id: 48,
+    itemName: "Person 48",
+    name: "Person 48",
+    region: "Colombian"
+  },
+  {
+    id: 49,
+    itemName: "Person 49",
+    name: "Person 49",
+    region: "Brazilian"
+  },
+  {
+    id: 50,
+    itemName: "Person 50",
+    name: "Person 50",
+    region: "Canadian"
+  },
+  {
+    id: 51,
+    itemName: "Person 51",
+    name: "Person 51",
+    region: "Mexican"
+  },
+  {
+    id: 52,
+    itemName: "Person 52",
+    name: "Person 52",
+    region: "Colombian"
+  },
+  {
+    id: 53,
+    itemName: "Person 53",
+    name: "Person 53",
+    region: "Brazilian"
+  },
+  {
+    id: 54,
+    itemName: "Person 54",
+    name: "Person 54",
+    region: "Canadian"
+  },
+  {
+    id: 55,
+    itemName: "Person 55",
+    name: "Person 55",
+    region: "Mexican"
+  },
+  {
+    id: 56,
+    itemName: "Person 56",
+    name: "Person 56",
+    region: "Colombian"
+  },
+  {
+    id: 57,
+    itemName: "Person 57",
+    name: "Person 57",
+    region: "Brazilian"
+  },
+  {
+    id: 58,
+    itemName: "Person 58",
+    name: "Person 58",
+    region: "Canadian"
+  },
+  {
+    id: 59,
+    itemName: "Person 59",
+    name: "Person 59",
+    region: "Mexican"
+  },
+  {
+    id: 60,
+    itemName: "Person 60",
+    name: "Person 60",
+    region: "Colombian"
+  },
+  {
+    id: 61,
+    itemName: "Person 61",
+    name: "Person 61",
+    region: "Brazilian"
+  },
+  {
+    id: 62,
+    itemName: "Person 62",
+    name: "Person 62",
+    region: "Canadian"
+  },
+  {
+    id: 63,
+    itemName: "Person 63",
+    name: "Person 63",
+    region: "Mexican"
+  },
+  {
+    id: 64,
+    itemName: "Person 64",
+    name: "Person 64",
+    region: "Colombian"
+  },
+  {
+    id: 65,
+    itemName: "Person 65",
+    name: "Person 65",
+    region: "Brazilian"
+  },
+  {
+    id: 66,
+    itemName: "Person 66",
+    name: "Person 66",
+    region: "Canadian"
+  },
+  {
+    id: 67,
+    itemName: "Person 67",
+    name: "Person 67",
+    region: "Mexican"
+  },
+  {
+    id: 68,
+    itemName: "Person 68",
+    name: "Person 68",
+    region: "Colombian"
+  },
+  {
+    id: 69,
+    itemName: "Person 69",
+    name: "Person 69",
+    region: "Brazilian"
+  },
+  {
+    id: 70,
+    itemName: "Person 70",
+    name: "Person 70",
+    region: "Canadian"
+  },
+  {
+    id: 71,
+    itemName: "Person 71",
+    name: "Person 71",
+    region: "Mexican"
+  },
+  {
+    id: 72,
+    itemName: "Person 72",
+    name: "Person 72",
+    region: "Colombian"
+  },
+  {
+    id: 73,
+    itemName: "Person 73",
+    name: "Person 73",
+    region: "Brazilian"
+  },
+  {
+    id: 74,
+    itemName: "Person 74",
+    name: "Person 74",
+    region: "Canadian"
+  },
+  {
+    id: 75,
+    itemName: "Person 75",
+    name: "Person 75",
+    region: "Mexican"
+  },
+  {
+    id: 76,
+    itemName: "Person 76",
+    name: "Person 76",
+    region: "Colombian"
+  },
+  {
+    id: 77,
+    itemName: "Person 77",
+    name: "Person 77",
+    region: "Brazilian"
+  },
+  {
+    id: 78,
+    itemName: "Person 78",
+    name: "Person 78",
+    region: "Canadian"
+  },
+  {
+    id: 79,
+    itemName: "Person 79",
+    name: "Person 79",
+    region: "Mexican"
+  },
+  {
+    id: 80,
+    itemName: "Person 80",
+    name: "Person 80",
+    region: "Colombian"
+  },
+  {
+    id: 81,
+    itemName: "Person 81",
+    name: "Person 81",
+    region: "Brazilian"
+  },
+  {
+    id: 82,
+    itemName: "Person 82",
+    name: "Person 82",
+    region: "Canadian"
+  },
+  {
+    id: 83,
+    itemName: "Person 83",
+    name: "Person 83",
+    region: "Mexican"
+  },
+  {
+    id: 84,
+    itemName: "Person 84",
+    name: "Person 84",
+    region: "Colombian"
+  },
+  {
+    id: 85,
+    itemName: "Person 85",
+    name: "Person 85",
+    region: "Brazilian"
+  },
+  {
+    id: 86,
+    itemName: "Person 86",
+    name: "Person 86",
+    region: "Canadian"
+  },
+  {
+    id: 87,
+    itemName: "Person 87",
+    name: "Person 87",
+    region: "Mexican"
+  },
+  {
+    id: 88,
+    itemName: "Person 88",
+    name: "Person 88",
+    region: "Colombian"
+  },
+  {
+    id: 89,
+    itemName: "Person 89",
+    name: "Person 89",
+    region: "Brazilian"
+  },
+  {
+    id: 90,
+    itemName: "Person 90",
+    name: "Person 90",
+    region: "Canadian"
+  },
+  {
+    id: 91,
+    itemName: "Person 91",
+    name: "Person 91",
+    region: "Mexican"
+  },
+  {
+    id: 92,
+    itemName: "Person 92",
+    name: "Person 92",
+    region: "Colombian"
+  },
+  {
+    id: 93,
+    itemName: "Person 93",
+    name: "Person 93",
+    region: "Brazilian"
+  },
+  {
+    id: 94,
+    itemName: "Person 94",
+    name: "Person 94",
+    region: "Canadian"
+  },
+  {
+    id: 95,
+    itemName: "Person 95",
+    name: "Person 95",
+    region: "Mexican"
+  },
+  {
+    id: 96,
+    itemName: "Person 96",
+    name: "Person 96",
+    region: "Colombian"
+  },
+  {
+    id: 97,
+    itemName: "Person 97",
+    name: "Person 97",
+    region: "Brazilian"
+  },
+  {
+    id: 98,
+    itemName: "Person 98",
+    name: "Person 98",
+    region: "Canadian"
+  },
+  {
+    id: 99,
+    itemName: "Person 99",
+    name: "Person 99",
+    region: "Mexican"
+  },
+  {
+    id: 100,
+    itemName: "Person 100",
+    name: "Person 100",
+    region: "Colombian"
+  },
+  {
+    id: 101,
+    itemName: "Person 101",
+    name: "Person 101",
+    region: "Brazilian"
+  },
+  {
+    id: 102,
+    itemName: "Person 102",
+    name: "Person 102",
+    region: "Canadian"
+  },
+  {
+    id: 103,
+    itemName: "Person 103",
+    name: "Person 103",
+    region: "Mexican"
+  },
+  {
+    id: 104,
+    itemName: "Person 104",
+    name: "Person 104",
+    region: "Colombian"
+  },
+  {
+    id: 105,
+    itemName: "Person 105",
+    name: "Person 105",
+    region: "Brazilian"
+  },
+  {
+    id: 106,
+    itemName: "Person 106",
+    name: "Person 106",
+    region: "Canadian"
+  },
+  {
+    id: 107,
+    itemName: "Person 107",
+    name: "Person 107",
+    region: "Mexican"
+  },
+  {
+    id: 108,
+    itemName: "Person 108",
+    name: "Person 108",
+    region: "Colombian"
+  },
+  {
+    id: 109,
+    itemName: "Person 109",
+    name: "Person 109",
+    region: "Brazilian"
+  },
+  {
+    id: 110,
+    itemName: "Person 110",
+    name: "Person 110",
+    region: "Canadian"
+  },
+  {
+    id: 111,
+    itemName: "Person 111",
+    name: "Person 111",
+    region: "Mexican"
+  },
+  {
+    id: 112,
+    itemName: "Person 112",
+    name: "Person 112",
+    region: "Colombian"
+  },
+  {
+    id: 113,
+    itemName: "Person 113",
+    name: "Person 113",
+    region: "Brazilian"
+  },
+  {
+    id: 114,
+    itemName: "Person 114",
+    name: "Person 114",
+    region: "Canadian"
+  },
+  {
+    id: 115,
+    itemName: "Person 115",
+    name: "Person 115",
+    region: "Mexican"
+  },
+  {
+    id: 116,
+    itemName: "Person 116",
+    name: "Person 116",
+    region: "Colombian"
+  },
+  {
+    id: 117,
+    itemName: "Person 117",
+    name: "Person 117",
+    region: "Brazilian"
+  },
+  {
+    id: 118,
+    itemName: "Person 118",
+    name: "Person 118",
+    region: "Canadian"
+  },
+  {
+    id: 119,
+    itemName: "Person 119",
+    name: "Person 119",
+    region: "Mexican"
+  },
+  {
+    id: 120,
+    itemName: "Person 120",
+    name: "Person 120",
+    region: "Colombian"
+  },
+  {
+    id: 121,
+    itemName: "Person 121",
+    name: "Person 121",
+    region: "Brazilian"
+  },
+  {
+    id: 122,
+    itemName: "Person 122",
+    name: "Person 122",
+    region: "Canadian"
+  },
+  {
+    id: 123,
+    itemName: "Person 123",
+    name: "Person 123",
+    region: "Mexican"
+  },
+  {
+    id: 124,
+    itemName: "Person 124",
+    name: "Person 124",
+    region: "Colombian"
+  },
+  {
+    id: 125,
+    itemName: "Person 125",
+    name: "Person 125",
+    region: "Brazilian"
+  },
+  {
+    id: 126,
+    itemName: "Person 126",
+    name: "Person 126",
+    region: "Canadian"
+  },
+  {
+    id: 127,
+    itemName: "Person 127",
+    name: "Person 127",
+    region: "Mexican"
+  },
+  {
+    id: 128,
+    itemName: "Person 128",
+    name: "Person 128",
+    region: "Colombian"
+  },
+  {
+    id: 129,
+    itemName: "Person 129",
+    name: "Person 129",
+    region: "Brazilian"
+  },
+  {
+    id: 130,
+    itemName: "Person 130",
+    name: "Person 130",
+    region: "Canadian"
+  },
+  {
+    id: 131,
+    itemName: "Person 131",
+    name: "Person 131",
+    region: "Mexican"
+  },
+  {
+    id: 132,
+    itemName: "Person 132",
+    name: "Person 132",
+    region: "Colombian"
+  },
+  {
+    id: 133,
+    itemName: "Person 133",
+    name: "Person 133",
+    region: "Brazilian"
+  },
+  {
+    id: 134,
+    itemName: "Person 134",
+    name: "Person 134",
+    region: "Canadian"
+  },
+  {
+    id: 135,
+    itemName: "Person 135",
+    name: "Person 135",
+    region: "Mexican"
+  },
+  {
+    id: 136,
+    itemName: "Person 136",
+    name: "Person 136",
+    region: "Colombian"
+  },
+  {
+    id: 137,
+    itemName: "Person 137",
+    name: "Person 137",
+    region: "Brazilian"
+  },
+  {
+    id: 138,
+    itemName: "Person 138",
+    name: "Person 138",
+    region: "Canadian"
+  },
+  {
+    id: 139,
+    itemName: "Person 139",
+    name: "Person 139",
+    region: "Mexican"
+  },
+  {
+    id: 140,
+    itemName: "Person 140",
+    name: "Person 140",
+    region: "Colombian"
+  }
+];
+
+export const lazySelectedInitial: DemoItem[] = [];
+
+export const lazySettings: DropdownSettings<DemoItem> = {
+  singleSelection: false,
+  text: "Lazy people",
+  selectAllText: "Select all",
+  unSelectAllText: "Clear all",
+  enableCheckAll: true,
+  enableSearchFilter: true,
+  searchPlaceholderText: "Search",
+  badgeShowLimit: 3,
+  maxHeight: 140,
+  showCheckbox: true,
+  noDataLabel: "No data",
+  clearAll: true,
+  primaryKey: "id",
+  labelKey: "itemName",
+  skin: "classic",
+  lazyLoading: true
+};

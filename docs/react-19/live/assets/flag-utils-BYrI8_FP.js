@@ -1,0 +1,1 @@
+function e(e){return e?`fi fi-${e.toLowerCase()}`:``}export{e as t};

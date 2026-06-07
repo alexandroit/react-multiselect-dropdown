@@ -1,0 +1,51 @@
+.form-panel {
+  display: grid;
+  gap: 16px;
+}
+
+.form-field {
+  display: grid;
+  gap: 8px;
+}
+
+.form-field input {
+  min-height: 42px;
+  padding: 0 12px;
+  border: 1px solid #d9dee8;
+  background: #ffffff;
+}
+
+.form-field em {
+  float: right;
+  color: #be123c;
+  font-style: normal;
+}
+
+.submit-button {
+  min-height: 42px;
+  border: 0;
+  background: #15803d;
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.submit-button:disabled {
+  opacity: 0.55;
+}
+
+.form-output {
+  width: 100%;
+  margin-top: 18px;
+  border-collapse: collapse;
+}
+
+.form-output td {
+  padding: 8px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.form-json {
+  color: #475569;
+  font-family: "Courier New", monospace;
+  font-size: 13px;
+}
