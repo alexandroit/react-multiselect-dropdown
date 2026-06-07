@@ -273,7 +273,7 @@ export function useMultiSelectDropdown<T extends DropdownItem = DropdownItem>({
   // Selection wrappers add focus guarantees around the pure state actions.
   const selectItem = (item: T, focusTarget: SelectionFocusTarget = 'search') => {
     const wasSelected = state.isSelected(item);
-    const willClose = !wasSelected && (settings.singleSelection || settings.closeDropDownOnSelection);
+    const willClose = settings.singleSelection || (!wasSelected && settings.closeDropDownOnSelection);
     state.selectItem(item);
     focusAfterSelectionChange(willClose ? 'trigger' : focusTarget);
   };
@@ -422,7 +422,7 @@ export function useMultiSelectDropdown<T extends DropdownItem = DropdownItem>({
       const enabledOptions = options.filter((currentOption) => !currentOption.disabled);
       const currentEnabledIndex = enabledOptions.findIndex((currentOption) => currentOption.id === option.id);
       const willClose =
-        !state.isSelected(option.item) && (settings.singleSelection || settings.closeDropDownOnSelection);
+        settings.singleSelection || (!state.isSelected(option.item) && settings.closeDropDownOnSelection);
       const moveToNextOption =
         isSpaceKey(event.key) && settings.keyboard.spaceOptionAction === 'toggle-and-next';
       selectItem(option.item, willClose ? 'trigger' : 'none');
@@ -701,7 +701,7 @@ export function useMultiSelectDropdown<T extends DropdownItem = DropdownItem>({
             return;
           }
           const willClose =
-            !state.isSelected(option.item) && (settings.singleSelection || settings.closeDropDownOnSelection);
+            settings.singleSelection || (!state.isSelected(option.item) && settings.closeDropDownOnSelection);
           selectItem(option.item, willClose ? 'trigger' : 'none');
 
           if (!willClose) {

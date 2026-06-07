@@ -26,9 +26,19 @@ for (const relativePath of htmlFiles) {
 }
 
 for (const relativePath of skinFiles) {
-  test(`skin smoke: ${relativePath}`, () => {
-    const filePath = path.join(repoRoot, relativePath);
-    const source = fs.readFileSync(filePath, "utf8");
-    assert.match(source, themeMarker);
-  });
+test(`skin smoke: ${relativePath}`, () => {
+  const filePath = path.join(repoRoot, relativePath);
+  const source = fs.readFileSync(filePath, "utf8");
+  assert.match(source, themeMarker);
+});
+
+test("single-selection contract keeps the active item selected", () => {
+  const stateSource = fs.readFileSync(path.join(repoRoot, "src/useMultiSelectState.ts"), "utf8");
+  const componentSource = fs.readFileSync(path.join(repoRoot, "src/MultiSelectDropdown.tsx"), "utf8");
+  const headlessSource = fs.readFileSync(path.join(repoRoot, "src/useMultiSelectDropdown.ts"), "utf8");
+
+  assert.match(stateSource, /if \(isSelected\(item\)\) \{\s+if \(settings\.singleSelection\) \{\s+onSelectionShouldClose\?\.\(\);\s+return;\s+\}/);
+  assert.match(componentSource, /if \(isSelected\(item\)\) \{\s+if \(settings\.singleSelection\) \{\s+closeDropdown\(true\);\s+focusAfterSelectionChange\('trigger'\);\s+return;\s+\}/);
+  assert.match(headlessSource, /const willClose =\s+settings\.singleSelection \|\| \(!wasSelected && settings\.closeDropDownOnSelection\);/);
+});
 }

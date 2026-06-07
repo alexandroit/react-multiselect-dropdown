@@ -13,22 +13,25 @@ const supportedReleaseLines = [17, 18, 19];
 
 const releaseLines = {
   17: {
-    version: '17.0.0',
+    version: '17.0.2',
     react: '17.0.2',
     reactDom: '17.0.2',
-    peerRange: '>=17.0.0 <18.0.0'
+    peerRange: '>=17.0.0 <18.0.0',
+    distTags: ['react-17', 'v17-lts']
   },
   18: {
-    version: '18.0.0',
+    version: '18.0.2',
     react: '18.3.1',
     reactDom: '18.3.1',
-    peerRange: '>=18.0.0 <19.0.0'
+    peerRange: '>=18.0.0 <19.0.0',
+    distTags: ['react-18', 'v18-lts']
   },
   19: {
-    version: '19.0.0',
+    version: '19.1.3',
     react: '19.2.4',
     reactDom: '19.2.4',
-    peerRange: '>=19.0.0 <20.0.0'
+    peerRange: '>=19.0.0 <20.0.0',
+    distTags: ['react-19', 'latest']
   }
 };
 
@@ -124,7 +127,10 @@ export function releaseReactLine(line, options = { publish: true, keepTemp: fals
     runNpm(['pack'], bundle.tempDir);
 
     if (options.publish) {
-      runNpm(['publish', '--access', 'public'], bundle.tempDir);
+      runNpm(['publish', '--access', 'public', '--tag', release.distTags[0]], bundle.tempDir);
+      for (const tag of release.distTags.slice(1)) {
+        runNpm(['dist-tag', 'add', `${packageName}@${release.version}`, tag], rootDir);
+      }
       console.log(`Published ${packageName}@${release.version}.`);
     }
   } finally {

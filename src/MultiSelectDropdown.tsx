@@ -349,6 +349,12 @@ function InnerMultiSelectDropdown<T extends DropdownItem>(
     }
 
     if (isSelected(item)) {
+      if (settings.singleSelection) {
+        closeDropdown(true);
+        focusAfterSelectionChange('trigger');
+        return;
+      }
+
       removeItem(item, focusTarget);
       return;
     }
@@ -880,7 +886,7 @@ function InnerMultiSelectDropdown<T extends DropdownItem>(
 
     if (event.key === 'Enter' || isSpaceKey(event.key)) {
       event.preventDefault();
-      const willClose = !isSelected(item) && (settings.singleSelection || settings.closeDropDownOnSelection);
+      const willClose = settings.singleSelection || (!isSelected(item) && settings.closeDropDownOnSelection);
       const currentOptionId = event.currentTarget.id;
       const moveToNextOption =
         isSpaceKey(event.key) && settings.keyboard.spaceOptionAction === 'toggle-and-next';
@@ -1106,7 +1112,7 @@ function InnerMultiSelectDropdown<T extends DropdownItem>(
           return;
         }
 
-        const willClose = !isSelected(item) && (settings.singleSelection || settings.closeDropDownOnSelection);
+        const willClose = settings.singleSelection || (!isSelected(item) && settings.closeDropDownOnSelection);
         selectItem(item, willClose ? 'trigger' : 'none');
 
         if (!willClose) {

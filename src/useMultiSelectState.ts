@@ -99,6 +99,11 @@ export function useMultiSelectState<T extends DropdownItem = DropdownItem>({
     }
 
     if (isSelected(item)) {
+      if (settings.singleSelection) {
+        onSelectionShouldClose?.();
+        return;
+      }
+
       removeItem(item);
       return;
     }

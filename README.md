@@ -15,7 +15,7 @@
   <img src="https://alexandro.net/images/public/2026/06/dropdownlist.gif" alt="@stackline/react-multiselect-dropdown live dropdown preview" width="420">
 </p>
 
-**Latest React 19 release:** `19.1.1` for React `19.x`
+**Latest React 19 release:** `19.1.3` for React `19.x`
 
 ---
 
@@ -29,7 +29,7 @@
 
 The package is built around a controlled React API: pass `data`, bind `selectedItems`, receive updates through `onChange`, and customize behavior through a `settings` object. It also supports a Slots API for replacing component structure without losing ARIA/focus behavior, a headless `useMultiSelectDropdown` hook, a lower-level `useMultiSelectState` hook, custom React render functions for option rows and selected badges, lazy loading callbacks, imperative `ref` methods, and body-overlay positioning for dialogs or clipped containers.
 
-The current stable React 19 release is `19.1.1`. It adds guided structural slots, a headless hook, a state hook, a type-safe factory helper, and a strengthened combobox contract while keeping the styled `<MultiSelectDropdown />` component compatible with the existing visual contract.
+The current stable React 19 release is `19.1.3`. It adds guided structural slots, a headless hook, a state hook, a type-safe factory helper, and a strengthened combobox contract while keeping the styled `<MultiSelectDropdown />` component compatible with the existing visual contract.
 
 ## Features
 
@@ -86,17 +86,17 @@ Each package family installs on its matching React family. Keep the package fami
 
 | Package family | React family | Peer range | Tested release window | Demo link |
 | :---: | :---: | :---: | :---: | :--- |
-| **17.x** | **React 17 only** | **`>=17.0.0 <18.0.0`** | **17.0.0 -> 17.0.2** | [React 17 family docs](https://alexandro.net/docs/react/multiselect/react-17/) |
-| **18.x** | **React 18 only** | **`>=18.0.0 <19.0.0`** | **18.0.0 -> 18.3.1** | [React 18 family docs](https://alexandro.net/docs/react/multiselect/react-18/) |
-| **19.x** | **React 19 only** | **`>=19.0.0 <20.0.0`** | **19.1.1 -> 19.2.4** | [React 19 family docs](https://alexandro.net/docs/react/multiselect/react-19/) |
+| **17.x** | **React 17 only** | **`>=17.0.0 <18.0.0`** | **17.0.2 -> 17.0.2** | [React 17 family docs](https://alexandro.net/docs/react/multiselect/react-17/) |
+| **18.x** | **React 18 only** | **`>=18.0.0 <19.0.0`** | **18.0.2 -> 18.3.1** | [React 18 family docs](https://alexandro.net/docs/react/multiselect/react-18/) |
+| **19.x** | **React 19 only** | **`>=19.0.0 <20.0.0`** | **19.1.3 -> 19.2.4** | [React 19 family docs](https://alexandro.net/docs/react/multiselect/react-19/) |
 
 ## Installation
 
 ```bash
-npm install @stackline/react-multiselect-dropdown@19.1.1 --save-exact
+npm install @stackline/react-multiselect-dropdown@19.1.3 --save-exact
 ```
 
-Install `19.1.1` for React 19.x applications. The styled component includes its component styles and injects them at runtime. The headless hook does not inject CSS and lets your application own the markup and styling.
+Install `19.1.3` for React 19.x applications. The styled component includes its component styles and injects them at runtime. The headless hook does not inject CSS and lets your application own the markup and styling.
 
 ## Setup
 
@@ -481,7 +481,7 @@ The styled component remains available for drop-in usage. The headless hooks are
 
 ## Combobox Contract
 
-Version `19.1.1` tightens the interaction details that usually matter most in production forms:
+Version `19.1.3` tightens the interaction details that usually matter most in production forms:
 
 | Behavior | Contract |
 | :--- | :--- |
@@ -559,7 +559,7 @@ Use the dedicated React 19 StackBlitz project when you want a fast editable exam
 
 ## Official React 19 Test Matrix
 
-The React 19 release was tested in a clean React `19.2.4` application with `@stackline/react-multiselect-dropdown@19.1.1`. The docs use the same examples from that test app, including keyboard navigation, focus, ARIA behavior, badge counters, responsive action buttons, scrollable lists, dialog-safe body overlays, the corrected left-aligned placeholder with vertical centering, guided Slots API customization, headless/custom HTML, and the combobox contract checks for Backspace, Escape, focused badge removal, focus, and option ARIA.
+The React 19 release was tested in a clean React `19.2.4` application with `@stackline/react-multiselect-dropdown@19.1.3`. The docs use the same examples from that test app, including keyboard navigation, focus, ARIA behavior, badge counters, responsive action buttons, scrollable lists, dialog-safe body overlays, the corrected left-aligned placeholder with vertical centering, guided Slots API customization, headless/custom HTML, and the combobox contract checks for Backspace, Escape, focused badge removal, focus, and option ARIA.
 
 The same core scenarios are validated for the visual skins:
 
