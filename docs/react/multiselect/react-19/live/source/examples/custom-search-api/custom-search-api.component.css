@@ -1,0 +1,7 @@
+.route-note {
+  margin: 12px 0 0;
+  color: #475569;
+}
+.api-search-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; padding: 10px; }
+.api-search-row input { min-height: 36px; min-width: 0; padding: 0 10px; border: 1px solid #cbd5e1; }
+.api-search-row button { min-height: 36px; padding: 0 12px; border: 1px solid #cbd5e1; background: #fff; font-weight: 700; }

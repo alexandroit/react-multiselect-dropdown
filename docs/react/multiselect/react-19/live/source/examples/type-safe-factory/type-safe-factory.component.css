@@ -1,0 +1,25 @@
+.factory-option.rmsd-option {
+  display: grid;
+  grid-template-columns: 18px 26px minmax(0, 1fr);
+  gap: 10px;
+  align-items: center;
+  min-height: 52px;
+}
+
+.factory-option span:last-child {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.factory-option strong,
+.factory-option small {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.factory-option small {
+  color: #64748b;
+}

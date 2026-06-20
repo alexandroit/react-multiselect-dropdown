@@ -1,0 +1,11 @@
+.route-note {
+  margin: 12px 0 0;
+  color: #475569;
+}
+.route-form { display: grid; gap: 14px; }
+.route-form label { display: grid; gap: 6px; font-weight: 700; }
+.route-form input { min-height: 40px; padding: 0 10px; border: 1px solid #cbd5e1; }
+.route-submit { min-height: 40px; border: 0; background: #168a5b; color: #fff; font-weight: 700; }
+.route-submit:disabled { opacity: .45; }
+.route-valid { color: #168a5b; font-weight: 700; }
+.route-invalid { color: #c0263d; font-weight: 700; }

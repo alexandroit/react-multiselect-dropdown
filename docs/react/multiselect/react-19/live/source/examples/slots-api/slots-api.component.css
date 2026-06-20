@@ -1,0 +1,124 @@
+.slot-trigger.rmsd-trigger {
+  display: grid;
+  grid-template-columns: minmax(130px, 0.38fr) minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+  min-height: 58px;
+  padding: 8px 10px;
+  border-color: #bfdbfe;
+  border-radius: 14px;
+  background: linear-gradient(#ffffff, #eff6ff);
+  box-shadow: 0 12px 28px rgba(37, 99, 235, 0.14);
+}
+
+.slot-summary {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+  padding-left: 4px;
+  color: #172033;
+}
+
+.slot-summary small {
+  color: #64748b;
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.slot-badge.rmsd-badge {
+  gap: 7px;
+  border-radius: 8px;
+  background: #dbeafe;
+  color: #1e3a8a;
+}
+
+.slot-search.rmsd-search-shell {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+  margin: 10px;
+  border-color: #bfdbfe;
+  border-radius: 10px;
+  background: #f8fbff;
+}
+
+.slot-search input {
+  min-width: 0;
+}
+
+.slot-search button {
+  cursor: pointer;
+  border: 0;
+  background: transparent;
+  color: #2563eb;
+  font-weight: 900;
+}
+
+.slot-group-head.rmsd-group-header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  gap: 10px;
+  align-items: center;
+  color: #1e3a8a;
+}
+
+.slot-group-head small {
+  color: #64748b;
+}
+
+.slot-option.rmsd-option {
+  display: grid;
+  grid-template-columns: 18px 26px minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+  min-height: 54px;
+}
+
+.slot-option-copy {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.slot-option-copy strong,
+.slot-option-copy small {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.slot-option-copy small {
+  color: #64748b;
+}
+
+.slot-option-state {
+  justify-self: end;
+  color: #2563eb;
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.slot-footer {
+  padding: 9px 12px;
+  border-top: 1px solid #dbeafe;
+  background: #f8fbff;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+@media (max-width: 640px) {
+  .slot-trigger.rmsd-trigger,
+  .slot-option.rmsd-option {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .slot-summary,
+  .slot-option-state,
+  .slot-option .fi {
+    display: none;
+  }
+}

@@ -15,11 +15,11 @@ createRoot(rootElement).render(
     <App
       docsMeta={{
         badge: 'React 19 family · Multiselect dropdown',
-        reactLine: '19.0.0 -> 19.2.5',
+        reactLine: '19.0.0 -> 19.2.7',
         reactFamily: '19.x',
-        reactRuntime: '19.2.4',
-        packageVersion: '19.1.3',
-        packageRange: '19.1.3',
+        reactRuntime: '19.2.7',
+        packageVersion: '19.1.4',
+        packageRange: '19.1.4',
         docsPath: 'react-19',
         stackBlitzBaseUrl: 'https://stackblitz.com/github/alexandroit/stackline-react-multiselect-react-19'
       }}

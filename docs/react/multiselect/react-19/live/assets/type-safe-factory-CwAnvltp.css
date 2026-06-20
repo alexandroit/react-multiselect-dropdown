@@ -1,0 +1,1 @@
+.factory-option.rmsd-option{grid-template-columns:18px 26px minmax(0,1fr);align-items:center;gap:10px;min-height:52px;display:grid}.factory-option span:last-child{gap:2px;min-width:0;display:grid}.factory-option strong,.factory-option small{text-overflow:ellipsis;white-space:nowrap;min-width:0;overflow:hidden}.factory-option small{color:#64748b}

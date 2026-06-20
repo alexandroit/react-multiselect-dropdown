@@ -27,9 +27,9 @@ const releaseLines = {
     distTags: ['react-18', 'v18-lts']
   },
   19: {
-    version: '19.1.3',
-    react: '19.2.4',
-    reactDom: '19.2.4',
+    version: '19.1.4',
+    react: '19.2.7',
+    reactDom: '19.2.7',
     peerRange: '>=19.0.0 <20.0.0',
     distTags: ['react-19', 'latest']
   }
