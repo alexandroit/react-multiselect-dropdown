@@ -22,3 +22,13 @@ export const applicationBaseUrl = findApplicationBase();
 export function applicationUrl(path: string) {
   return new URL(path.replace(/^\/+/, ''), applicationBaseUrl);
 }
+
+export function applicationRouteUrl(path: string) {
+  if (applicationBaseUrl.pathname === '/') {
+    return applicationUrl(path);
+  }
+
+  const url = new URL(applicationBaseUrl);
+  url.hash = path.replace(/^#?\/?/, '');
+  return url;
+}

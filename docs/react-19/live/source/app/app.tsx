@@ -1,8 +1,13 @@
 import { Suspense, useEffect, useMemo, useState } from 'react';
 import { allRoutes, exampleRoutes } from './routes';
-import { applicationBaseUrl, applicationUrl } from '../shared/app-base';
+import { applicationBaseUrl, applicationRouteUrl } from '../shared/app-base';
 
 function normalizePath() {
+  const hashPath = window.location.hash.replace(/^#\/?|\/+$/g, '');
+  if (hashPath) {
+    return hashPath;
+  }
+
   const pathname = window.location.pathname.startsWith(applicationBaseUrl.pathname)
     ? window.location.pathname.slice(applicationBaseUrl.pathname.length)
     : window.location.pathname;
@@ -16,7 +21,11 @@ export function App() {
   useEffect(() => {
     const syncPath = () => setPath(normalizePath());
     window.addEventListener('popstate', syncPath);
-    return () => window.removeEventListener('popstate', syncPath);
+    window.addEventListener('hashchange', syncPath);
+    return () => {
+      window.removeEventListener('popstate', syncPath);
+      window.removeEventListener('hashchange', syncPath);
+    };
   }, []);
 
   const route = useMemo(
@@ -26,7 +35,7 @@ export function App() {
   const CurrentExample = route.component;
 
   function navigate(slug: string) {
-    window.history.pushState(null, '', applicationUrl(slug));
+    window.history.pushState(null, '', applicationRouteUrl(slug));
     setPath(slug);
     window.scrollTo({ top: 0, left: 0 });
   }
@@ -54,7 +63,7 @@ export function App() {
           {exampleRoutes.map((item) => (
             <a
               key={item.slug}
-              href={applicationUrl(item.slug).pathname}
+              href={applicationRouteUrl(item.slug).href}
               className={item.slug === route.slug ? 'active' : ''}
               onClick={(event) => {
                 event.preventDefault();
