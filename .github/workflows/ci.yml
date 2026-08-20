@@ -1,0 +1,74 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Node ${{ matrix.node }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [22.22.3, 24.15.0]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+      - run: npm ci
+      - run: npm run check
+      - run: npm audit --audit-level=low
+
+  browser-contract:
+    name: Browser combobox contract
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: 22.22.3
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            docs-src/react-19/package-lock.json
+      - run: npm ci
+      - run: npm run build
+      - run: npm ci --prefix docs-src/react-19
+      - run: npm run build:docs:react-19
+      - run: npm run test:combobox
+      - run: npm audit --prefix docs-src/react-19 --audit-level=low
+
+  release-artifact:
+    name: Build release artifact
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: 22.22.3
+          cache: npm
+      - run: npm ci
+      - run: npm run check
+      - name: Create package archive
+        run: |
+          mkdir -p release
+          npm pack --ignore-scripts --pack-destination release
+          (cd release && sha512sum *.tgz > SHA512SUMS)
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: stackline-react-multiselect-${{ github.sha }}
+          path: release/
+          if-no-files-found: error
+          retention-days: 30

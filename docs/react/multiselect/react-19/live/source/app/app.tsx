@@ -1,8 +1,13 @@
 import { Suspense, useEffect, useMemo, useState } from 'react';
 import { allRoutes, exampleRoutes } from './routes';
+import { applicationBaseUrl, applicationUrl } from '../shared/app-base';
 
 function normalizePath() {
-  return window.location.pathname.replace(/^\/+|\/+$/g, '') || 'basic';
+  const pathname = window.location.pathname.startsWith(applicationBaseUrl.pathname)
+    ? window.location.pathname.slice(applicationBaseUrl.pathname.length)
+    : window.location.pathname;
+
+  return pathname.replace(/^\/+|\/+$/g, '') || 'basic';
 }
 
 export function App() {
@@ -21,7 +26,7 @@ export function App() {
   const CurrentExample = route.component;
 
   function navigate(slug: string) {
-    window.history.pushState(null, '', '/' + slug);
+    window.history.pushState(null, '', applicationUrl(slug));
     setPath(slug);
     window.scrollTo({ top: 0, left: 0 });
   }
@@ -29,8 +34,8 @@ export function App() {
   return (
     <main className="page shell-page">
       <header className="topbar">
-        <p className="eyebrow">React 19.2.7 runtime</p>
-        <h1>@stackline/react-multiselect-dropdown 19.1.4</h1>
+        <p className="eyebrow">React 19.2.8 runtime</p>
+        <h1>@stackline/react-multiselect-dropdown 19.1.5</h1>
       </header>
 
       <section className="docs-main">
@@ -49,7 +54,7 @@ export function App() {
           {exampleRoutes.map((item) => (
             <a
               key={item.slug}
-              href={'/' + item.slug}
+              href={applicationUrl(item.slug).pathname}
               className={item.slug === route.slug ? 'active' : ''}
               onClick={(event) => {
                 event.preventDefault();

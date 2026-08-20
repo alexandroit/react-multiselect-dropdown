@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { applicationUrl } from './app-base';
 
 type ExampleSource = {
   tsx: string;
@@ -20,10 +21,11 @@ export function ExampleSourcePanel({ slug }: { slug: string }) {
   useEffect(() => {
     let mounted = true;
     setLoading(true);
+    const sourceRoot = 'source/examples/' + slug + '/' + slug;
     Promise.all([
-      loadText('/source/examples/' + slug + '/' + slug + '.component.tsx'),
-      loadText('/source/examples/' + slug + '/' + slug + '.data.ts'),
-      loadText('/source/examples/' + slug + '/' + slug + '.component.css')
+      loadText(applicationUrl(sourceRoot + '.component.tsx').href),
+      loadText(applicationUrl(sourceRoot + '.data.ts').href),
+      loadText(applicationUrl(sourceRoot + '.component.css').href)
     ]).then(([tsx, data, css]) => {
       if (!mounted) {
         return;
