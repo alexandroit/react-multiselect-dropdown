@@ -4,6 +4,8 @@ All notable changes to this project are documented in this file.
 
 ## Unreleased
 
+- Updated all React 17, 18, and 19 documentation apps to the patched Vite 8.2
+  toolchain and made the browser CI job build and audit every supported line.
 - Moved exact-version dependency records to `package.fixture.json`, repaired
   their validators, and added an offline catalog contract to keep historical
   metadata out of active dependency alerts.
