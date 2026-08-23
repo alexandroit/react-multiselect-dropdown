@@ -4,6 +4,8 @@ All notable changes to this project are documented in this file.
 
 ## Unreleased
 
+- Replaced the option ID edge-trimming regular expression with a linear scan
+  and added adversarial-input regression coverage.
 - Updated all React 17, 18, and 19 documentation apps to the patched Vite 8.2
   toolchain and made the browser CI job build and audit every supported line.
 - Moved exact-version dependency records to `package.fixture.json`, repaired

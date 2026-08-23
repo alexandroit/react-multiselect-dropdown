@@ -37,7 +37,14 @@ export function getPrimaryValue<T extends DropdownItem>(item: T, settings: Resol
 }
 
 export function sanitizeId(value: string) {
-  return value.replace(/[^a-zA-Z0-9_-]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 56) || 'option';
+	const sanitized = value.replace(/[^a-zA-Z0-9_-]+/g, '-');
+	let start = 0;
+	let end = sanitized.length;
+
+	while (start < end && sanitized.charCodeAt(start) === 45) start += 1;
+	while (end > start && sanitized.charCodeAt(end - 1) === 45) end -= 1;
+
+	return sanitized.slice(start, Math.min(end, start + 56)) || 'option';
 }
 
 export function normalizeSkinName(value: string) {
