@@ -82,6 +82,7 @@
   },
   "sideEffects": false,
   "scripts": {
+    "test:fixtures": "node tools/stackline-run-release-smoke.mjs --catalog",
     "build": "tsup",
     "clean": "rm -rf dist docs/react-17 docs/react-18 docs/react-19",
     "typecheck": "tsc --noEmit",

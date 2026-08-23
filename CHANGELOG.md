@@ -2,6 +2,12 @@
 
 All notable changes to this project are documented in this file.
 
+## Unreleased
+
+- Moved exact-version dependency records to `package.fixture.json`, repaired
+  their validators, and added an offline catalog contract to keep historical
+  metadata out of active dependency alerts.
+
 ## [19.1.5] - 2026-08-19
 
 ### Changed
