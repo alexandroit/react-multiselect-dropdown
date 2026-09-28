@@ -27,7 +27,7 @@ const releaseLines = {
     distTags: ['react-18', 'v18-lts']
   },
   19: {
-    version: '19.1.5',
+    version: '19.1.6',
     react: '19.2.8',
     reactDom: '19.2.8',
     peerRange: '>=19.0.0 <20.0.0',
@@ -112,6 +112,9 @@ function createReleasePackage(line) {
 
 export function releaseReactLine(line, options = { publish: true, keepTemp: false }) {
   assertSupportedLine(line);
+  if (options.publish) {
+    throw new Error('Public npm releases use .github/workflows/publish.yml with the reviewed tarball SHA-512. Use --no-publish to prepare a local package.');
+  }
 
   const release = releaseLines[line];
   console.log(`\n=== React ${line} · ${release.version} ===`);

@@ -15,7 +15,7 @@
   <img src="https://alexandro.net/images/public/2026/06/dropdownlist.gif" alt="@stackline/react-multiselect-dropdown live dropdown preview" width="420">
 </p>
 
-**Latest React 19 release:** `19.1.5` for React `19.x`
+**Package version:** `19.1.6`
 
 ---
 
@@ -23,64 +23,45 @@
 
 ---
 
-## Why this library?
+## Contents
+
+- [Why this package?](#why-this-package)
+- [Compatibility](#compatibility)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Features](#features)
+- [Security](#security)
+- [API Surface](#api-surface)
+- [Local Development](#local-development)
+- [Consumer Smoke Test](#consumer-smoke-test)
+- [Release Checklist](#release-checklist)
+- [Community and Support](#community-and-support)
+- [License](#license)
+
+<a id="why-this-library"></a>
+
+## Why this package?
 
 `@stackline/react-multiselect-dropdown` provides a maintained React multiselect component for applications that need predictable selection state, search, grouping, skins, keyboard support, and live tested examples.
 
 The package is built around a controlled React API: pass `data`, bind `selectedItems`, receive updates through `onChange`, and customize behavior through a `settings` object. It also supports a Slots API for replacing component structure without losing ARIA/focus behavior, a headless `useMultiSelectDropdown` hook, a lower-level `useMultiSelectState` hook, custom React render functions for option rows and selected badges, lazy loading callbacks, imperative `ref` methods, and body-overlay positioning for dialogs or clipped containers.
 
-The current stable React 19 release is `19.1.5`. It keeps the guided structural slots, headless and state hooks, type-safe factory, and combobox contract while refreshing the tested React runtime and the security-sensitive browser test toolchain without changing the public API.
+This README documents React 19 package `19.1.6`. It keeps the guided structural slots, headless and state hooks, type-safe factory, and combobox contract while refreshing the tested React runtime and the security-sensitive browser test toolchain without changing the public API.
 
-## Features
+## Compatibility
 
-| Feature | Supported |
-| :--- | :---: |
-| React 19 tested release line | Yes |
-| Multi-select and single-select modes | Yes |
-| Controlled and uncontrolled selection | Yes |
-| Guided Slots API for custom HTML structure | Yes |
-| Headless `useMultiSelectDropdown` hook | Yes |
-| State-only `useMultiSelectState` hook | Yes |
-| Search and filter | Yes |
-| Group by field | Yes |
-| Custom item render functions | Yes |
-| Custom badge render functions | Yes |
-| Lazy loading hooks | Yes |
-| Add-new-item from search text | Yes |
-| Ref methods for open, close, focus, select all, and clear | Yes |
-| Built-in `classic`, `material`, `dark`, `custom`, and `brand` skins | Yes |
-| Accessibility-focused and keyboard/ARIA tested navigation, focus states, and ARIA labels | Yes |
-| Multiselect options expose both `aria-selected` and `aria-checked` | Yes |
-| Backspace/Escape combobox contract | Yes |
-| Async add-item stale response protection | Yes |
-| Selected object preservation across async data refreshes | Yes |
-| Dialog and overflow-container support through `appendToBody` / `tagToBody` | Yes |
-| Left-aligned, vertically centered placeholder and single-value text | Yes |
-| Versioned docs builds per React line | Yes |
+| Item | Value |
+| --- | --- |
+| Package | `@stackline/react-multiselect-dropdown@19.1.6` |
+| Peer: `react` | `>=19.0.0 <20.0.0` |
+| Peer: `react-dom` | `>=19.0.0 <20.0.0` |
+| Runtime dependencies | None; framework peers are supplied by the application |
+| Package format | ESM, CommonJS, and TypeScript declarations |
 
-## Table of Contents
 
-1. [React Version Compatibility](#react-version-compatibility)
-2. [Installation](#installation)
-3. [Setup](#setup)
-4. [Styling and Skins](#styling-and-skins)
-5. [Basic Usage](#basic-usage)
-6. [Customization Paths](#customization-paths)
-7. [Slots API](#slots-api)
-8. [Headless Usage](#headless-usage)
-9. [Combobox Contract](#combobox-contract)
-10. [React 19 StackBlitz Playground](#react-19-stackblitz-playground)
-11. [Official React 19 Test Matrix](#official-react-19-test-matrix)
-12. [Custom Render Functions](#custom-render-functions)
-13. [Forms and Controlled State](#forms-and-controlled-state)
-14. [Lazy Loading and Dynamic Data](#lazy-loading-and-dynamic-data)
-15. [Dialogs and Overflow Containers](#dialogs-and-overflow-containers)
-16. [Events](#events)
-17. [Ref Methods](#ref-methods)
-18. [Run Locally](#run-locally)
-19. [License](#license)
 
-## React Version Compatibility
+
+### React Version Compatibility
 
 Each package family installs on its matching React family. Keep the package family aligned with the React major used by your application.
 
@@ -90,17 +71,21 @@ Each package family installs on its matching React family. Keep the package fami
 | **18.x** | **React 18 only** | **`>=18.0.0 <19.0.0`** | **18.0.2 -> 18.3.1** | [React 18 family docs](https://alexandro.net/docs/react/multiselect/react-18/) |
 | **19.x** | **React 19 only** | **`>=19.0.0 <20.0.0`** | **19.1.5 -> 19.2.8** | [React 19 family docs](https://alexandro.net/docs/react/multiselect/react-19/) |
 
+<a id="install"></a>
+
 ## Installation
 
 ```bash
-npm install @stackline/react-multiselect-dropdown@19.1.5 --save-exact
+npm install @stackline/react-multiselect-dropdown@19.1.6 --save-exact
 ```
 
-Install `19.1.5` for React 19.x applications. The styled component includes its component styles and injects them at runtime. The headless hook does not inject CSS and lets your application own the markup and styling. This maintenance release is API-compatible with the 19.1 line and is tested against React 19.2.8.
+Install `19.1.6` for React 19.x applications. The styled component includes its component styles and injects them at runtime. The headless hook does not inject CSS and lets your application own the markup and styling. This maintenance release is API-compatible with the 19.1 line and is tested against React 19.2.8.
 
-## Setup
+## Usage
 
-### 1. Import the component
+### Setup
+
+#### 1. Import the component
 
 ```tsx
 import { MultiSelectDropdown } from '@stackline/react-multiselect-dropdown';
@@ -110,13 +95,13 @@ import type {
 } from '@stackline/react-multiselect-dropdown';
 ```
 
-### 2. Keep selection in React state
+#### 2. Keep selection in React state
 
 ```tsx
 const [selectedCountries, setSelectedCountries] = useState<Country[]>([]);
 ```
 
-### 3. Pass a stable settings object
+#### 3. Pass a stable settings object
 
 ```tsx
 const settings = useMemo<DropdownSettings<Country>>(
@@ -132,30 +117,7 @@ const settings = useMemo<DropdownSettings<Country>>(
 );
 ```
 
-## Styling and Skins
-
-Use `settings.skin` to switch the visual mode:
-
-```ts
-setSettings((current) => ({
-  ...current,
-  skin: 'material'
-}));
-```
-
-Built-in skins:
-
-| Skin | Usage |
-| :--- | :--- |
-| `classic` | Compact classic dropdown styling. |
-| `material` | Material-style rounded controls and chips. |
-| `dark` | Dark UI surfaces. |
-| `custom` | CSS-variable starter skin for custom projects. |
-| `brand` | Stackline brand skin. |
-
-`settings.theme` is accepted as a legacy alias, but new React usage should configure only `settings.skin`.
-
-## Basic Usage
+### Basic Usage
 
 ```tsx
 import { useState } from 'react';
@@ -220,7 +182,68 @@ export function CountrySelector() {
 }
 ```
 
-## Customization Paths
+## Features
+
+| Feature | Supported |
+| :--- | :---: |
+| React 19 tested release line | Yes |
+| Multi-select and single-select modes | Yes |
+| Controlled and uncontrolled selection | Yes |
+| Guided Slots API for custom HTML structure | Yes |
+| Headless `useMultiSelectDropdown` hook | Yes |
+| State-only `useMultiSelectState` hook | Yes |
+| Search and filter | Yes |
+| Group by field | Yes |
+| Custom item render functions | Yes |
+| Custom badge render functions | Yes |
+| Lazy loading hooks | Yes |
+| Add-new-item from search text | Yes |
+| Ref methods for open, close, focus, select all, and clear | Yes |
+| Built-in `classic`, `material`, `dark`, `custom`, and `brand` skins | Yes |
+| Accessibility-focused and keyboard/ARIA tested navigation, focus states, and ARIA labels | Yes |
+| Multiselect options expose both `aria-selected` and `aria-checked` | Yes |
+| Backspace/Escape combobox contract | Yes |
+| Async add-item stale response protection | Yes |
+| Selected object preservation across async data refreshes | Yes |
+| Dialog and overflow-container support through `appendToBody` / `tagToBody` | Yes |
+| Left-aligned, vertically centered placeholder and single-value text | Yes |
+| Versioned docs builds per React line | Yes |
+
+## Security
+
+See the [security policy](https://github.com/alexandroit/react-multiselect-dropdown/blob/main/SECURITY.md) for supported release lines and private vulnerability reporting.
+
+Keep framework peers and application dependencies patched. Dependency audits cover known advisories; they do not establish that an application is secure.
+
+Option identifier normalization trims adversarial runs in linear time while preserving the existing identifier and selection contract.
+
+## API Surface
+
+### Styling and Skins
+
+Use `settings.skin` to switch the visual mode:
+
+```ts
+setSettings((current) => ({
+  ...current,
+  skin: 'material'
+}));
+```
+
+Built-in skins:
+
+| Skin | Usage |
+| :--- | :--- |
+| `classic` | Compact classic dropdown styling. |
+| `material` | Material-style rounded controls and chips. |
+| `dark` | Dark UI surfaces. |
+| `custom` | CSS-variable starter skin for custom projects. |
+| `brand` | Stackline brand skin. |
+
+`settings.theme` is accepted as a legacy alias, but new React usage should configure only `settings.skin`.
+
+
+### Customization Paths
 
 Use the API layer that matches the amount of control your team needs:
 
@@ -234,7 +257,8 @@ Use the API layer that matches the amount of control your team needs:
 
 For most teams, start with the component. Use `slots` when the component works but your layout needs a different shell. Use the headless hooks when the application must own the whole combobox contract.
 
-## Type-Safe Factory
+
+### Type-Safe Factory
 
 Use `createMultiSelectDropdown<T>()` when a feature, package, or design-system wrapper should bind the item type once and reuse it across the component, settings, slots, and hooks.
 
@@ -292,7 +316,8 @@ export function CountryFilter({ countries }: { countries: Country[] }) {
 
 With the factory, `primaryKey`, `labelKey`, `searchBy`, and `groupBy` are checked against `keyof Country`. Typos such as `labelKey: 'itemname'` or `searchBy: ['city']` fail at compile time.
 
-## Slots API
+
+### Slots API
 
 Slots let you replace the visible HTML pieces while the package still owns the tested selection, filtering, keyboard, focus, ARIA, body overlay, and async behavior.
 
@@ -375,7 +400,8 @@ Available slots:
 
 `Root`, `Trigger`, `Value`, `Placeholder`, `SingleValue`, `BadgeList`, `Badge`, `BadgeLabel`, `BadgeRemove`, `Actions`, `OverflowCounter`, `ClearAll`, `Arrow`, `Menu`, `Toolbar`, `BulkActions`, `SelectAll`, `AddNewItem`, `Search`, `OptionList`, `Group`, `GroupHeader`, `GroupAction`, `Option`, `Checkbox`, `LoadingState`, `EmptyState`, and `MenuFooter`.
 
-## Headless Usage
+
+### Headless Usage
 
 Use `useMultiSelectDropdown` when you want Stackline selection, filtering, keyboard handling, ARIA props, grouping, limits, and callbacks without the built-in DOM/CSS.
 
@@ -479,7 +505,8 @@ const state = useMultiSelectState({
 
 The styled component remains available for drop-in usage. The headless hooks are for teams that want a headless-style ownership model where the application controls layout, elements, and CSS.
 
-## Combobox Contract
+
+### Combobox Contract
 
 The `19.1.x` line enforces the interaction details that usually matter most in production forms:
 
@@ -516,7 +543,8 @@ Set any key to `false` to disable that behavior. `backspaceRemovesLastWhenSearch
 `'toggle'` keeps focus on the current option, while `'toggle-and-next'` toggles and moves to the next enabled option.
 `escapeToClose: false` is still supported and also disables `keyboard.escape`.
 
-## React 19 StackBlitz Playground
+
+### React 19 StackBlitz Playground
 
 Use the dedicated React 19 StackBlitz project when you want a fast editable example without importing the full package repository:
 
@@ -557,9 +585,10 @@ Use the dedicated React 19 StackBlitz project when you want a fast editable exam
 | Styling | [Open](https://stackblitz.com/github/alexandroit/stackline-react-multiselect-react-19?file=src%2Fexamples%2Fstyling%2Fstyling.component.tsx&startScript=start&initialpath=%2Fstyling) |
 | Body Overlay Auto | [Open](https://stackblitz.com/github/alexandroit/stackline-react-multiselect-react-19?file=src%2Fexamples%2Fbody-overlay-auto%2Fbody-overlay-auto.component.tsx&startScript=start&initialpath=%2Fbody-overlay-auto) |
 
-## Official React 19 Test Matrix
 
-The React 19 release was tested in a clean React `19.2.8` application with `@stackline/react-multiselect-dropdown@19.1.5`. The docs use the same examples from that test app, including keyboard navigation, focus, ARIA behavior, badge counters, responsive action buttons, scrollable lists, dialog-safe body overlays, the corrected left-aligned placeholder with vertical centering, guided Slots API customization, headless/custom HTML, and the combobox contract checks for Backspace, Escape, focused badge removal, focus, and option ARIA.
+### Official React 19 Test Matrix
+
+The React 19 release was tested in a clean React `19.2.8` application with `@stackline/react-multiselect-dropdown@19.1.6`. The docs use the same examples from that test app, including keyboard navigation, focus, ARIA behavior, badge counters, responsive action buttons, scrollable lists, dialog-safe body overlays, the corrected left-aligned placeholder with vertical centering, guided Slots API customization, headless/custom HTML, and the combobox contract checks for Backspace, Escape, focused badge removal, focus, and option ARIA.
 
 The same core scenarios are validated for the visual skins:
 
@@ -582,7 +611,8 @@ The same core scenarios are validated for the visual skins:
 | 15 | Ref methods | `openDropdown`, `closeDropdown`, `selectAll`, `clearSelection` |
 | 16 | Slots API custom HTML | `slots.Trigger`, `slots.Option`, `slots.Search`, `slots.GroupHeader`, `slots.MenuFooter` |
 
-## Custom Render Functions
+
+### Custom Render Functions
 
 Use `renderItem` for option rows and `renderBadge` for selected chips when you only need to replace inner content. Use `slots` when you need to replace component structure such as the trigger, menu, search shell, option row, badge, or footer.
 
@@ -604,7 +634,8 @@ Use `renderItem` for option rows and `renderBadge` for selected chips when you o
 />
 ```
 
-## Forms and Controlled State
+
+### Forms and Controlled State
 
 Keep the selected array in React state and derive validity from that state:
 
@@ -634,7 +665,8 @@ return (
 );
 ```
 
-## Lazy Loading and Dynamic Data
+
+### Lazy Loading and Dynamic Data
 
 Enable lazy loading through the settings object and append more rows when the list reaches the end:
 
@@ -659,7 +691,8 @@ const settings = {
 />
 ```
 
-## Dialogs and Overflow Containers
+
+### Dialogs and Overflow Containers
 
 Use `appendToBody: true` or `tagToBody: true` when the dropdown is inside dialogs, modals, drawers, or containers that set `overflow: hidden` or `overflow: auto`.
 
@@ -678,7 +711,8 @@ With body overlay enabled, the open panel is rendered against `document.body`, a
 
 `autoPosition: true` treats `position` as a preferred direction. The menu opens upward only when there is meaningfully less room below and enough room above; otherwise it opens below and shrinks the scrollable list height to stay visible without covering the trigger.
 
-## Events
+
+### Events
 
 Available callbacks:
 
@@ -694,7 +728,8 @@ Available callbacks:
 - `onGroupSelect`
 - `onGroupDeSelect`
 
-## Ref Methods
+
+### Ref Methods
 
 ```tsx
 const dropdownRef = useRef<MultiSelectDropdownHandle<Country>>(null);
@@ -707,10 +742,15 @@ dropdownRef.current?.deSelectAll();
 dropdownRef.current?.clearSelection();
 ```
 
-## Run Locally
+<a id="run-locally"></a>
+<a id="development"></a>
+
+## Local Development
+
+Use Node `24.20.0` and npm `11.19.0` for reproducible release artifacts.
 
 ```bash
-npm install
+npm ci
 npm run build
 npm test
 ```
@@ -719,9 +759,30 @@ React 19 docs:
 
 ```bash
 cd docs-src/react-19
-npm install
+npm ci
 npm run build
 ```
+
+## Consumer Smoke Test
+
+`npm run check` builds the library and checks its public package contents and existing behavior. The existing tests load the built package exports; use the documented peer range when installing a packed tarball into a separate application.
+
+## Release Checklist
+
+- Run `npm ci`, `npm run check`, and the applicable browser or consumer checks.
+- Review `npm audit` and `npm audit --omit=dev` separately.
+- Review the packed README, declarations, exports, license, and compatibility metadata.
+- Publish through the [GitHub Actions workflow](https://github.com/alexandroit/react-multiselect-dropdown/actions/workflows/publish.yml) using the tested artifact's SHA-512 digest.
+- Verify the exact npm tarball, version, and GitHub provenance after publication; never replace a published version.
+
+## Community and Support
+
+Report reproducible package issues in the [issue tracker](https://github.com/alexandroit/react-multiselect-dropdown/issues). Use the [security policy](https://github.com/alexandroit/react-multiselect-dropdown/blob/main/SECURITY.md) for security reports.
+
+- [Stackline / Alexandro.Net](https://alexandro.net/)
+- [GitHub](https://github.com/alexandroit)
+- [Maintainer LinkedIn](https://www.linkedin.com/in/aleinfo/)
+- [Reddit community: r/Stackline](https://www.reddit.com/r/Stackline/)
 
 ## License
 

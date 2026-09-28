@@ -1,6 +1,6 @@
 {
   "name": "@stackline/react-multiselect-dropdown",
-  "version": "19.1.5",
+  "version": "19.1.6",
   "description": "Maintained React 19 multiselect dropdown with accessibility-focused and keyboard/ARIA tested support, controlled state, slots, headless/state hooks, Stackline skins, body overlays, live docs, search, grouping, lazy loading, and custom renderers.",
   "keywords": [
     "react",
@@ -29,7 +29,6 @@
     "accessible",
     "accessibility",
     "accessibility-focused",
-    "ada-compliant",
     "a11y",
     "aria",
     "aria-tested",
@@ -48,7 +47,10 @@
     "theming",
     "ui-component",
     "wrapper",
-    "maintained"
+    "maintained",
+    "stackline",
+    "react19",
+    "searchable-dropdown"
   ],
   "homepage": "https://alexandro.net/docs/react/multiselect/",
   "bugs": {
@@ -122,5 +124,6 @@
   },
   "overrides": {
     "esbuild": "0.28.1"
-  }
+  },
+  "packageManager": "npm@11.19.0"
 }

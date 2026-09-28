@@ -185,10 +185,16 @@ async function waitForElementCount(page, selector, expected) {
 }
 
 async function clearSearchInput(page) {
-  const modifier = process.platform === 'darwin' ? 'Meta' : 'Control';
-  await page.keyboard.down(modifier);
-  await page.keyboard.press('KeyA');
-  await page.keyboard.up(modifier);
+  // Select the query directly: headless macOS Chromium may not implement
+  // the platform Select All accelerator. Backspace still exercises the
+  // component's real keyboard and input handlers.
+  await page.evaluate(() => {
+    const input = document.activeElement;
+    if (!(input instanceof HTMLInputElement)) {
+      throw new Error('Search input must be focused before clearing its query.');
+    }
+    input.select();
+  });
   await page.keyboard.press('Backspace');
 }
 

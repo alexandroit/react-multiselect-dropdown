@@ -4,6 +4,15 @@ All notable changes to this project are documented in this file.
 
 ## Unreleased
 
+## 19.1.6 - 2026-09-28
+
+- Organize package documentation, preserve examples and compatibility guidance, and add verified Stackline community links.
+- Add precise Stackline discovery metadata and standardize GitHub release tooling on Node 24.20.0 and npm 11.19.0.
+- Fail closed on registry lookup errors and use the reviewed GitHub artifact workflow for public npm releases.
+- Make the browser contract test clear focused search inputs reliably in headless macOS Chromium.
+- Include the previously committed linear-time identifier normalization hardening without changing public APIs.
+
+
 - Replaced the option ID edge-trimming regular expression with a linear scan
   and added adversarial-input regression coverage.
 - Updated all React 17, 18, and 19 documentation apps to the patched Vite 8.2
