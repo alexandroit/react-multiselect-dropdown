@@ -44,7 +44,7 @@ export function App() {
     <main className="page shell-page">
       <header className="topbar">
         <p className="eyebrow">React 19.2.8 runtime</p>
-        <h1>@stackline/react-multiselect-dropdown 19.1.5</h1>
+        <h1>@stackline/react-multiselect-dropdown 19.1.6</h1>
       </header>
 
       <section className="docs-main">
