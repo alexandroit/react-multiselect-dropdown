@@ -4,7 +4,7 @@
     {
       "name": "@stackline/react-multiselect-dropdown",
       "path": "README.md",
-      "version": "19.1.7",
+      "version": "19.1.8",
       "baselineVersion": "19.1.6",
       "keywords": [
         "stackline",
@@ -31,8 +31,8 @@
       "homepage": "https://alexandro.net/docs/react/multiselect/",
       "baselineTarball": "https://registry.npmjs.org/@stackline/react-multiselect-dropdown/-/react-multiselect-dropdown-19.1.6.tgz",
       "baselineIntegrity": "sha512-XYxj/VOxS7dImVP1NBe3wp4fGQVXx0chIsNDkxIuo6wDgwhtMoJfKUS9W0V65FSuu/HRfonijw8jxXj+kkd79Q==",
-      "expectedSha512": "3dc6b3420800dc4282deb4127e8731999279d20da04bb8a54e1e27f4a5b407e9b9238bf5a1963da31c150bc429aab28213311696cf2583590c4aeda210ec4162",
-      "tag": "docs-stackline-react-multiselect-dropdown-v19.1.7"
+      "expectedSha512": "967bb9c13132153b2487aa6c7304c92a384b947a21e3cd77cf07f0e7cbe5441c5f707bed4b52d674f76c12ae366dc0ea2d28b9c78f999b4f34a208bc84a99425",
+      "tag": "docs-stackline-react-multiselect-dropdown-v19.1.8"
     }
   ]
 }

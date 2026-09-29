@@ -4,13 +4,13 @@
 
 [![npm version](https://img.shields.io/npm/v/@stackline/react-multiselect-dropdown.svg?style=flat-square)](https://www.npmjs.com/package/@stackline/react-multiselect-dropdown)
 [![license](https://img.shields.io/npm/l/@stackline/react-multiselect-dropdown.svg?style=flat-square)](https://github.com/alexandroit/react-multiselect-dropdown)
-[![GitHub repository](https://img.shields.io/badge/GitHub-alexandroit%2Freact-multiselect-dropdown-181717?style=flat-square&logo=github)](https://github.com/alexandroit/react-multiselect-dropdown)
+[![GitHub repository](https://img.shields.io/badge/GitHub-repository-181717?style=flat-square&logo=github)](https://github.com/alexandroit/react-multiselect-dropdown)
 [![Docs](https://img.shields.io/badge/docs-alexandro.net-0f766e?style=flat-square)](https://alexandro.net/docs/react/multiselect/)
 [![Reddit community](https://img.shields.io/badge/community-r%2FStackline-ff4500?style=flat-square&logo=reddit&logoColor=white)](https://www.reddit.com/r/Stackline/)
 
 **[Documentation](https://alexandro.net/docs/react/multiselect/)** | **[npm](https://www.npmjs.com/package/@stackline/react-multiselect-dropdown)** | **[Issues](https://github.com/alexandroit/react-multiselect-dropdown/issues)** | **[Repository](https://github.com/alexandroit/react-multiselect-dropdown)**
 
-**Current package version:** `19.1.7`
+**Current package version:** `19.1.8`
 
 ---
 
@@ -26,7 +26,7 @@ This README documents React 19 package `19.1.6`. It keeps the guided structural 
 
 | Item | Value |
 | --- | --- |
-| Package | `@stackline/react-multiselect-dropdown@19.1.7` |
+| Package | `@stackline/react-multiselect-dropdown@19.1.8` |
 | Peer: `react` | `>=19.0.0 <20.0.0` |
 | Peer: `react-dom` | `>=19.0.0 <20.0.0` |
 | Runtime dependencies | None; framework peers are supplied by the application |
@@ -50,7 +50,7 @@ Each package family installs on its matching React family. Keep the package fami
 ## Installation
 
 ```bash
-npm install @stackline/react-multiselect-dropdown@19.1.7 --save-exact
+npm install @stackline/react-multiselect-dropdown@19.1.8 --save-exact
 ```
 
 Install `19.1.6` for React 19.x applications. The styled component includes its component styles and injects them at runtime. The headless hook does not inject CSS and lets your application own the markup and styling. This maintenance release is API-compatible with the 19.1 line and is tested against React 19.2.8.
@@ -562,7 +562,7 @@ Use the dedicated React 19 StackBlitz project when you want a fast editable exam
 
 ### Official React 19 Test Matrix
 
-The React 19 release was tested in a clean React `19.2.8` application with `@stackline/react-multiselect-dropdown@19.1.7`. The docs use the same examples from that test app, including keyboard navigation, focus, ARIA behavior, badge counters, responsive action buttons, scrollable lists, dialog-safe body overlays, the corrected left-aligned placeholder with vertical centering, guided Slots API customization, headless/custom HTML, and the combobox contract checks for Backspace, Escape, focused badge removal, focus, and option ARIA.
+The React 19 release was tested in a clean React `19.2.8` application with `@stackline/react-multiselect-dropdown@19.1.8`. The docs use the same examples from that test app, including keyboard navigation, focus, ARIA behavior, badge counters, responsive action buttons, scrollable lists, dialog-safe body overlays, the corrected left-aligned placeholder with vertical centering, guided Slots API customization, headless/custom HTML, and the combobox contract checks for Backspace, Escape, focused badge removal, focus, and option ARIA.
 
 The same core scenarios are validated for the visual skins:
 
