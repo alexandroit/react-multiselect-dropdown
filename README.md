@@ -1,44 +1,18 @@
 # @stackline/react-multiselect-dropdown
 
-> A maintained React multiselect dropdown for React 19 applications, with controlled React state, custom slots, headless/state hooks, searchable/grouped options, lazy loading hooks, custom render functions, skins, body-overlay positioning, and accessibility-focused and keyboard/ARIA tested behavior.
+> Maintained React 19 multiselect dropdown with accessibility-focused and keyboard/ARIA tested support, controlled state, slots, headless/state hooks, Stackline skins, body overlays, live docs, search, grouping, lazy loading, and custom renderers.
 
 [![npm version](https://img.shields.io/npm/v/@stackline/react-multiselect-dropdown.svg?style=flat-square)](https://www.npmjs.com/package/@stackline/react-multiselect-dropdown)
-[![npm monthly](https://img.shields.io/npm/dm/@stackline/react-multiselect-dropdown.svg?style=flat-square)](https://www.npmjs.com/package/@stackline/react-multiselect-dropdown)
-[![license](https://img.shields.io/npm/l/@stackline/react-multiselect-dropdown.svg?style=flat-square)](https://github.com/alexandroit/react-multiselect-dropdown/blob/main/LICENSE)
-[![React 19](https://img.shields.io/badge/React-19.x-61dafb?style=flat-square&logo=react)](https://alexandro.net/docs/react/multiselect/react-19/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue?style=flat-square&logo=typescript)](https://www.typescriptlang.org)
+[![license](https://img.shields.io/npm/l/@stackline/react-multiselect-dropdown.svg?style=flat-square)](https://github.com/alexandroit/react-multiselect-dropdown)
+[![GitHub repository](https://img.shields.io/badge/GitHub-alexandroit%2Freact-multiselect-dropdown-181717?style=flat-square&logo=github)](https://github.com/alexandroit/react-multiselect-dropdown)
+[![Docs](https://img.shields.io/badge/docs-alexandro.net-0f766e?style=flat-square)](https://alexandro.net/docs/react/multiselect/)
 [![Reddit community](https://img.shields.io/badge/community-r%2FStackline-ff4500?style=flat-square&logo=reddit&logoColor=white)](https://www.reddit.com/r/Stackline/)
 
-**[Documentation & Live Demos](https://alexandro.net/docs/react/multiselect/)** | **[React 19 Demo](https://alexandro.net/docs/react/multiselect/react-19/)** | **[React 19 StackBlitz](https://stackblitz.com/github/alexandroit/stackline-react-multiselect-react-19?file=src%2Fexamples%2Fbasic%2Fbasic.component.tsx&startScript=start&initialpath=%2Fbasic)** | **[npm](https://www.npmjs.com/package/@stackline/react-multiselect-dropdown)** | **[Issues](https://github.com/alexandroit/react-multiselect-dropdown/issues)** | **[Repository](https://github.com/alexandroit/react-multiselect-dropdown)** | **[Community Discussions](https://www.reddit.com/r/Stackline/)**
+**[Documentation](https://alexandro.net/docs/react/multiselect/)** | **[npm](https://www.npmjs.com/package/@stackline/react-multiselect-dropdown)** | **[Issues](https://github.com/alexandroit/react-multiselect-dropdown/issues)** | **[Repository](https://github.com/alexandroit/react-multiselect-dropdown)**
 
-<p align="center">
-  <img src="https://alexandro.net/images/public/2026/06/dropdownlist.gif" alt="@stackline/react-multiselect-dropdown live dropdown preview" width="420">
-</p>
-
-**Package version:** `19.1.6`
+**Current package version:** `19.1.7`
 
 ---
-
-> **Credits:** Current maintenance, React line stewardship, publishing, and documentation by [Alexandro Paixao Marques](https://github.com/alexandroit/react-multiselect-dropdown).
-
----
-
-## Contents
-
-- [Why this package?](#why-this-package)
-- [Compatibility](#compatibility)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Features](#features)
-- [Security](#security)
-- [API Surface](#api-surface)
-- [Local Development](#local-development)
-- [Consumer Smoke Test](#consumer-smoke-test)
-- [Release Checklist](#release-checklist)
-- [Community and Support](#community-and-support)
-- [License](#license)
-
-<a id="why-this-library"></a>
 
 ## Why this package?
 
@@ -52,7 +26,7 @@ This README documents React 19 package `19.1.6`. It keeps the guided structural 
 
 | Item | Value |
 | --- | --- |
-| Package | `@stackline/react-multiselect-dropdown@19.1.6` |
+| Package | `@stackline/react-multiselect-dropdown@19.1.7` |
 | Peer: `react` | `>=19.0.0 <20.0.0` |
 | Peer: `react-dom` | `>=19.0.0 <20.0.0` |
 | Runtime dependencies | None; framework peers are supplied by the application |
@@ -76,7 +50,7 @@ Each package family installs on its matching React family. Keep the package fami
 ## Installation
 
 ```bash
-npm install @stackline/react-multiselect-dropdown@19.1.6 --save-exact
+npm install @stackline/react-multiselect-dropdown@19.1.7 --save-exact
 ```
 
 Install `19.1.6` for React 19.x applications. The styled component includes its component styles and injects them at runtime. The headless hook does not inject CSS and lets your application own the markup and styling. This maintenance release is API-compatible with the 19.1 line and is tested against React 19.2.8.
@@ -588,7 +562,7 @@ Use the dedicated React 19 StackBlitz project when you want a fast editable exam
 
 ### Official React 19 Test Matrix
 
-The React 19 release was tested in a clean React `19.2.8` application with `@stackline/react-multiselect-dropdown@19.1.6`. The docs use the same examples from that test app, including keyboard navigation, focus, ARIA behavior, badge counters, responsive action buttons, scrollable lists, dialog-safe body overlays, the corrected left-aligned placeholder with vertical centering, guided Slots API customization, headless/custom HTML, and the combobox contract checks for Backspace, Escape, focused badge removal, focus, and option ARIA.
+The React 19 release was tested in a clean React `19.2.8` application with `@stackline/react-multiselect-dropdown@19.1.7`. The docs use the same examples from that test app, including keyboard navigation, focus, ARIA behavior, badge counters, responsive action buttons, scrollable lists, dialog-safe body overlays, the corrected left-aligned placeholder with vertical centering, guided Slots API customization, headless/custom HTML, and the combobox contract checks for Backspace, Escape, focused badge removal, focus, and option ARIA.
 
 The same core scenarios are validated for the visual skins:
 
@@ -775,15 +749,23 @@ npm run build
 - Publish through the [GitHub Actions workflow](https://github.com/alexandroit/react-multiselect-dropdown/actions/workflows/publish.yml) using the tested artifact's SHA-512 digest.
 - Verify the exact npm tarball, version, and GitHub provenance after publication; never replace a published version.
 
-## Community and Support
-
-Report reproducible package issues in the [issue tracker](https://github.com/alexandroit/react-multiselect-dropdown/issues). Use the [security policy](https://github.com/alexandroit/react-multiselect-dropdown/blob/main/SECURITY.md) for security reports.
-
-- [Stackline / Alexandro.Net](https://alexandro.net/)
-- [GitHub](https://github.com/alexandroit)
-- [Maintainer LinkedIn](https://www.linkedin.com/in/aleinfo/)
-- [Reddit community: r/Stackline](https://www.reddit.com/r/Stackline/)
-
 ## License
 
 MIT
+
+## Credits and original authors
+
+- Copyright (c) 2026 Alexandro Marques.
+- Stackline maintenance: [Alexandro Paixao Marques](https://www.linkedin.com/in/aleinfo/) and [Stackline contributors](https://github.com/alexandroit).
+
+Original copyright, license notices and contributor acknowledgements remain part of this distribution. Stackline maintenance does not replace authorship of the original work.
+
+## Community and Links
+
+- [Stackline website](https://alexandro.net/)
+- [GitHub projects](https://github.com/alexandroit)
+- [npm packages](https://www.npmjs.com/~alex360qc)
+- [Reddit community — r/Stackline](https://www.reddit.com/r/Stackline/)
+- [Maintainer LinkedIn](https://www.linkedin.com/in/aleinfo/)
+
+Use this repository's issue tracker for reproducible bugs and feature requests. Join r/Stackline for examples, usage questions and release discussions.
