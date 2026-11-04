@@ -2,6 +2,11 @@
 
 All notable changes to this project are documented in this file.
 
+## 19.1.9 - 2026-11-04
+
+- Refresh the build and browser-test dependencies to address known security advisories.
+- Run CI and provenance publishing on patched Node.js releases.
+
 ## Unreleased
 
 ## 19.1.6 - 2026-09-28

@@ -12,8 +12,8 @@ const report = JSON.parse(execFileSync(
   { cwd: rootDir, encoding: 'utf8' }
 ))[0];
 
-if (packageJson.version !== '19.1.6') {
-  throw new Error(`Expected package version 19.1.6, found ${packageJson.version}.`);
+if (report.version !== packageJson.version) {
+  throw new Error('Packed version does not match the package manifest.');
 }
 
 for (const peer of ['react', 'react-dom']) {
