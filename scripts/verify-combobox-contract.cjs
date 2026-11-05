@@ -359,6 +359,33 @@ async function verifyStyledCombobox(page) {
     active.text.includes(testText.optionAfterDisabledGap),
     `Styled Space selection after a disabled option moved focus to "${active.text}".`
   );
+
+  // Hold delayed selection focus until a newer ArrowDown has already moved focus.
+  await page.evaluate(() => {
+    window.__originalFocusFrame = window.requestAnimationFrame;
+    window.__pendingFocusFrames = [];
+    window.requestAnimationFrame = (callback) => {
+      window.__pendingFocusFrames.push(callback);
+      return 0;
+    };
+  });
+  await page.keyboard.press('Space');
+  await page.waitForFunction(() => window.__pendingFocusFrames.length > 0, { polling: 10 });
+  const beforeNavigation = await activeElementInfo(page);
+  await page.keyboard.press('ArrowDown');
+  const navigated = await activeElementInfo(page);
+  assert(navigated.role === 'option' && navigated.id !== beforeNavigation.id,
+    'The regression scenario must navigate to a different option before delayed focus runs.');
+  await page.evaluate(() => {
+    window.requestAnimationFrame = window.__originalFocusFrame;
+    for (const callback of window.__pendingFocusFrames) callback(performance.now());
+    delete window.__originalFocusFrame;
+    delete window.__pendingFocusFrames;
+  });
+  active = await activeElementInfo(page);
+  assert(active.id === navigated.id,
+    `Delayed selection focus stole newer keyboard navigation: ${navigated.text} -> ${active.text}`);
+
 }
 
 async function verifyHeadlessCombobox(page) {

@@ -149,6 +149,7 @@ function InnerMultiSelectDropdown<T extends DropdownItem>(
   const listRef = useRef<HTMLDivElement | null>(null);
   const lastScrollHeightRef = useRef(0);
   const pendingFocusRef = useRef<PendingFocus>(null);
+  const optionFocusRequestRef = useRef(0);
   const addRequestIdRef = useRef(0);
   const instanceIdRef = useRef(`rmsd-${Math.random().toString(36).slice(2)}`);
 
@@ -182,6 +183,7 @@ function InnerMultiSelectDropdown<T extends DropdownItem>(
     );
 
   const focusOptionByIndex = (index: number) => {
+    optionFocusRequestRef.current += 1;
     const options = getOptionElements();
     if (!options.length) {
       return;
@@ -209,8 +211,10 @@ function InnerMultiSelectDropdown<T extends DropdownItem>(
   };
 
   const focusOptionAfterPointerSelection = (optionId: string, fallbackIndex: number) => {
+    const request = ++optionFocusRequestRef.current;
     window.setTimeout(() => {
       const focusAfterRender = () => {
+        if (request !== optionFocusRequestRef.current) return;
         if (focusOptionById(optionId)) {
           return;
         }
@@ -232,8 +236,11 @@ function InnerMultiSelectDropdown<T extends DropdownItem>(
     fallbackIndex: number,
     moveToNextOption: boolean
   ) => {
+    const request = ++optionFocusRequestRef.current;
     window.setTimeout(() => {
       const focusAfterRender = () => {
+        // A delayed selection must not override a newer navigation action.
+        if (request !== optionFocusRequestRef.current) return;
         if (moveToNextOption) {
           const options = getOptionElements();
           const currentIndex = options.findIndex((option) => option.id === optionId);
@@ -281,6 +288,7 @@ function InnerMultiSelectDropdown<T extends DropdownItem>(
   };
 
   const openDropdown = (focusTarget: PendingFocus = 'search') => {
+    optionFocusRequestRef.current += 1;
     if (settings.disabled) {
       return;
     }
@@ -295,6 +303,7 @@ function InnerMultiSelectDropdown<T extends DropdownItem>(
   };
 
   const closeDropdown = (returnFocus = false) => {
+    optionFocusRequestRef.current += 1;
     setIsOpen((current) => {
       if (current) {
         onClose?.();
@@ -874,6 +883,7 @@ function InnerMultiSelectDropdown<T extends DropdownItem>(
     item: T,
     optionIndex: number
   ) => {
+    optionFocusRequestRef.current += 1;
     if (isSpaceKey(event.key) && !settings.keyboard.space) {
       event.preventDefault();
       return;

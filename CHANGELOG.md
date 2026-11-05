@@ -1,5 +1,10 @@
 # Changelog
 
+## 19.1.11 - 2026-11-04
+
+- Prevent deferred selection focus from overriding newer keyboard navigation.
+- Reproduce the timing regression in the real-browser contract and test the built candidate before publishing.
+
 ## 19.1.10 - 2026-11-04
 
 - Refresh the current framework and compatible build/test dependencies.

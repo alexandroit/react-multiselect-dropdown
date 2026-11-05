@@ -19,8 +19,8 @@ createRoot(rootElement).render(
         reactLine: '19.0.0 -> 19.3.1',
         reactFamily: '19.x',
         reactRuntime: '19.3.1',
-        packageVersion: '19.1.6',
-        packageRange: '19.1.6',
+        packageVersion: '19.1.11',
+        packageRange: '19.1.11',
         docsPath: 'react-19',
         stackBlitzBaseUrl: 'https://stackblitz.com/github/alexandroit/stackline-react-multiselect-react-19'
       }}
