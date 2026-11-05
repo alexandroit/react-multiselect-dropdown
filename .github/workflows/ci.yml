@@ -80,6 +80,10 @@ jobs:
           mkdir -p release
           npm pack --ignore-scripts --pack-destination release
           (cd release && sha512sum *.tgz > SHA512SUMS)
+      - name: Check package README and clean installs/updates
+        run: |
+          python3 .github/scripts/check-release-readme.py release/*.tgz
+          python3 .github/scripts/check-install-update.py release/*.tgz
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
           name: stackline-react-multiselect-${{ github.sha }}

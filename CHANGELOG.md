@@ -1,5 +1,11 @@
 # Changelog
 
+## 19.1.10 - 2026-11-04
+
+- Refresh the current framework and compatible build/test dependencies.
+- Validate normal installs, updates, and the maintained documentation with zero known npm audit vulnerabilities.
+- Synchronize the current package documentation and release metadata.
+
 All notable changes to this project are documented in this file.
 
 ## 19.1.9 - 2026-11-04

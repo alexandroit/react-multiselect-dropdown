@@ -1,6 +1,6 @@
 {
   "name": "@stackline/react-multiselect-dropdown",
-  "version": "19.1.9",
+  "version": "19.1.10",
   "description": "Maintained React 19 multiselect dropdown with accessibility-focused and keyboard/ARIA tested support, controlled state, slots, headless/state hooks, Stackline skins, body overlays, live docs, search, grouping, lazy loading, and custom renderers.",
   "keywords": [
     "stackline",
@@ -86,16 +86,16 @@
     "access": "public"
   },
   "devDependencies": {
-    "@types/react": "19.2.18",
-    "@types/react-dom": "19.2.4",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
     "puppeteer-core": "25.16.0",
-    "react": "19.2.8",
-    "react-dom": "19.2.8",
-    "tsup": "8.5.1",
-    "typescript": "5.9.3"
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "tsup": "9.0.0",
+    "typescript": "6.0.3"
   },
   "overrides": {
-    "esbuild": "0.28.1"
+    "esbuild": "0.28.2"
   },
   "packageManager": "npm@11.19.0"
 }

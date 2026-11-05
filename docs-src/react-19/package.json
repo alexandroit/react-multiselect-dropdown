@@ -10,18 +10,18 @@
   },
   "dependencies": {
     "@stackline/react-multiselect-dropdown": "19.1.6",
-    "flag-icons": "^7.5.0",
-    "react": "19.2.8",
-    "react-dom": "19.2.8"
+    "flag-icons": "7.6.0",
+    "react": "19.3.1",
+    "react-dom": "19.3.1"
   },
   "devDependencies": {
-    "@types/react": "19.2.18",
-    "@types/react-dom": "19.2.4",
-    "@vitejs/plugin-react": "6.1.0",
-    "typescript": "5.9.3",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@vitejs/plugin-react": "6.2.1",
+    "typescript": "7.0.2",
     "vite": "8.3.5"
   },
   "overrides": {
-    "esbuild": "0.28.1"
+    "esbuild": "0.28.2"
   }
 }
