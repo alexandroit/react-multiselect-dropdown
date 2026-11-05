@@ -9,7 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@stackline/react-multiselect-dropdown": "file:../..",
+    "@stackline/react-multiselect-dropdown": "19.1.11",
     "flag-icons": "7.6.0",
     "react": "19.3.1",
     "react-dom": "19.3.1"
